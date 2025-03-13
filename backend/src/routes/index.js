@@ -14,7 +14,7 @@ router.use('/auth', authUsers);
 
 
 // Users
-router.use('/user', users);
+router.use('/user', authMiddleware, users);
 
 
 // Ejemplo
