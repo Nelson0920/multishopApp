@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
@@ -17,13 +16,89 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-
 model Categories{
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  discount_percentage: Int
-  profit_percentage: Int
-  id_accounting_accounts: String  @db.ObjectId
-  id_cost_center: String  @db.ObjectId
-  band_management: Boolean
+  discount_percentage Int
+  profit_percentage Int
+  id_accounting_accounts String  @db.ObjectId
+  // id_auxiliaries_accounts String @db.ObjectId
+  id_cost_center String  @db.ObjectId
+  band_management Boolean
+}
+
+model AccountingAccounts {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  code_account      String
+}
+
+// model AuxiliariesAccounts {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+//   name      String
+//   code_account      String
+// }
+
+model CostCenter {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  current_cost Float
+  average_cost Float
+  previous_cost Float
+  higher_current_average Float
+  lower_current_previous_average Float
+}
+
+model Clients {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String
+  rif       String
+  name      String
+  address   String
+  phone     String
+  credit_conditions Int
+  email     String
+  observations String
+  id_categories_clients String  @db.ObjectId
+  id_sellers String  @db.ObjectId
+  credentials Json
+  marketing_environment String
+  id_accounting_accounts String  @db.ObjectId
+  // id_auxiliaries_accounts String @db.ObjectId
+  bank_accounts String
+  credit_limit Int
+  credit_terms Int
+  discount_percentage Float
+  prompt_payment_terms Int
+  type_taxpayer String
+  retention_percentage_iva Float
+  type_retencion_islr String
+  id_RetentionConcepts String  @db.ObjectId
+  automatic_islr Boolean
+}
+
+model CategoriesClient {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  credit_limit Int
+  credit_terms Int
+  discount_percentage Float
+}
+
+model Sellers {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  rif       String
+  address   String
+  phone     String
+  email     String   @unique
+  type_seller String
+  credentials Json
+  createdAt DateTime @default(now())
+}
+
+model RetentionConcepts {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  percentage Float
+  subtrahend_amount Float
 }
