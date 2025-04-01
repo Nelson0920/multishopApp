@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcryptjs');
-const prisma = require('../config/prisma');
-const generateToken = require('../config/jwt');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import prisma from '../config/prisma.js';
+import { generateToken } from '../config/jwt.js';
 
+const router = express.Router()
 
 // Register
 router.post('/register', async (req, res) => {
@@ -65,4 +65,4 @@ router.post('/login', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router

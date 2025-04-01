@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
+import { JWT } from '../global/_var.js'
+import jwt from 'jsonwebtoken'
 
-const generateToken = (user) => {
+export const generateToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email },
-    process.env.JWT_SECRET,
+    JWT,
     { expiresIn: '7d' }
   );
 };
 
-module.exports = generateToken;

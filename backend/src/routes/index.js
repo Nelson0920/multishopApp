@@ -1,24 +1,32 @@
-const express = require('express');
-const router = express.Router();
-const authMiddleware = require('../middlewares/auth');
+import express from 'express'
+import {authMiddleware} from '../middlewares/auth.js'
 
+const router = express.Router()
 
-// Rutas individuales
-const exampleRoutes = require('../controllers/example');
-const authUsers = require('../controllers/auth');
-const users = require('../controllers/users');
+// Auth - Users
+import authUsers from '../controllers/auth.js'
+import users from '../controllers/users.js'
+// Categories
+import categories from '../controllers/categories.js'
+// Accounts 
+import accounts from '../controllers/accounts.js'
+// Clients
+import clients from '../controllers/clients.js'
+// Sellers
+import sellers from '../controllers/sellers.js'
 
+// --- Routes ---
 
-// Auth
-router.use('/auth', authUsers);
+// Auth - Users
+router.use('/auth', authUsers)
+router.use('/user', authMiddleware, users)
+// Categories
+router.use('/category', categories)
+// Accounts
+router.use('/accounts', accounts)
+// Clients
+router.use('/clients', clients)
+// Sellers
+router.use('/sellers', sellers)
 
-
-// Users
-router.use('/user', authMiddleware, users);
-
-
-// Ejemplo
-router.use('/example', authMiddleware, exampleRoutes);
-
-
-module.exports = router;
+export default router

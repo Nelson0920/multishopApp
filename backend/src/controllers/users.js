@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const prisma = require('../config/prisma');
-const bcrypt = require('bcryptjs');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import prisma from '../config/prisma.js';
 
+const router = express.Router()
 
 // Obtener todos los usuarios
 router.get('/', async (req, res) => {
@@ -78,4 +78,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router
