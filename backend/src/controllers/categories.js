@@ -11,13 +11,30 @@ router.get('/', async (req, res) => {
   try {
     const categories = await prisma.categories.findMany()
     if (categories.length > 0) {
-      return res.status(200).json({ success: true, code:200, categories })
+      return res.status(200).json({ success: true, code:200, message: 'Categories found', categories })
     }else{
       return res.status(404).json({ success: false, code:404 , message: 'No categories found' })
     }
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, message: 'Error fetching cost centers' })
+    res.status(500).json({ success: false, message: 'Error fetching categories' })
+  }
+})
+
+// Obtener categoría por ID
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const categories = await prisma.categories.findUnique({where : { id }})
+
+    if (categories) {
+      return res.status(200).json({ success: true, code:200, message: 'category found', categories })
+    }else{
+      return res.status(404).json({ success: false, code:404 , message: 'No category found' })
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, message: 'Error fetching category', error })
   }
 })
 
@@ -26,12 +43,12 @@ router.post('/register', async (req, res) => {
   try {
     const { name, discount_percentage, profit_percentage, band_management } = req.body
 
-    const existingCategory = await prisma.categories.findUnique({
+    const existingCategory = await prisma.categories.findMany({
       where: { name }
     })
 
-    if (existingCategory) {
-      return res.status(400).json({ success: false, message: 'The category already exists' })
+    if (existingCategory.length > 0) {
+      return res.status(400).json({ success: false, message: 'The category already exists', name })
     }
 
     const search = await prisma.costCenter.findFirst()
@@ -58,29 +75,22 @@ router.post('/register', async (req, res) => {
   }
 })
 
-
 // Actualizar una categoria
 router.put('/edit/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const { id_category, name, discount_percentage, profit_percentage, band_management } = req.body
+    const data = req.body
 
-    const search = await prisma.costCenter.findUnique({ where: { id } })
+    const search = await prisma.categories.findUnique({ where: { id } })
 
     if(search){
       const category = await prisma.categories.update({ 
-        data : {
-          name, 
-          discount_percentage, 
-          profit_percentage, 
-          id_cost_center: id , 
-          band_management
-        },
-        where: { id: id_category } 
+        data,
+        where: { id } 
       })
-      res.status(200).json({ success: true, message: 'Category updated successfully', category })
+      res.status(200).json({ success: true, code: 200 , message: 'Category updated successfully', category })
     }else{
-      res.status(404).json({ success: false, message: 'No cost centers found' })
+      res.status(404).json({ success: false, code: 404 , message: 'Category not found' })
     }
 
   } catch (error) {
@@ -91,10 +101,18 @@ router.put('/edit/:id', async (req, res) => {
 
 // Eliminar una Categoria
 router.delete('/delete/:id', async (req, res) => {
-  const { id } = req.params
   try {
-    const deleteCategory = await prisma.categories.delete({ where: {id} })
-    res.json({ success: true, message: 'Category successfully deleted', deleteCategory })
+    const { id } = req.params
+
+    const search = await prisma.categories.findUnique({ where: { id } })
+
+    if(search){
+      const deleteCategory = await prisma.categories.delete({ where: {id} })
+      res.json({ success: true, code: 200, message: 'Category successfully deleted', deleteCategory })    
+    }else{
+      res.status(404).json({ success: false, code: 404 , message: 'Category not found' })
+    }
+
   } catch (error) {
     console.log(error)
     res.status(500).json({ success: false, message: 'Error deleting the category'})
