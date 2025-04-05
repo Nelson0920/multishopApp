@@ -146,7 +146,7 @@ model RetentionISLRConcepts {
 
 model PaymentConditions{
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  days      Float
+  days      Int
   discount_percentage Float
   createdAt DateTime @default(now())
 }

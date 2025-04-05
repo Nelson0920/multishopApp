@@ -12,6 +12,8 @@ import categories from '../controllers/categories.js'
 import accounts from '../controllers/accounts.js'
 // Clients
 import clients from '../controllers/clients.js'
+// Finanzas
+import finance from '../controllers/finance.js'
 // Sellers
 import sellers from '../controllers/sellers.js'
 
@@ -26,6 +28,8 @@ router.use('/category', categories)
 router.use('/accounts', accounts)
 // Clients
 router.use('/clients', clients)
+// Finance
+router.use('/finance', finance)
 // Sellers
 router.use('/sellers', sellers)
 
