@@ -134,14 +134,18 @@ router.post('/auxiliaries/register', async (req, res) => {
   try {
     const data = req.body
 
+    const searchName = await prisma.auxiliariesAccounts.findMany({ where: { name: data.name } })
     const search = await prisma.auxiliariesAccounts.findMany({ where: { auxiliary_code: data.auxiliary_code } })
 
-    if (search.length > 0) {
-      res.status(400).json({ success: false, code: 400, message: 'This account auxiliary already exists', account: search[0].name })
+    if (searchName.length > 0) {
+      res.status(400).json({ success: false, code: 400, message: 'This name already exists', account_name: searchName[0].name , account_code: searchName[0].auxiliary_code })
+    }else if (search.length > 0) {
+      res.status(400).json({ success: false, code: 400, message: 'This account auxiliary already exists', account_name: search[0].name , account_code: search[0].auxiliary_code })
     } else {
       const account = await prisma.auxiliariesAccounts.create({ data })
       res.status(201).json({ success: true, code: 200, message: 'Auxiliary account created successfully', account })
     }
+
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, code: 500, message: 'Error creating the auxiliary account', error })
@@ -160,10 +164,10 @@ router.put('/auxiliaries/edit/:id', async (req, res) => {
       return res.status(404).json({ success: false, message: 'No accounting account found' })
     }
 
-    // // Verificar si el nombre ya existe en otro registro
-    // const verifyName = await prisma.auxiliariesAccounts.findFirst({
-    //   where: { name: data.name }
-    // })
+    // Verificar si el nombre ya existe en otro registro
+    const verifyName = await prisma.auxiliariesAccounts.findFirst({
+      where: { name: data.name }
+    })
 
     // Verificar si el código auxiliar ya existe en otro registro
     const verifyCode = await prisma.auxiliariesAccounts.findFirst({
@@ -171,11 +175,11 @@ router.put('/auxiliaries/edit/:id', async (req, res) => {
     })
 
     // console.log(verifyName)
-    console.log(verifyCode)
+    // console.log(verifyCode)
 
-    // if (verifyName) {
-    //   return res.status(400).json({ success: false, message: 'The name is already in use', verifyName })
-    // }
+    if (verifyName) {
+      return res.status(400).json({ success: false, message: 'The name is already in use', verifyName })
+    }
 
     if (verifyCode) {
       return res.status(400).json({ success: false, code: 400, message: 'The auxiliary code is already in use', verifyCode })

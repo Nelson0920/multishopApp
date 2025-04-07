@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 })
 
 // Obtener categoría por ID
-router.get('/:id', async (req, res) => {
+router.get('/get/:id', async (req, res) => {
   try {
     const { id } = req.params
     const categories = await prisma.categories.findUnique({where : { id }})
@@ -178,6 +178,176 @@ router.post('/cost/center/change', async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, message: 'Error updating cost center' })
+  }
+})
+
+// --- Categorias de Cuentas ---
+
+// Obtener todas las categorías de cuentas
+router.get('/accounts', async (req, res) => {
+  try {
+    const categories = await prisma.account_Categories.findMany()
+    if (categories.length > 0) {
+      return res.status(200).json({ success: true, code:200, message: 'Account categories found', categories })
+    }else{
+      return res.status(404).json({ success: false, code:404 , message: 'Account categories not found' })
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, message: 'Error fetching account categories' })
+  }
+})
+
+// Obtener categoría de una cuenta por ID
+router.get('/account/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const categories = await prisma.account_Categories.findUnique({where : { id }})
+
+    if (categories) {
+      return res.status(200).json({ success: true, code:200, message: 'Account category found', categories })
+    }else{
+      return res.status(404).json({ success: false, code:404 , message: 'Account category not found' })
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, message: 'Error fetching account category', error })
+  }
+})
+
+// Crear una nueva categoría para una cuenta
+router.post('/account/register', async (req, res) => {
+  try {
+    const {
+      id_categories,
+      account_sales, auxiliary1_sales, auxiliary2_sales,
+      account_buy, auxiliary1_buy, auxiliary2_buy,
+      account_consumos, auxiliary1_consumos, auxiliary2_consumos,
+      account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy,
+      account_tax, auxiliary1_tax, auxiliary2_tax
+    } = req.body;
+
+    // Validar existencia de la categoría
+    const existingCategory = await prisma.categories.findUnique({
+      where: { id: id_categories }
+    });
+
+    if (!existingCategory) {
+      return res.status(404).json({ success: false, message: 'No existe la categoria' });
+    }
+
+    // Función para validar cuentas y auxiliares
+    const validateAccountAndAuxiliaries = async (accountCode, aux1, aux2, label) => {
+      const account = await prisma.accountingAccounts.findUnique({
+        where: { code_account: accountCode }
+      });
+
+      if (!account) {
+        throw new Error(`La cuenta ${label} (${accountCode}) no existe`);
+      }
+
+      const auxiliary1 = await prisma.auxiliariesAccounts.findUnique({
+        where: { code_auxiliary: aux1 }
+      });
+
+      if (!auxiliary1) {
+        throw new Error(`El auxiliar 1 de ${label} (${aux1}) no existe`);
+      }
+
+      const auxiliary2 = await prisma.auxiliariesAccounts.findUnique({
+        where: { code_auxiliary: aux2 }
+      });
+
+      if (!auxiliary2) {
+        throw new Error(`El auxiliar 2 de ${label} (${aux2}) no existe`);
+      }
+
+      if (account.auxiliary1_initials !== aux1 || account.auxiliary2_initials !== aux2) {
+        throw new Error(`Los auxiliares de ${label} no coinciden con las iniciales requeridas`);
+      }
+
+      return { account, auxiliary1, auxiliary2 };
+    };
+
+    // Validar cada conjunto de cuenta + auxiliares
+    await validateAccountAndAuxiliaries(account_sales, auxiliary1_sales, auxiliary2_sales, 'ventas');
+    await validateAccountAndAuxiliaries(account_buy, auxiliary1_buy, auxiliary2_buy, 'compras');
+    await validateAccountAndAuxiliaries(account_consumos, auxiliary1_consumos, auxiliary2_consumos, 'consumos');
+    await validateAccountAndAuxiliaries(account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy, 'devolución de compras');
+    await validateAccountAndAuxiliaries(account_tax, auxiliary1_tax, auxiliary2_tax, 'impuestos');
+
+    // Si pasa todas las validaciones, crear el registro
+    const newAccountCategory = await prisma.account_Categories.create({
+      data: {
+        id_categories,
+        account_sales,
+        auxiliary1_sales,
+        auxiliary2_sales,
+        account_buy,
+        auxiliary1_buy,
+        auxiliary2_buy,
+        account_consumos,
+        auxiliary1_consumos,
+        auxiliary2_consumos,
+        account_devbuy,
+        auxiliary1_devbuy,
+        auxiliary2_devbuy,
+        account_tax,
+        auxiliary1_tax,
+        auxiliary2_tax
+      }
+    });
+
+    res.status(201).json({ success: true, message: 'Categoría contable registrada correctamente', category: newAccountCategory });
+
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ success: false, message: error.message || 'Error al registrar la categoría contable' });
+  }
+});
+
+
+// Actualizar la categoria de una cuenta
+router.put('/account/edit/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const data = req.body
+
+    const search = await prisma.categories.findUnique({ where: { id } })
+
+    if(search){
+      const category = await prisma.categories.update({ 
+        data,
+        where: { id } 
+      })
+      res.status(200).json({ success: true, code: 200 , message: 'Category updated successfully', category })
+    }else{
+      res.status(404).json({ success: false, code: 404 , message: 'Category not found' })
+    }
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: 'Error updating the category', error })
+  }
+})
+
+// Eliminar la Categoria de una cuenta
+router.delete('/account/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const search = await prisma.account_Categories.findUnique({ where: { id } })
+
+    if(search){
+      const deleteCategory = await prisma.account_Categories.delete({ where: {id} })
+      res.json({ success: true, code: 200, message: 'Account category successfully deleted', deleteCategory })    
+    }else{
+      res.status(404).json({ success: false, code: 404 , message: 'Account category not found' })
+    }
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: 'Error deleting the account category'})
   }
 })
 

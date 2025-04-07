@@ -40,60 +40,149 @@ router.get('/get/:id', async (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const data = req.body
+    const { type, rif, id_categories_clients, id_sellers, id_accounting_accounts, id_PaymentConditions, id_RetentionISLRConcepts } = data
 
-    const existingClient = await prisma.clients.findMany({ where: { rif: data.rif } })
-
-    if (existingClient.length > 0) {
-      return res.status(400).json({ success: false, code:400, message: 'The client already exists', data })
+    if (!['client', 'provider'].includes(type)) {
+      return res.status(400).json({ success: false, code: 400, message: 'Invalid type provided', data })
     }
 
-    // const search = await prisma.costCenter.findFirst()
+    const existing = await prisma.clients.findMany({
+      where: { rif, type }
+    })
 
-    // if (!search) {
-    //   return res.status(404).json({ success: false, message: 'No available cost center found' })
-    // }
+    if (existing.length > 0) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: `The ${type} already exists`,
+        data
+      })
+    }
 
-    // const category = await prisma.categories.create({
-    //   data: {
-    //     name,
-    //     discount_percentage,
-    //     profit_percentage,
-    //     id_cost_center: search.id,
-    //     band_management
-    //   }
-    // })
+    // Validaciones de relaciones
+    const searchCategory = await prisma.categoriesClient.findUnique({
+      where: { id: id_categories_clients }
+    })
+    if (!searchCategory) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Invalid category ID',
+        data: id_categories_clients
+      })
+    }
 
-    // res.status(201).json({ success: true, message: 'Category created successfully', category })
+    const searchSeller = await prisma.sellers.findUnique({
+      where: { id: id_sellers }
+    })
+    if (!searchSeller) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Invalid Seller ID',
+        data: id_sellers
+      })
+    }
+
+
+    const searchAccounting = await prisma.accountingAccounts.findUnique({
+      where: { id: id_accounting_accounts }
+    })
+    if (!searchAccounting) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Invalid accounting account ID',
+        data: id_accounting_accounts
+      })
+    }
+
+    const searchPayCondition = await prisma.paymentConditions.findUnique({
+      where: { id: id_PaymentConditions }
+    })
+    if (!searchPayCondition) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Invalid payment condition ID',
+        data: id_PaymentConditions
+      })
+    }
+
+    const searchRetention = await prisma.retentionISLRConcepts.findUnique({
+      where: { id: id_RetentionISLRConcepts }
+    })
+    if (!searchRetention) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Invalid ISLR retention concept ID',
+        data: id_RetentionISLRConcepts
+      })
+    }
+
+    const created = await prisma.clients.create({ data })
+
+    res.status(200).json({
+      success: true,
+      code: 200,
+      message: `${type.charAt(0).toUpperCase() + type.slice(1)} created successfully`,
+      [type]: created
+    })
 
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, message: 'Error creating category', error })
+    res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error creating client or provider',
+      error
+    })
   }
 })
 
 // Actualizar un cliente
 router.put('/edit/:id', async (req, res) => {
-  const { id } = req.params
   try {
-    const updatedClient = await prisma.clients.update({
-      where: { id: Number(id) },
-      data: req.body,
-    })
+    const { id } = req.params
+    const data = req.body
 
-    res.json({ success: true, message: 'Cliente actualizado', updatedClient })
+    const search = await prisma.clients.findUnique({ where: { id } })
+
+    if(search){
+      const categoryClient = await prisma.categoriesClient.update({ 
+        data,
+        where: { id } 
+      })
+      res.status(200).json({ success: true, code:200, message: 'Client updated successfully', categoryClient })
+    }else{
+      res.status(404).json({ success: false, code:404, message: 'Client not found' })
+    }
+
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error al actualizar el cliente' })
+    console.log(error)
+    res.status(500).json({ success: false, code:500, message: 'Error updating the client', error })
   }
 })
 
 // Eliminar un cliente
 router.delete('/delete/:id', async (req, res) => {
-  const { id } = req.params
   try {
-    await prisma.clients.delete({ where: { id: Number(id) } })
-    res.json({ success: true, message: 'Cliente eliminado' })
+    const { id } = req.params
+
+    const search = await prisma.clients.findUnique({ where: { id } })
+
+    if(search){
+      const client = await prisma.clients.delete({ where: { id } })
+
+      res.status(200).json({ success: true, code:200, message: 'Client deleted successfully', client })
+    }else{
+      res.status(404).json({ success: false, code:404, message: 'Client not found' })
+    }
+
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error al eliminar el cliente' })
+    console.log(error)
+    res.status(500).json({ success: false, code:500, message: 'Error deleting the client', error })
   }
 })
 
