@@ -2,6 +2,8 @@ import express from 'express'
 import bcrypt from 'bcryptjs'
 import prisma from '../config/prisma.js'
 
+import { validateAccountAndAuxiliaries } from './helpers/funct_categories.js'
+
 const router = express.Router()
 
 // --- Categories ---
@@ -219,8 +221,8 @@ router.get('/account/:id', async (req, res) => {
 router.post('/account/register', async (req, res) => {
   try {
     const {
-      id_categories,
-      account_sales, auxiliary1_sales, auxiliary2_sales,
+      id_Categories,
+      account_Sales, auxiliary1_Sales, auxiliary2_Sales,
       account_buy, auxiliary1_buy, auxiliary2_buy,
       account_consumos, auxiliary1_consumos, auxiliary2_consumos,
       account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy,
@@ -229,60 +231,43 @@ router.post('/account/register', async (req, res) => {
 
     // Validar existencia de la categoría
     const existingCategory = await prisma.categories.findUnique({
-      where: { id: id_categories }
+      where: { id: id_Categories }
     });
 
     if (!existingCategory) {
-      return res.status(404).json({ success: false, message: 'No existe la categoria' });
+      return res.status(404).json({ success: false, code : 404 , message: 'Category not found' });
     }
 
-    // Función para validar cuentas y auxiliares
-    const validateAccountAndAuxiliaries = async (accountCode, aux1, aux2, label) => {
-      const account = await prisma.accountingAccounts.findUnique({
-        where: { code_account: accountCode }
-      });
+    const existingCategoryAccount = await prisma.account_Categories.findMany({ where : {id_Categories : id_Categories} })
+    
+    if (existingCategoryAccount.length > 0) {
+      return res.status(400).json({ success: false, code: 400, message: 'The accounting category already exists', name: id_Categories });
+    }
 
-      if (!account) {
-        throw new Error(`La cuenta ${label} (${accountCode}) no existe`);
-      }
+    // Solo validar si la cuenta principal existe
+    if (account_Sales) {
+      await validateAccountAndAuxiliaries(account_Sales, auxiliary1_Sales, auxiliary2_Sales, 'ventas');
+    }
+    if (account_buy) {
+      await validateAccountAndAuxiliaries(account_buy, auxiliary1_buy, auxiliary2_buy, 'compras');
+    }
+    if (account_consumos) {
+      await validateAccountAndAuxiliaries(account_consumos, auxiliary1_consumos, auxiliary2_consumos, 'consumos');
+    }
+    if (account_devbuy) {
+      await validateAccountAndAuxiliaries(account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy, 'devolución de compras');
+    }
+    if (account_tax) {
+      await validateAccountAndAuxiliaries(account_tax, auxiliary1_tax, auxiliary2_tax, 'impuestos');
+    }
 
-      const auxiliary1 = await prisma.auxiliariesAccounts.findUnique({
-        where: { code_auxiliary: aux1 }
-      });
-
-      if (!auxiliary1) {
-        throw new Error(`El auxiliar 1 de ${label} (${aux1}) no existe`);
-      }
-
-      const auxiliary2 = await prisma.auxiliariesAccounts.findUnique({
-        where: { code_auxiliary: aux2 }
-      });
-
-      if (!auxiliary2) {
-        throw new Error(`El auxiliar 2 de ${label} (${aux2}) no existe`);
-      }
-
-      if (account.auxiliary1_initials !== aux1 || account.auxiliary2_initials !== aux2) {
-        throw new Error(`Los auxiliares de ${label} no coinciden con las iniciales requeridas`);
-      }
-
-      return { account, auxiliary1, auxiliary2 };
-    };
-
-    // Validar cada conjunto de cuenta + auxiliares
-    await validateAccountAndAuxiliaries(account_sales, auxiliary1_sales, auxiliary2_sales, 'ventas');
-    await validateAccountAndAuxiliaries(account_buy, auxiliary1_buy, auxiliary2_buy, 'compras');
-    await validateAccountAndAuxiliaries(account_consumos, auxiliary1_consumos, auxiliary2_consumos, 'consumos');
-    await validateAccountAndAuxiliaries(account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy, 'devolución de compras');
-    await validateAccountAndAuxiliaries(account_tax, auxiliary1_tax, auxiliary2_tax, 'impuestos');
-
-    // Si pasa todas las validaciones, crear el registro
+    // Crear el registro
     const newAccountCategory = await prisma.account_Categories.create({
       data: {
-        id_categories,
-        account_sales,
-        auxiliary1_sales,
-        auxiliary2_sales,
+        id_Categories,
+        account_Sales,
+        auxiliary1_Sales,
+        auxiliary2_Sales,
         account_buy,
         auxiliary1_buy,
         auxiliary2_buy,
@@ -298,36 +283,74 @@ router.post('/account/register', async (req, res) => {
       }
     });
 
-    res.status(201).json({ success: true, message: 'Categoría contable registrada correctamente', category: newAccountCategory });
+    res.status(200).json({ success: true, code:200 , message: 'Account category registered succesfully', category: newAccountCategory });
 
   } catch (error) {
     console.error(error);
-    res.status(400).json({ success: false, message: error.message || 'Error al registrar la categoría contable' });
+    res.status(500).json({ success: false, code: 500, message: 'Error creating account category', error })
+
   }
 });
-
 
 // Actualizar la categoria de una cuenta
 router.put('/account/edit/:id', async (req, res) => {
   try {
+    const {
+      id_Categories,
+      account_Sales, auxiliary1_Sales, auxiliary2_Sales,
+      account_buy, auxiliary1_buy, auxiliary2_buy,
+      account_consumos, auxiliary1_consumos, auxiliary2_consumos,
+      account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy,
+      account_tax, auxiliary1_tax, auxiliary2_tax
+    } = req.body
     const { id } = req.params
-    const data = req.body
 
-    const search = await prisma.categories.findUnique({ where: { id } })
+    // Validar existencia de la cateogoría de la cuenta
+    const existingAccount = await prisma.account_Categories.findUnique({
+      where: { id }
+    });
 
-    if(search){
-      const category = await prisma.categories.update({ 
-        data,
-        where: { id } 
-      })
-      res.status(200).json({ success: true, code: 200 , message: 'Category updated successfully', category })
-    }else{
-      res.status(404).json({ success: false, code: 404 , message: 'Category not found' })
+    if (!existingAccount) {
+      return res.status(404).json({ success: false, code: 404, message: 'Account Category not found' });
     }
+
+    // Validar existencia de la categoría
+    const existingCategory = await prisma.categories.findUnique({
+      where: { id: id_Categories }
+    });
+
+    if (!existingCategory) {
+      return res.status(404).json({ success: false, code: 404, message: 'Category not found' });
+    }
+
+    // Solo validar si la cuenta principal existe
+    if (account_Sales) {
+      await validateAccountAndAuxiliaries(account_Sales, auxiliary1_Sales, auxiliary2_Sales, 'ventas');
+    }
+    if (account_buy) {
+      await validateAccountAndAuxiliaries(account_buy, auxiliary1_buy, auxiliary2_buy, 'compras');
+    }
+    if (account_consumos) {
+      await validateAccountAndAuxiliaries(account_consumos, auxiliary1_consumos, auxiliary2_consumos, 'consumos');
+    }
+    if (account_devbuy) {
+      await validateAccountAndAuxiliaries(account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy, 'devolución de compras');
+    }
+    if (account_tax) {
+      await validateAccountAndAuxiliaries(account_tax, auxiliary1_tax, auxiliary2_tax, 'impuestos');
+    }
+
+    // Crear el registro
+    const newAccountCategory = await prisma.account_Categories.update({
+      data : req.body,
+      where: { id }
+    });
+
+    res.status(200).json({ success: true, code:200, message: 'Account Category updated succesfully', category: newAccountCategory });
 
   } catch (error) {
     console.log(error)
-    res.status(500).json({ success: false, message: 'Error updating the category', error })
+    res.status(500).json({ success: false, code:500, message: 'Error updating the category', error })
   }
 })
 
