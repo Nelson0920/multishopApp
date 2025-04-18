@@ -39,8 +39,8 @@ router.get('/get/:id', async (req, res) => {
 // Crear un nuevo cliente
 router.post('/register', async (req, res) => {
   try {
+    const { type, rif, id_categories_clients, id_sellers, id_accounting_accounts, id_PaymentConditions, id_RetentionISLRConcepts } = req.body
     const data = req.body
-    const { type, rif, id_categories_clients, id_sellers, id_accounting_accounts, id_PaymentConditions, id_RetentionISLRConcepts } = data
 
     if (!['client', 'provider'].includes(type)) {
       return res.status(400).json({ success: false, code: 400, message: 'Invalid type provided', data })

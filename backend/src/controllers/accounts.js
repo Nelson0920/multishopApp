@@ -173,10 +173,7 @@ router.put('/auxiliaries/edit/:id', async (req, res) => {
     const verifyCode = await prisma.auxiliariesAccounts.findFirst({
       where: { auxiliary_code: data.auxiliary_code }
     })
-
-    // console.log(verifyName)
-    // console.log(verifyCode)
-
+    
     if (verifyName) {
       return res.status(400).json({ success: false, message: 'The name is already in use', verifyName })
     }

@@ -43,14 +43,14 @@ router.get('/get/:id', async (req, res) => {
 // Crear una nueva categoría
 router.post('/register', async (req, res) => {
   try {
-    const { name, discount_percentage, profit_percentage, band_management } = req.body
+    const data = req.body
 
     const existingCategory = await prisma.categories.findMany({
-      where: { name }
+      where: { name: data.name }
     })
 
     if (existingCategory.length > 0) {
-      return res.status(400).json({ success: false, message: 'The category already exists', name })
+      return res.status(400).json({ success: false, message: 'The category already exists', name: data.name})
     }
 
     const search = await prisma.costCenter.findFirst()
@@ -59,15 +59,7 @@ router.post('/register', async (req, res) => {
       return res.status(404).json({ success: false, message: 'No available cost center found' })
     }
 
-    const category = await prisma.categories.create({
-      data: {
-        name,
-        discount_percentage,
-        profit_percentage,
-        id_cost_center: search.id,
-        band_management
-      }
-    })
+    const category = await prisma.categories.create({...data, id_cost_center: search.id,})
 
     res.status(201).json({ success: true, message: 'Category created successfully', category })
 
@@ -229,6 +221,8 @@ router.post('/account/register', async (req, res) => {
       account_tax, auxiliary1_tax, auxiliary2_tax
     } = req.body;
 
+    const data = req.body
+
     // Validar existencia de la categoría
     const existingCategory = await prisma.categories.findUnique({
       where: { id: id_Categories }
@@ -262,26 +256,7 @@ router.post('/account/register', async (req, res) => {
     }
 
     // Crear el registro
-    const newAccountCategory = await prisma.account_Categories.create({
-      data: {
-        id_Categories,
-        account_Sales,
-        auxiliary1_Sales,
-        auxiliary2_Sales,
-        account_buy,
-        auxiliary1_buy,
-        auxiliary2_buy,
-        account_consumos,
-        auxiliary1_consumos,
-        auxiliary2_consumos,
-        account_devbuy,
-        auxiliary1_devbuy,
-        auxiliary2_devbuy,
-        account_tax,
-        auxiliary1_tax,
-        auxiliary2_tax
-      }
-    });
+    const newAccountCategory = await prisma.account_Categories.create({ data });
 
     res.status(200).json({ success: true, code:200 , message: 'Account category registered succesfully', category: newAccountCategory });
 
@@ -303,6 +278,7 @@ router.put('/account/edit/:id', async (req, res) => {
       account_devbuy, auxiliary1_devbuy, auxiliary2_devbuy,
       account_tax, auxiliary1_tax, auxiliary2_tax
     } = req.body
+    const data = req.body
     const { id } = req.params
 
     // Validar existencia de la cateogoría de la cuenta
@@ -342,7 +318,7 @@ router.put('/account/edit/:id', async (req, res) => {
 
     // Crear el registro
     const newAccountCategory = await prisma.account_Categories.update({
-      data : req.body,
+      data,
       where: { id }
     });
 
