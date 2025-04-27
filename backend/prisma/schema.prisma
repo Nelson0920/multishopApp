@@ -150,3 +150,372 @@ model PaymentConditions{
   discount_percentage Float
   createdAt DateTime @default(now())
 }
+
+model Inventory {
+  id_product          String   @id @default(auto()) @map("_id") @db.ObjectId
+  long_description    String
+  short_description   String
+  id_Categories       String  @db.ObjectId
+  id_Clients          String  @db.ObjectId
+  id_Costs            String  @db.ObjectId
+  id_Prices           String  @db.ObjectId
+  id_AlternateCodes   String  @db.ObjectId
+  existence           Float
+  detailed_stock      Float
+  existence_commited  Float
+  stock_min           Float
+  stock_max           Float
+  id_additionalInfo   String @db.ObjectId
+  id_type            String  @db.ObjectId
+  id_finish          String  @db.ObjectId
+  id_width           String  @db.ObjectId
+  id_weight          String  @db.ObjectId
+  id_composition     String  @db.ObjectId
+  id_physicalLocation String @db.ObjectId
+  id_manufacturer    String  @db.ObjectId
+  id_laboratory      String  @db.ObjectId
+  id_unitOfMeasure   String  @db.ObjectId
+  id_componentActive String  @db.ObjectId
+  id_brand           String  @db.ObjectId
+  id_subbrand        String  @db.ObjectId
+  id_model           String  @db.ObjectId
+  id_subCategory     String  @db.ObjectId
+  id_businessUnit    String  @db.ObjectId
+  id_purchaseStatistics       String  @db.ObjectId
+  type_product        String
+  createdAt           DateTime @default(now())
+}
+
+model Prices {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  id_cost_center      String  @db.ObjectId
+  id_cost             String  @db.ObjectId
+  priority            Int
+  id_type_currency    String  @db.ObjectId
+  name                String  
+  cost                Float
+  margin              Float
+  price_base          Float
+  tax                 Float
+  price               Float
+  tax_rate            Float
+  tax_included        Boolean
+  createdAt           DateTime @default(now())
+}
+
+model PriceHistory{
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  id_user             String
+  type_price          String
+  old_value           Float
+  new_value           Float
+  module              String
+  createdAt           DateTime @default(now())
+}
+
+model AlternateCodes {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  code                String
+  createdAt           DateTime @default(now())
+}
+
+model Costs {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  id_cost_center      String  @db.ObjectId
+  average_cost        Float
+  current_cost        Float
+  previous_cost       Float
+  sf_cost             Float
+  id_type_currency    String  @db.ObjectId
+  createdAt           DateTime @default(now())
+}
+
+model CostHistory{
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  id_user             String
+  type_cost           String
+  old_value           Float
+  new_value           Float
+  module              String
+  createdAt           DateTime @default(now())
+}
+
+model TypeCurrency {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  name                String
+  price_value         Float
+  purchase_value      Float
+  sales_value         Float
+  official_value      Float
+  operator            String
+  createdAt           DateTime @default(now())
+}
+
+model TypeCurrencyHistory {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_typeCurrency     String  @db.ObjectId
+  id_user             String
+  type_currency       String
+  old_value           Float
+  new_value           Float
+  module              String
+  createdAt           DateTime @default(now())
+}
+
+model Warehouses{
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_deposit          String  @db.ObjectId
+  id_product          String  @db.ObjectId
+  current_stock       Float
+  committed_stock     Float
+  available_stock     Float
+  detailed_stock      Float
+  stock_min           Float
+  stock_max           Float
+  createdAt           DateTime @default(now())
+}
+
+model Deposits{
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model DetailStock {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  id_warehouses         String  @db.ObjectId
+  code1               String
+  code2               String
+  code3               String
+  code4               String
+  quantity            Float
+  date_received       DateTime
+  date_expiration     DateTime
+  Observations       String
+  createdAt           DateTime @default(now())
+}
+
+model AdditionalInfo {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  lastSale_date       DateTime
+  lastPurchase_date   DateTime
+  compound_product    Boolean
+  domestic_product    Boolean
+  catalog_offers      Boolean
+  price_offers        Boolean
+  quantity_offers     Float
+  discount_offers     Float
+  date_offers         DateTime
+  password_offers     Boolean
+  name_offers         String
+  observations        String
+  weighted            Boolean
+  fractional_sale     Boolean
+  product_alert       Boolean
+  discontinued        Boolean
+  creation_date       DateTime
+  lastInventory_date  DateTime
+  turnover_index      Float
+  days_inventory      Float
+  average_sales       Float
+  active              Boolean  
+  average_sale        Float
+  belongs_bands       Boolean
+  automatic_rotation  Boolean
+  visible_mobileApp   Boolean
+  units_package       Float
+  visible_webPage     Boolean
+  createdAt           DateTime @default(now())
+}
+
+model CompoundComponent {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  id_product_child    String 
+  quantity            Float
+  createdAt           DateTime @default(now())
+}
+
+model ProductAlert {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  message             String
+  active              Boolean
+  createdAt           DateTime @default(now())
+}
+
+model Images {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  image               Bytes
+  createdAt           DateTime @default(now())
+}
+
+model WebFeatures{
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  sku                 String
+  name                String
+  line                String
+  subline             String
+  brand               String
+  subbrand            String
+  model               String
+  createdAt           DateTime @default(now())
+}
+
+model PurchaseStatistics {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  invoice_date        DateTime
+  name_provider       String
+  invoice_number      String
+  quantity            Float
+  price_usd           Float
+  price_bs            Float
+  rate                Float
+  date_confirmation   DateTime
+  invoice_status      Boolean
+  createdAt           DateTime @default(now())
+}
+
+model KardexEvent {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  date                DateTime
+  initial_stock       Float
+  input               Float
+  exit                Float
+  final_stock         Float
+  current_costBs      Float
+  average_costBs      Float
+  current_costUsd     Float
+  average_costUsd     Float
+  event_description   String
+  invoice_number      String
+  id_user             String
+  hour                String
+  type_event          String
+  module              String
+  createdAt           DateTime @default(now())
+}
+
+model MiniKardexDeposit {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_product          String  @db.ObjectId
+  id_warehouses       String  @db.ObjectId
+  date                DateTime
+  initial_stock       Float
+  input               Float
+  exit                Float
+  final_stock         Float
+  current_costBs      Float
+  average_costBs      Float
+  current_costUsd     Float
+  average_costUsd     Float
+  event_description   String
+  invoice_number      String
+  id_user             String
+  hour                String
+  type_event          String
+  module              String
+  createdAt           DateTime @default(now())
+}
+
+model Type {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Finish {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Width {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Weight {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Composition {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model PhysicalLocation {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Manufacturer {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Laboratory {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model UnitOfMeasure {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model ComponentActive {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Brand {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model SubBrand {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model Model {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model SubCategory {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
+
+model BusinessUnit {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  createdAt           DateTime @default(now())
+}
