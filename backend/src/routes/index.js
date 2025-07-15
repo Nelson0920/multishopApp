@@ -16,6 +16,13 @@ import clients from '../controllers/clients.js'
 import finance from '../controllers/finance.js'
 // Sellers
 import sellers from '../controllers/sellers.js'
+// Inventory
+import inventory from '../controllers/inventory.js'
+// Complementary
+import complementary from '../controllers/complementary.js'
+// Images
+import images from '../controllers/img.js'
+
 
 // --- Routes ---
 
@@ -32,5 +39,11 @@ router.use('/clients', clients)
 router.use('/finance', finance)
 // Sellers
 router.use('/sellers', sellers)
+// Inventory
+router.use('/inventory', inventory)
+// Complementary
+router.use('/complementary', complementary)
+// Images
+router.use('/images', images)
 
 export default router
