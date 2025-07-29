@@ -1,12 +1,10 @@
 // Dependencies
 import express from 'express'
-import prisma from '../config/prisma.js'
 // Helpers
 import { Inventory } from './helpers/inventory.js'
 import { InventoryEntities } from './helpers/inventoryEntitiesOne.js'
-// import { Costs } from './helpers/costs.js'
-// import { AlternateCodes } from './helpers/alternateCodes.js'
-// import { TypeCurrency } from './helpers/typeCurrency.js'
+import { InventoryEntities2 } from './helpers/inventoryEntitiesTwo.js'
+import { InventoryEntities3 } from './helpers/inventoryEntitiesThree.js'
 
 const router = express.Router()
 
@@ -305,11 +303,11 @@ router.get('/type/currency/:id', async (req, res) => {
 router.post('/type/currency/register', async (req, res) => {
   try {
     const data = req.body
-    const cost = await InventoryEntities.createCost(data)
-    return res.status(cost.code).json(cost)
+    const currency = await InventoryEntities.createTypeCurrency(data)
+    return res.status(currency.code).json(currency)
   } catch (error) {
     console.log(error)
-    return res.status(500).json({ success: false, code:500, message: 'Error creating the cost', error })
+    return res.status(500).json({ success: false, code:500, message: 'Error creating the currency', error })
   }
 })
 
@@ -319,12 +317,12 @@ router.put('/type/currency/edit/:id', async (req, res) => {
     const { id } = req.params
     const data = req.body
 
-    const cost = await InventoryEntities.editCost(id, data)
-    return res.status(cost.code).json(cost)
+    const currency = await InventoryEntities.editTypeCurrency(id, data)
+    return res.status(currency.code).json(currency)
 
   } catch (error) {
     console.log(error)
-    return res.status(500).json({ success: false, code:500, message: 'Error updating cost', error })
+    return res.status(500).json({ success: false, code:500, message: 'Error updating currency', error })
   }
 })
 
@@ -333,15 +331,211 @@ router.delete('/type/currency/delete/:id', async (req, res) => {
   try {
     const { id } = req.params
 
-    const cost = await InventoryEntities.deleteCost(id)
-    return res.status(cost.code).json(cost)
+    const currency = await InventoryEntities.deleteTypeCurrency(id)
+    return res.status(currency.code).json(currency)
 
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, code: 500, message: 'Error deleting cost' })
+    res.status(500).json({ success: false, code: 500, message: 'Error deleting currency' })
   }
 })
 
+// -- Depositos --
 
+// Obtener todos los Depositos
+router.get('/deposits', async (req, res) => {
+  try {
+    const deposits = await InventoryEntities2.getDeposits()
+    return res.status(deposits.code).json(deposits)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error get the types of deposits ', error })
+  }
+})
+
+// Obtener un Almacen por ID
+router.get('/deposit/:id', async (req, res) => {
+  try {
+    const {id} = req.params
+    const deposit = await InventoryEntities2.getDeposit(id)
+    return res.status(deposit.code).json(deposit)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error get the type deposit', error })
+  }
+})
+
+// Crear un nuevo Deposito
+router.post('/deposit/register', async (req, res) => {
+  try {
+    const data = req.body
+    const deposit = await InventoryEntities2.createDeposit(data)
+    return res.status(deposit.code).json(deposit)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error creating the deposit', error })
+  }
+})
+
+// Actualizar un Deposito
+router.put('/deposit/edit/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const data = req.body
+
+    const deposit = await InventoryEntities2.editDeposit(id, data)
+    return res.status(deposit.code).json(deposit)
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error updating deposit', error })
+  }
+})
+
+// Eliminar un Deposito
+router.delete('/deposit/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const deposit = await InventoryEntities2.deleteDeposit(id)
+    return res.status(deposit.code).json(deposit)
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, code: 500, message: 'Error deleting deposit' })
+  }
+})
+
+// -- Almacenes --
+
+// Obtener todos los Almacenes
+router.get('/warehouses', async (req, res) => {
+  try {
+    const Warehouses = await InventoryEntities2.getWarehouses()
+    return res.status(Warehouses.code).json(Warehouses)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error get the types of Warehouses ', error })
+  }
+})
+
+// Obtener un Almacen por ID
+router.get('/warehouse/:id', async (req, res) => {
+  try {
+    const {id} = req.params
+    const currency = await InventoryEntities2.getWarehouse(id)
+    return res.status(currency.code).json(currency)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error get the type currency', error })
+  }
+})
+
+// Crear un nuevo Almacen
+router.post('/warehouse/register', async (req, res) => {
+  try {
+    const data = req.body
+    const warehouse = await InventoryEntities2.createWarehouse(data)
+    return res.status(warehouse.code).json(warehouse)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error creating the warehouse', error })
+  }
+})
+
+// Actualizar un Almacen
+router.put('/warehouse/edit/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const data = req.body
+
+    const warehouse = await InventoryEntities2.editWarehouse(id, data)
+    return res.status(warehouse.code).json(warehouse)
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error updating warehouse', error })
+  }
+})
+
+// Eliminar un Almacen
+router.delete('/warehouse/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const warehouse = await InventoryEntities2.deleteWarehouse(id)
+    return res.status(warehouse.code).json(warehouse)
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, code: 500, message: 'Error deleting warehouse' })
+  }
+})
+
+// -- Detalle de Stock --
+
+// Obtener todos los Stocks
+router.get('/detailed/stocks', async (req, res) => {
+  try {
+    const stock = await InventoryEntities2.getDetailedStocks()
+    return res.status(stock.code).json(stock)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error get the detailed of stocks ', error })
+  }
+})
+
+// Obtener un Stock por ID
+router.get('/detailed/stock/:id', async (req, res) => {
+  try {
+    const {id} = req.params
+    const stock = await InventoryEntities2.getDetailedStock(id)
+    return res.status(stock.code).json(stock)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error get the detailed stock', error })
+  }
+})
+
+// Crear un nuevo Stock
+router.post('/detailed/stock/register', async (req, res) => {
+  try {
+    const data = req.body
+    const stock = await InventoryEntities2.createDetailStock(data)
+    return res.status(stock.code).json(stock)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error creating the detail stock', error })
+  }
+})
+
+// Actualizar un Stock
+router.put('/detailed/stock/edit/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const data = req.body
+
+    const stock = await InventoryEntities2.editDetailStock(id, data)
+    return res.status(stock.code).json(stock)
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ success: false, code:500, message: 'Error updating detail stock', error })
+  }
+})
+
+// Eliminar un Stock
+router.delete('/detailed/stock/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const stock = await InventoryEntities2.deleteDetailStock(id)
+    return res.status(stock.code).json(stock)
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, code: 500, message: 'Error deleting detail stock' })
+  }
+})
 
 export default router

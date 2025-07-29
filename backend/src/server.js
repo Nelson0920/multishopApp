@@ -1,14 +1,16 @@
-import express from 'express'
-import cors from 'cors'
-import morgan from 'morgan'
-import routes from './routes/index.js'
-import { PORT } from './global/_var.js'
+import express      from 'express'
+import cors         from 'cors'
+import morgan       from 'morgan'
+import routes       from './routes/index.js'
+import cookieParser from "cookie-parser"
+import { PORT }     from './global/_var.js'
 
 const app = express()
 
 // ** Middleware **
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 

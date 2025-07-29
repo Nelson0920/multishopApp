@@ -1,0 +1,82 @@
+// Sidebar.scss
+
+// Variables
+$PrimaryBlue: #36aad4;
+$SecundaryBlue: #236982;
+$PrimaryBackground: #ffffff;
+$SecondaryBackground: #dadada;
+$PrimaryTextColor: #58baf4;
+$SecundaryTextColor: #303030;
+$HoverTextColor: white;
+$Line: #b2b2b2;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --PrimaryBlue: #{$PrimaryBlue};
+  --SecundaryBlue: #{$SecundaryBlue};
+  --PrimaryBackground: #{$PrimaryBackground};
+  --SecondaryBackground: #{$SecondaryBackground};
+  --PrimaryTextColor: #{$PrimaryTextColor};
+  --SecundaryTextColor: #{$SecundaryTextColor};
+  --HoverTextColor: #{$HoverTextColor};
+  --Line: #{$Line};
+}
+
+.main_container {
+  background-color: rgb(227, 226, 226);
+  display: flex;
+}
+
+.home_content__shortcuts {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  width: 100%;
+  height: 15vh;
+  padding-left: 2rem;
+  background-color: #fff;
+
+  .buttons{
+    display: flex;
+    gap: 1rem;
+    width: 23%;
+    margin-top: 1rem;
+    align-items: center;
+  }
+
+  .buttons button {
+    width: 100%;
+    height: 100%;
+    background-color: var(--PrimaryBackground);
+    border: 1px solid transparent;
+    color: var(--SecundaryTextColor);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem;
+    transition: all 0.3s ease-in-out;
+
+    
+
+    &:hover {
+      background-color: var(--SecondaryBackground);
+      color: var(--PrimaryTextColor);
+      border-top: 1px solid var(--PrimaryTextColor);
+      border-left: 1px solid var(--PrimaryTextColor);
+      border-right: 1px solid var(--PrimaryTextColor);
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+
+  .line {
+    width: 1px;
+    height: 60%;
+    background-color: var(--Line);
+  }
+}

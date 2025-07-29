@@ -57,13 +57,15 @@ export class Inventory {
         status: false,
         code: 400,
         message: "Inventory creation failed",
-      }
+      };
+
+      // Validación para IDs tipo ObjectId
+      const isValidObjectId = id =>
+        typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id);
 
       const {
         id_categories,
         id_clients,
-        id_costs,
-        id_prices,
         id_alternateCodes,
         id_additionalInfo,
         id_type,
@@ -80,16 +82,13 @@ export class Inventory {
         id_model,
         id_subCategory,
         id_businessUnit,
-        id_purchaseStatistics,
         type
-      } = data
+      } = data;
 
-      // Validaciones de relaciones
+      // Validaciones de relaciones (solo si el ID es válido)
       const validations = [
         { id: id_categories, model: prisma.categories, name: 'category ID' },
         { id: id_clients, model: prisma.clients, name: 'client ID' },
-        { id: id_costs, model: prisma.costs, name: 'cost ID' },
-        { id: id_prices, model: prisma.prices, name: 'price ID' },
         { id: id_alternateCodes, model: prisma.alternateCodes, name: 'alternate code ID' },
         { id: id_additionalInfo, model: prisma.additionalInfo, name: 'additional info ID' },
         { id: id_type, model: prisma.type, name: 'type ID' },
@@ -105,45 +104,44 @@ export class Inventory {
         { id: id_subbrand, model: prisma.subBrand, name: 'subbrand ID' },
         { id: id_model, model: prisma.model, name: 'model ID' },
         { id: id_subCategory, model: prisma.subCategory, name: 'subcategory ID' },
-        { id: id_businessUnit, model: prisma.businessUnit, name: 'business unit ID' },
-        { id: id_purchaseStatistics, model: prisma.purchaseStatistics, name: 'purchase statistics ID' }
-      ]
+        { id: id_businessUnit, model: prisma.businessUnit, name: 'BusinessUnit ID' },
+      ];
 
       for (const validation of validations) {
-        if (validation.id) {
+        if (isValidObjectId(validation.id)) {
           const exists = await validation.model.findUnique({
             where: { id: validation.id }
-          })
+          });
           if (!exists) {
             return {
               success: false,
               code: 400,
               message: `Invalid ${validation.name}`,
               data: validation.id
-            }
+            };
           }
         }
       }
 
-      const createdInventory = await prisma.inventory.create({ data })
+      const createdInventory = await prisma.inventory.create({ data });
 
       msg = {
         success: true,
         code: 200,
-        message: `${type.charAt(0).toUpperCase() + type.slice(1)} created successfully`,
-        [type]: createdInventory
-      }
+        message: `Inventory created successfully`,
+        data: createdInventory
+      };
 
-      return msg
+      return msg;
 
     } catch (error) {
-      console.error("Error creating inventory:", error)
+      console.error("Error creating inventory:", error);
       return {
         success: false,
         code: 500,
         message: "Server error while creating inventory",
         error: error.message
-      }
+      };
     }
   }
 

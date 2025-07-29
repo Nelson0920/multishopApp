@@ -1,0 +1,74 @@
+// Sidebar.scss
+
+// Variables
+$PrimaryBlue: #36aad4;
+$SecundaryBlue: #236982;
+$PrimaryBackground: #ffffff;
+$SecondaryBackground: #ffffff5e;
+$PrimaryTextColor: #ffffff;
+$TertiaryBackground: #b1b1b1;
+$HoverTextColor: white;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --PrimaryBlue: #{$PrimaryBlue};
+  --SecundaryBlue: #{$SecundaryBlue};
+  --PrimaryBackground: #{$PrimaryBackground};
+  --SecondaryBackground: #{$SecondaryBackground};
+  --PrimaryTextColor: #{$PrimaryTextColor};
+  --TertiaryBackground: #{$TertiaryBackground};
+  --HoverTextColor: #{$HoverTextColor};
+}
+
+#sidebar_container {
+  background: linear-gradient(180deg, $PrimaryBlue, $SecundaryBlue);
+  width: 5vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar_list {
+  list-style: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+
+  li {
+    width: 3rem;
+    height: 3rem;
+    margin: 1rem auto;
+    background-color: $SecundaryBlue;
+    color: $PrimaryTextColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background-color: $SecondaryBackground;
+      color: $HoverTextColor;
+      border: 2px solid $HoverTextColor;
+      cursor: pointer;
+    }
+  }
+}
+
+.element_marked {
+  background-color: $SecondaryBackground;
+  color: $HoverTextColor;
+  border: 2px solid $HoverTextColor;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}

@@ -157,31 +157,27 @@ model Inventory {
   short_description   String
   id_Categories       String  @db.ObjectId
   id_Clients          String  @db.ObjectId
-  id_Costs            String  @db.ObjectId
-  id_Prices           String  @db.ObjectId
-  id_AlternateCodes   String  @db.ObjectId
   existence           Float
   detailed_stock      Float
   existence_commited  Float
   stock_min           Float
   stock_max           Float
-  id_additionalInfo   String @db.ObjectId
-  id_type            String  @db.ObjectId
-  id_finish          String  @db.ObjectId
-  id_width           String  @db.ObjectId
-  id_weight          String  @db.ObjectId
-  id_composition     String  @db.ObjectId
-  id_physicalLocation String @db.ObjectId
-  id_manufacturer    String  @db.ObjectId
-  id_laboratory      String  @db.ObjectId
-  id_unitOfMeasure   String  @db.ObjectId
-  id_componentActive String  @db.ObjectId
-  id_brand           String  @db.ObjectId
-  id_subbrand        String  @db.ObjectId
-  id_model           String  @db.ObjectId
-  id_subCategory     String  @db.ObjectId
-  id_businessUnit    String  @db.ObjectId
-  id_purchaseStatistics       String  @db.ObjectId
+  id_additionalInfo   String? @db.ObjectId
+  id_type            String?  @db.ObjectId
+  id_finish          String?  @db.ObjectId
+  id_width           String?  @db.ObjectId
+  id_weight          String?  @db.ObjectId
+  id_composition     String?  @db.ObjectId
+  id_physicalLocation String? @db.ObjectId
+  id_manufacturer    String?  @db.ObjectId
+  id_laboratory      String?  @db.ObjectId
+  id_unitOfMeasure   String?  @db.ObjectId
+  id_componentActive String?  @db.ObjectId
+  id_brand           String?  @db.ObjectId
+  id_subbrand        String?  @db.ObjectId
+  id_model           String?  @db.ObjectId
+  id_subCategory     String?  @db.ObjectId
+  id_businessUnit    String?  @db.ObjectId
   type_product        String
   createdAt           DateTime @default(now())
 }
@@ -336,7 +332,7 @@ model AdditionalInfo {
   createdAt           DateTime @default(now())
 }
 
-model CompoundComponent {
+model CompositeProduct {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
   id_product          String  @db.ObjectId
   id_product_child    String 

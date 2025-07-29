@@ -18,6 +18,7 @@ import finance from '../controllers/finance.js'
 import sellers from '../controllers/sellers.js'
 // Inventory
 import inventory from '../controllers/inventory.js'
+import inventoryEntities from '../controllers/inventoryEntities.js'
 // Complementary
 import complementary from '../controllers/complementary.js'
 // Images
@@ -41,6 +42,7 @@ router.use('/finance', finance)
 router.use('/sellers', sellers)
 // Inventory
 router.use('/inventory', inventory)
+router.use('/inventory/entities', inventoryEntities)
 // Complementary
 router.use('/complementary', complementary)
 // Images

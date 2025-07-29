@@ -175,7 +175,7 @@ export class InventoryEntities {
       return {
         success: false,
         code: 500,
-        message: "Server error while updating prince",
+        message: "Server error while updating price",
         error: error.message
       }
     }
@@ -623,86 +623,77 @@ export class InventoryEntities {
     try {
       let msg = {
         status: false,
-        code: 400,
-        message: "Price creation failed",
+        code: 500,
+        message: "Type Currency creation failed",
       };
 
-      const { id_product, id_typeCurrency, id_cost_center , value, type, id_user } = data
+      const { id_product} = data;
 
-      console.log(data)
+      // Validaciones de relaciones solo si se proporciona un valor
 
-      // Validaciones de relaciones
-      // const searchProduct = await prisma.inventory.findUnique({
-      //   where: { id: id_product }
-      // })
-      // if (!searchProduct) {
-      //   return res.status(400).json({
-      //     success: false,
-      //     code: 400,
-      //     message: 'Invalid Id Product',
-      //     data: id_product
-      //   })
+      // if (id_product) {
+      //   const searchProduct = await prisma.inventory.findUnique({
+      //     where: { id: id_product }
+      //   });
+      //   if (!searchProduct) {
+      //     return {
+      //       success: false,
+      //       code: 400,
+      //       message: 'Invalid Id Product',
+      //       data: id_product
+      //     };
+      //   }
       // }
-  
-      // const searchCost = await prisma.costCenter.findUnique({
-      //   where: { id: id_cost_center }
-      // })
-      // if (!searchCost) {
-      //   return res.status(400).json({
-      //     success: false,
-      //     code: 400,
-      //     message: 'Invalid Cost Center ID',
-      //     data: id_cost_center
-      //   })
-      // }
-  
-      // const search = await prisma.typeCurrency.findUnique({
-      //   where: { id: id_typeCurrency }
-      // })
-      // if (!search) {
-      //   return res.status(400).json({
-      //     success: false,
-      //     code: 400,
-      //     message: 'Invalid Type Currency ID',
-      //     data: id_typeCurrency
-      //   })
-      // }
-  
-      // Buscar valor anterior del precio
-      const previousPrice = await prisma.prices.findFirst({
-        where: { id_product },
-        orderBy: { createdAt: 'desc' }
-      })
-  
-      const createdPrice = await prisma.prices.create({ data })
-  
-      // Crear entrada en PriceHistory
-      await prisma.priceHistory.create({
+
+      let previousPrice = null;
+      if (id_product) {
+        previousPrice = await prisma.typeCurrency.findFirst({
+          where: { id_product },
+          orderBy: { createdAt: 'desc' }
+        });
+      }
+
+      const createdTypeCurrency = await prisma.typeCurrency.create({
         data: {
           id_product,
-          id_user: "userTest1",
-          type_price: "type",
-          old_value: previousPrice?.value || 0,
-          new_value: data.price_base,
-          module: 'price'
+          name: data.name,
+          price_value: data.price_value,
+          purchase_value: data.purchase_value,
+          sales_value: data.sales_value,
+          official_value: data.official_value,
+          operator: data.operator,
         }
-      })
+      });
+
+      if (createdTypeCurrency && id_product) {
+        await prisma.typeCurrencyHistory.create({
+          data: {
+            id_typeCurrency: createdTypeCurrency.id,
+            type_currency: data.typeCurrency,
+            id_user: data.id_user || "userTest1",
+            type_price: data.type,
+            old_value: previousPrice?.value || 0,
+            new_value: data.price_value || value,
+            module: 'price'
+          }
+        });
+      }
 
       msg = {
         success: true,
         code: 200,
-        message: `Price created successfully`,
-        price: createdPrice
+        message: `Type currency created successfully`,
+        price: createdTypeCurrency
       };
 
-      return msg
+      return msg;
 
     } catch (error) {
-      console.error("Error creating price:", error);
+      console.error("Error creating type currency:", error);
       return {
         success: false,
         code: 500,
-        message: "Server error while creating price",
+        message: "Server error while creating type currency",
         error: error.message
       };
     }
@@ -712,35 +703,42 @@ export class InventoryEntities {
     try {
       let msg = {
         status: false,
-        code: 400,
-        message: "Price update failed",
+        code: 500,
+        message: "Type Currency update failed",
       }
 
-      const search = await prisma.prices.findUnique({ where: { id } })
+      const search = await prisma.typeCurrency.findUnique({ where: { id } })
 
       if(search){
-        const price = await prisma.prices.update({ 
-          data,
+        const typeCurrency = await prisma.typeCurrency.update({ 
+          data: {
+            id_product: data.id_product,
+            name: data.name,
+            price_value: data.price_value,
+            purchase_value: data.purchase_value,
+            sales_value: data.sales_value,
+            official_value: data.official_value,
+            operator: data.operator,
+          },
           where: { id } 
         })
 
         msg = {
           success: true,
           code: 200,
-          message: `Price updated successfully`,
-          price: price
+          message: `Type Currency updated successfully`,
+          typeCurrency: typeCurrency
         }
       }
-
 
       return msg
 
     } catch (error) {
-      console.error("Error updating price:", error)
+      console.error("Error updating type currency:", error)
       return {
         success: false,
         code: 500,
-        message: "Server error while updating prince",
+        message: "Server error while updating type currency",
         error: error.message
       }
     }
@@ -750,25 +748,25 @@ export class InventoryEntities {
     try {
       let msg = {
         status: false,
-        msg: "No price found",
+        msg: "No type currency found",
         code: 404,
       }
 
-      const price = await prisma.prices.findUnique({ where: { id } })
-      if (price) {
-        await prisma.prices.delete({ where: { id } })
+      const typeCurrency = await prisma.typeCurrency.findUnique({ where: { id } })
+      if (typeCurrency) {
+        await prisma.typeCurrency.delete({ where: { id } })
         msg = {
             success: true,
             code: 200,
-            message: "price deleted",
-            price,
+            message: "type currency deleted",
+            typeCurrency,
           }
       }
 
       return msg
 
     } catch (error) {
-      console.error("Error price: " , error)
+      console.error("Error type currency: " , error)
     }
   }
 }
