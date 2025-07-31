@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import "../styles/HomePage.scss";
 import Shortcuts from "../components/Home/Shortcuts";
+import "../styles/HomePage.scss";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("tap1");

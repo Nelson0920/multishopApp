@@ -1,0 +1,136 @@
+// Variables
+$PrimaryBlue: #36aad4;
+$SecundaryBlue: #236982;
+$PrimaryBackground: #ffffff;
+$SecondaryBackground: #dadada;
+$TertiaryBackground: #f2fbff;
+$PrimaryTextColor: #58baf4;
+$SecundaryTextColor: #303030;
+$HoverTextColor: white;
+$Line: #b2b2b2;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --PrimaryBlue: #{$PrimaryBlue};
+  --SecundaryBlue: #{$SecundaryBlue};
+  --PrimaryBackground: #{$PrimaryBackground};
+  --SecondaryBackground: #{$SecondaryBackground};
+  --TertiaryBackground: #{$TertiaryBackground};
+  --PrimaryTextColor: #{$PrimaryTextColor};
+  --SecundaryTextColor: #{$SecundaryTextColor};
+  --HoverTextColor: #{$HoverTextColor};
+  --Line: #{$Line};
+}
+
+.indicators_header {
+  display: flex;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  gap: 1.5rem;
+  align-items: center;
+
+  span {
+    font-size: 1.1rem;
+    color: var(--SecundaryTextColor);
+  }
+
+  button {
+    background-color: var(--PrimaryBackground);
+    color: var(--HoverTextColor);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 10px;
+    color: var(--PrimaryTextColor);
+    border: 1px solid var(--PrimaryBlue);
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+      background-color: var(--PrimaryBlue);
+      color: var(--HoverTextColor);
+    }
+  }
+}
+
+.indicators_container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+
+  .indicator{
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    height: 100%;
+    background-color: var(--PrimaryBackground);
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+
+    .indicator_header{
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--Line);
+      
+
+      h2 {
+        font-size: 1.2rem;
+        color: var(--SecondaryTextColor);
+        margin-bottom: 1.5rem;
+      }
+
+      .icon {
+        font-size: 1.5rem;
+        color: var(--PrimaryBlue);
+      }
+
+    }
+
+    .period_input{
+      display: flex;
+      flex-direction: column;
+      margin-top: 2rem;
+
+      label {
+        display: block;
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 4px;
+      }
+
+      .period-dropdown {
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 14px;
+        background-color: white;
+        cursor: pointer;
+        width: 10rem;
+      }
+
+      .period-dropdown:focus {
+        outline: none;
+        border-color: #3b82f6;
+      }
+    }
+
+    .indicator_content {
+      display: flex;
+      flex-direction: column;
+      margin-top: 1rem;
+      width: 100%;
+      height: 50vh;
+      background-color: #6b728011;
+    }
+  }
+}
