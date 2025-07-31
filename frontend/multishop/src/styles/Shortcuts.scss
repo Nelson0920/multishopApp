@@ -1,0 +1,189 @@
+// Variables
+$PrimaryBlue: #36aad4;
+$SecundaryBlue: #236982;
+$PrimaryBackground: #ffffff;
+$SecondaryBackground: #efeff7;
+$PrimaryTextColor: #58baf4;
+$SecundaryTextColor: #303030;
+$HoverTextColor: white;
+$Line: #b2b2b2;
+
+:root {
+  --PrimaryBlue: #{$PrimaryBlue};
+  --SecundaryBlue: #{$SecundaryBlue};
+  --PrimaryBackground: #{$PrimaryBackground};
+  --SecondaryBackground: #{$SecondaryBackground};
+  --PrimaryTextColor: #{$PrimaryTextColor};
+  --SecundaryTextColor: #{$SecundaryTextColor};
+  --HoverTextColor: #{$HoverTextColor};
+  --Line: #{$Line};
+}
+
+.shortcuts_section {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: var(--SecondaryBackground);
+  padding: 1rem;
+  gap: 2rem;
+}
+
+.shortcuts_left {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+
+  .shortcuts_title {
+    width: 100%;
+    background-color: var(--PrimaryBackground);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--SecundaryTextColor);
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .card_grid {
+    display: grid;
+    background-color: #FFFFFF;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    max-height: 70vh;
+    border-radius: 10px;
+
+    .card_item {
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 0.5rem;
+      }
+
+      span {
+        font-size: 0.9rem;
+        color: var(--SecundaryTextColor);
+      }
+    }
+  }
+}
+
+.shortcuts_right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .right_title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: var(--PrimaryBackground);
+    width: 100%;
+    text-align: center;
+  }
+
+  .progress_container {
+    width: 100%;
+    height: auto;
+    background-color: var(--PrimaryBackground);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow-y: auto;
+
+    .progress_scroll_content {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      
+      .progress_card {
+        background-color: #fff;
+        width: 100%;
+        height: 120px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+        .circular_progress {
+          width: 65px;
+          height: 65px;
+
+          .circular_chart {
+            width: 100%;
+            height: 100%;
+          }
+
+          .circle_bg {
+            fill: none;
+            stroke: #eee;
+            stroke-width: 2;
+          }
+
+          .circle {
+            fill: none;
+            stroke: #639C31;
+            stroke-width: 3.8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.3s ease;
+          }
+
+          .percentage {
+            fill: #639C31;
+            font-size: 0.5rem;
+            text-anchor: middle;
+            dominant-baseline: middle;
+          }
+
+          .fraction {
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: #639C31;
+            margin-top: 0.25rem;
+          }
+        }
+
+        .progress_details {
+          text-align: left;
+
+          h4 {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--SecundaryTextColor);
+            margin-bottom: 0.5rem;
+          }
+
+          button {
+            background-color: var(--PrimaryBlue);
+            border: none;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+
+            &:hover {
+              background-color: var(--SecundaryBlue);
+            }
+          }
+        }
+      }
+    }
+  }
+}
