@@ -3,6 +3,7 @@ import React from 'react'
 // Components
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
+import Indicators from '../components/Home/Indicators'
 // Styles
 import '../styles/HomePage.scss'
 
@@ -26,6 +27,11 @@ const HomePage = () => {
                 <span>Indicadores</span>
               </button>
             </div>
+
+
+          </section>
+          <section className='home_content__indicators'>
+            <Indicators />
           </section>
         </section>
       </div>

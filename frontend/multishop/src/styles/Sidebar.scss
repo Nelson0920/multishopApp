@@ -1,6 +1,3 @@
-// Sidebar.scss
-
-// Variables
 $PrimaryBlue: #36aad4;
 $SecundaryBlue: #236982;
 $PrimaryBackground: #ffffff;
@@ -26,15 +23,33 @@ $HoverTextColor: white;
 }
 
 #sidebar_container {
-  background: linear-gradient(180deg, $PrimaryBlue, $SecundaryBlue);
-  width: 5vw;
+  top: 0;
+  left: 0;
   height: 100vh;
+  width: 5vw;
+  background: linear-gradient(180deg, $PrimaryBlue, $SecundaryBlue);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2rem;
+  padding: 1rem 0.5rem;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease-in-out;
+  z-index: 100;
+  transition: width 0.3s ease-in-out;
+
+  &:hover {
+    width: 15vw;
+
+    .sidebar_list li {
+      justify-content: flex-start;
+      padding-left: 1rem;
+
+      .sidebar_text {
+        display: inline;
+        margin-left: 0.8rem;
+      }
+    }
+  }
 }
 
 .sidebar_list {
@@ -44,17 +59,23 @@ $HoverTextColor: white;
   margin: 0;
 
   li {
-    width: 3rem;
+    width: 100%;
     height: 3rem;
-    margin: 1rem auto;
+    margin: 1rem 0;
     background-color: $SecundaryBlue;
     color: $PrimaryTextColor;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     border-radius: 0.5rem;
     transition: all 0.3s ease-in-out;
+
+    .sidebar_text {
+      display: none;
+      white-space: nowrap;
+      font-size: 1rem;
+    }
 
     &:hover {
       background-color: $SecondaryBackground;

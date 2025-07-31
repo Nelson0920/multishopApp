@@ -1,14 +1,25 @@
-// Sidebar.scss
-
 // Variables
 $PrimaryBlue: #36aad4;
 $SecundaryBlue: #236982;
 $PrimaryBackground: #ffffff;
 $SecondaryBackground: #dadada;
+$TertiaryBackground: #f2fbff;
 $PrimaryTextColor: #58baf4;
 $SecundaryTextColor: #303030;
 $HoverTextColor: white;
 $Line: #b2b2b2;
+
+:root {
+  --PrimaryBlue: #{$PrimaryBlue};
+  --SecundaryBlue: #{$SecundaryBlue};
+  --PrimaryBackground: #{$PrimaryBackground};
+  --SecondaryBackground: #{$SecondaryBackground};
+  --TertiaryBackground: #{$TertiaryBackground};
+  --PrimaryTextColor: #{$PrimaryTextColor};
+  --SecundaryTextColor: #{$SecundaryTextColor};
+  --HoverTextColor: #{$HoverTextColor};
+  --Line: #{$Line};
+}
 
 * {
   margin: 0;
@@ -16,32 +27,58 @@ $Line: #b2b2b2;
   box-sizing: border-box;
 }
 
-:root {
-  --PrimaryBlue: #{$PrimaryBlue};
-  --SecundaryBlue: #{$SecundaryBlue};
-  --PrimaryBackground: #{$PrimaryBackground};
-  --SecondaryBackground: #{$SecondaryBackground};
-  --PrimaryTextColor: #{$PrimaryTextColor};
-  --SecundaryTextColor: #{$SecundaryTextColor};
-  --HoverTextColor: #{$HoverTextColor};
-  --Line: #{$Line};
+// Sidebar
+#sidebar_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--PrimaryBlue), var(--SecundaryBlue));
+  width: 5vw;
+  transition: width 0.3s ease-in-out;
+  z-index: 1000;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
 }
 
+#sidebar_container.expanded {
+  width: 15vw;
+}
+
+// Contenedor principal
 .main_container {
-  background-color: rgb(227, 226, 226);
   display: flex;
+  height: 100vh;
+  background-color: var(--SecondaryBackground);
+}
+
+// Contenido general
+.home_content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--SecondaryBackground);
+  padding-left: 5vw;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+.home_content.sidebar-expanded {
+  padding-left: 15vw;
 }
 
 .home_content__shortcuts {
   display: flex;
   flex-direction: column;
   justify-content: end;
-  width: 100%;
   height: 15vh;
   padding-left: 2rem;
   background-color: #fff;
 
-  .buttons{
+  .buttons {
     display: flex;
     gap: 1rem;
     width: 23%;
@@ -51,26 +88,22 @@ $Line: #b2b2b2;
 
   .buttons button {
     width: 100%;
-    height: 100%;
     background-color: var(--PrimaryBackground);
     border: 1px solid transparent;
     color: var(--SecundaryTextColor);
-    cursor: pointer;
     font-size: 1rem;
     padding: 0.5rem;
+    cursor: pointer;
     transition: all 0.3s ease-in-out;
 
-    
-
     &:hover {
-      background-color: var(--SecondaryBackground);
+      background-color: var(--TertiaryBackground);
       color: var(--PrimaryTextColor);
       border-top: 1px solid var(--PrimaryTextColor);
       border-left: 1px solid var(--PrimaryTextColor);
       border-right: 1px solid var(--PrimaryTextColor);
       border-top-left-radius: 3px;
       border-top-right-radius: 3px;
-      transition: all 0.3s ease-in-out;
     }
   }
 
@@ -79,4 +112,19 @@ $Line: #b2b2b2;
     height: 60%;
     background-color: var(--Line);
   }
+}
+
+.home_content__indicators {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  border-top: 1px solid var(--PrimaryBlue);
+  background-color: var(--TertiaryBackground);
+}
+
+.home_content__creation {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: var(--TertiaryBackground);
 }

@@ -1,0 +1,106 @@
+// Variables
+$PrimaryBlue: #36aad4;
+$SecundaryBlue: #236982;
+$PrimaryBackground: #ffffff;
+$SecondaryBackground: #dadada;
+$TertiaryBackground: #f2fbff;
+$PrimaryTextColor: #58baf4;
+$SecundaryTextColor: #c45d5d;
+$TertiaryTextColor: #717171;
+$HoverTextColor: white;
+$Line: #b2b2b2;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#client_mainContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  height: 100%;
+}
+
+.creation_header {
+  // background-color: #236982;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  gap: 1.5rem;
+
+  h1{
+    font-size: 2rem;
+    color: $PrimaryTextColor;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 1.1rem;
+    color: $TertiaryTextColor;
+  }
+
+  a{
+    font-size: 1.3rem;
+    color: #fe0000
+  }
+
+}
+
+.creation_type {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: $PrimaryBackground;
+
+  h1 {
+    font-size: 1.5rem;
+    color: $PrimaryBlue;
+    font-weight: 600;
+  }
+
+  .creation_types {
+    display: flex;
+    // justify-content: space-between;
+    gap: 12rem;
+    padding: 1rem;
+
+    .creation_type_item {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .creation_type_checkbox{
+      display: flex;
+      align-items: center;
+
+      label{
+        font-size: 1.2rem;
+        margin-left: .4rem;
+        color: $PrimaryTextColor;
+      }
+
+      input[type="checkbox"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        cursor: pointer;
+        accent-color: #8dc2ff;
+        
+      }
+    }
+
+    .creation_type_description{
+      span {
+        font-size: 1rem;
+        color: $TertiaryTextColor;
+        margin-top: 0.5rem;
+      }
+    }
+  }
+}
