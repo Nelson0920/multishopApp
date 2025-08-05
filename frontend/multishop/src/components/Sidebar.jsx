@@ -1,7 +1,11 @@
 // Dependecies
-import React                                        from 'react'
-import { IoSettingsSharp }                          from "react-icons/io5"
-import { FaHome }                                   from "react-icons/fa"
+import React                                      from 'react'
+import { IoSettingsSharp , IoBagHandleSharp}      from "react-icons/io5"
+import { FaHome, FaBook, FaCashRegister }         from "react-icons/fa"
+import { MdContacts }                             from "react-icons/md"
+import { MdAttachMoney }                          from "react-icons/md"
+import { RiMoneyDollarCircleFill }                from "react-icons/ri"
+import { FaClipboardList }                        from "react-icons/fa6"
 // Styles
 import '../styles/Sidebar.scss'
 
@@ -14,19 +18,19 @@ const Sidebar = () => {
           <span className="sidebar_text">Inicio</span>
         </li>
         <li>
-          <IoSettingsSharp className='icon_sidebar'/>
+          <FaClipboardList className='icon_sidebar'/>
           <span className="sidebar_text">Inventario</span>
         </li>
         <li>
-          <IoSettingsSharp className='icon_sidebar'/>
+          <IoBagHandleSharp className='icon_sidebar'/>
           <span className="sidebar_text">Compras</span>
         </li>
         <li>
-          <IoSettingsSharp className='icon_sidebar'/>
+          <RiMoneyDollarCircleFill className='icon_sidebar'/>
           <span className="sidebar_text">Tesorería</span>
         </li>
         <li>
-          <IoSettingsSharp className='icon_sidebar'/>
+          <FaCashRegister className='icon_sidebar'/>
           <span className="sidebar_text">Facturación en Caja</span>
         </li>
         <li>
@@ -34,17 +38,17 @@ const Sidebar = () => {
           <span className="sidebar_text">Activo Fijo</span>
         </li>
         <li>
-          <IoSettingsSharp className='icon_sidebar'/>
+          <FaBook className='icon_sidebar'/>
           <span className="sidebar_text">Contabilidad</span>
         </li>
         <li>
-          <IoSettingsSharp className='icon_sidebar'/>
+          <MdContacts className='icon_sidebar'/>
           <span className="sidebar_text">Contactanos</span>
         </li>
       </ul>
     </nav>
-  );
-};
+  )
+}
 
 
 export default Sidebar

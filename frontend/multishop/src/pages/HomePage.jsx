@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Shortcuts from "../components/Home/Shortcuts";
+import Indicators from "../components/Home/Indicators";
 import "../styles/HomePage.scss";
 
 const HomePage = () => {
@@ -10,11 +11,11 @@ const HomePage = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "tap1":
-        return <div className="tab_content"><Shortcuts/></div>;
+        return <div className=""><Shortcuts/></div>;
       case "tap2":
-        return <div className="tab_content">Contenido de Indicadores 1</div>;
+        return <div className=""><Indicators/></div>;
       case "tap3":
-        return <div className="tab_content">Contenido de Indicadores 2</div>;
+        return <div className="">Contenido de Indicadores 2</div>;
       default:
         return null;
     }
@@ -44,7 +45,9 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="tabs_section">{renderContent()}</section>
+        <section className="home_content__indicators">
+          <section className="tabs_section">{renderContent()}</section>
+        </section>
       </section>
     </div>
   );

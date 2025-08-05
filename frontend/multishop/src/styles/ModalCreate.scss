@@ -1,3 +1,11 @@
+$PrimaryBlue: #36aad4;
+$SecundaryBlue: #236982;
+$PrimaryBackground: #ffffff;
+$SecondaryBackground: #ffffff5e;
+$PrimaryTextColor: #ffffff;
+$TertiaryBackground: #b1b1b1;
+$HoverTextColor: white;
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -73,7 +81,7 @@
           background: none;
           border: none;
           text-align: left;
-          padding: 8px 0;
+          padding: 8px;
           color: #6b7280;
           font-size: 14px;
           cursor: pointer;
@@ -81,9 +89,8 @@
           line-height: 1.4;
 
           &:hover {
-            background-color: #f1f5f9;
-            // transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: $PrimaryBlue;
+            transition: 0.2s;
           }
         }
       }

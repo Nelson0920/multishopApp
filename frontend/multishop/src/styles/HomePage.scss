@@ -30,6 +30,17 @@ $Line: #b2b2b2;
 .main_container {
   background-color: var(--SecondaryBackground);
   display: flex;
+  height: 100vh;
+}
+
+.home_content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--TertiaryBackground);
+  padding-left: 5vw;
+  transition: padding-left 0.3s ease-in-out;
 }
 
 .home_content__shortcuts {
@@ -63,17 +74,29 @@ $Line: #b2b2b2;
     margin-top: 2.5px;
     border-left: 0px solid var(--SecondaryBackground);
     border-right: 0px solid var(--SecondaryBackground);
-    border-bottom: 2px solid var(--PrimaryTextColor);
+    border-bottom: 1px solid transparent;
+
+    &:hover {
+      background-color: var(--TertiaryBackground);
+      color: var(--PrimaryTextColor);
+      border-top: 1px solid var(--PrimaryTextColor);
+      border-left: 1px solid var(--PrimaryTextColor);
+      border-right: 1px solid var(--PrimaryTextColor);
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      transition: all 0.3s ease-in-out;
+    }
 
     &.active {
-      background-color: var(--SecondaryBackground);
+      background-color: var(--TertiaryBackground);
       color: var(--PrimaryTextColor);
       border-top: 2px solid var(--PrimaryTextColor);
       border-left: 2px solid var(--PrimaryTextColor);
       border-right: 2px solid var(--PrimaryTextColor);
-      border-bottom: 2px solid var(--SecondaryBackground);
+      border-bottom: 2px solid var(--TertiaryBackground);
       border-top-left-radius: 6px;
       border-top-right-radius: 6px;
+      z-index: 1;
     }
   }
 
@@ -84,8 +107,20 @@ $Line: #b2b2b2;
   }
 }
 
-.tabs_section {
-  border-top: 2px solid var(--PrimaryTextColor);
+.home_content__indicators {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: var(--TertiaryBackground);
+  border-top: 1px solid var(--PrimaryBlue);
+}
+
+.home_content__creation{
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: var(--TertiaryBackground);
+  border-top: 1px solid var(--PrimaryBlue);
 }
 
 .tab_content {

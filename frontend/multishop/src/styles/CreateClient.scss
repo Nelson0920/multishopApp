@@ -20,7 +20,6 @@ $Line: #b2b2b2;
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  height: 100%;
 }
 
 .creation_header {
@@ -32,7 +31,8 @@ $Line: #b2b2b2;
 
   h1{
     font-size: 2rem;
-    color: $PrimaryTextColor;
+    // color: $PrimaryTextColor;
+    color: #767676;
     margin-bottom: 0.5rem;
     font-weight: 600;
   }
@@ -60,7 +60,8 @@ $Line: #b2b2b2;
 
   h1 {
     font-size: 1.5rem;
-    color: $PrimaryBlue;
+    // color: $PrimaryBlue;
+    color: #767676;
     font-weight: 600;
   }
 
@@ -101,6 +102,373 @@ $Line: #b2b2b2;
         color: $TertiaryTextColor;
         margin-top: 0.5rem;
       }
+    }
+  }
+}
+
+.creation_form{
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: $PrimaryBackground;
+
+  h1 {
+    font-size: 1.5rem;
+    color: $TertiaryTextColor;
+    font-weight: 600;
+  }
+
+  #red_icon_form{
+    color:#fe0000;
+  }
+}
+
+.form_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  
+  .phone_section {
+    grid-column: 1 / -1;
+  }
+}
+
+.form_column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.required_label {
+  // color: #27ae60;
+  
+  &::before {
+    content: "* ";
+    color: #e74c3c;
+  }
+}
+
+.form_input, .form_select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  
+  &:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  }
+}
+
+.form_select {
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 32px;
+  appearance: none;
+}
+
+.identification_group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.identification_input {
+  flex: 1;
+}
+
+.dv_label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.autocomplete_btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #2c3e50;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    color: $PrimaryBlue;
+  }
+  
+  .info_icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+  }
+}
+
+.phone_section {
+  margin-top: 20px;
+}
+
+.phone_group {
+  display: flex;
+  align-items: end;
+  gap: 15px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.phone_field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  
+  &:first-child {
+    flex: 0 0 100px;
+  }
+  
+  &:nth-child(2) {
+    flex: 1;
+    min-width: 150px;
+  }
+  
+  &:nth-child(3) {
+    flex: 0 0 100px;
+  }
+}
+
+.phone_input {
+  padding: 8px 12px;
+}
+
+.delete_btn {
+  padding: 8px 16px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  height: fit-content;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #c0392b;
+  }
+}
+
+.add_phone_btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #229954;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .form_grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .creation_types {
+    flex-direction: column;
+  }
+  
+  .phone_group {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .phone_field {
+      flex: none;
+    }
+  }
+}
+
+
+// -----------------
+
+.billing_form {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #fafafa;
+  margin-top: 20px;
+  
+  h1 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .info_icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background-color: #3498db;
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+}
+
+.billing_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.billing_column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phone_group_billing {
+  display: flex;
+  gap: 15px;
+  
+  .phone_field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    
+    &:first-child {
+      flex: 0 0 100px;
+    }
+    
+    &:last-child {
+      flex: 1;
+    }
+  }
+}
+
+.fiscal_responsibility {
+  h3 {
+    font-size: 16px;
+    color: #3498db;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  
+  .fiscal_description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+}
+
+.fiscal_options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fiscal_option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #3498db;
+  }
+  
+  label {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    
+    .fiscal_code {
+      font-weight: 600;
+      color: #333;
+      min-width: 60px;
+    }
+    
+    .fiscal_description {
+      color: #666;
+      font-weight: normal;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .form_grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .creation_types {
+    flex-direction: column;
+  }
+  
+  .phone_group {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .phone_field {
+      flex: none;
+    }
+  }
+  
+  .billing_grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .phone_group_billing {
+    flex-direction: column;
+    
+    .phone_field {
+      flex: none;
     }
   }
 }
