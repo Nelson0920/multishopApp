@@ -25,7 +25,7 @@ const HomePage = () => {
     <div className="main_container">
       <Sidebar />
       <section className="home_content">
-        <Navbar />
+        <Navbar/>
 
         <section className="home_content__shortcuts">
           <h1>Inicio</h1>

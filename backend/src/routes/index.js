@@ -29,22 +29,31 @@ import images from '../controllers/img.js'
 
 // Auth - Users
 router.use('/auth', authUsers)
-router.use('/user', authMiddleware, users)
+//router.use('/user', authMiddleware, users)
+router.use('/user', users)
+
 // Categories
 router.use('/category', categories)
+
 // Accounts
 router.use('/accounts', accounts)
+
 // Clients
 router.use('/clients', clients)
+
 // Finance
 router.use('/finance', finance)
+
 // Sellers
 router.use('/sellers', sellers)
+
 // Inventory
 router.use('/inventory', inventory)
 router.use('/inventory/entities', inventoryEntities)
+
 // Complementary
 router.use('/complementary', complementary)
+
 // Images
 router.use('/images', images)
 

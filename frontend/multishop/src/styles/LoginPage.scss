@@ -41,6 +41,13 @@ $HoverTextColor: white;
         display: flex;
         flex-direction: column;
 
+        .global-error {
+          color: red;
+          font-size: 14px;
+          margin-bottom: 10px;
+          text-align: center;
+        }
+
         h1 {
           font-size: 30px;
           font-weight: bold;

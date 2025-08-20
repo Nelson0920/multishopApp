@@ -8,7 +8,11 @@ import { PORT }     from './global/_var.js'
 const app = express()
 
 // ** Middleware **
-app.use(cors())
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true               
+}))
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))

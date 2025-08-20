@@ -1,8 +1,10 @@
 import React from 'react'
 // Styles
 import '../../styles/UserNavbar.scss'
+import { useAuth } from '../../context/AuthContext';
 
-const UserNavbar = ({ onClose }) => {
+const UserModal = ({ onClose, user }) => {
+    const { logout } = useAuth();
   const handleCloseModal = () => {
     onClose()
   }
@@ -13,8 +15,8 @@ const UserNavbar = ({ onClose }) => {
         <div className="userNav-header">
           <div className='userNav_img'/>
           <section>
-            <h3 className="userNav-name">nombre usuario</h3>
-            <span className="userNav-email">nombreusuario@gmail.com</span>
+            <h3 className="userNav-name">{user.name}</h3>
+            <span className="userNav-email">{user.email}</span>
           </section>
           <button className="modal-close" onClick={handleCloseModal}>
             ×
@@ -27,7 +29,7 @@ const UserNavbar = ({ onClose }) => {
           <div className="userNav-item">
             <span className="userNav-message">🔒 Cambiar Contraseña</span>
           </div>
-          <div className="userNav-item">
+          <div className="userNav-item" onClick={() => logout()}>
             <span className="userNav-message">🚪 Cerrar Sesión</span>
           </div>
         </div>
@@ -36,4 +38,4 @@ const UserNavbar = ({ onClose }) => {
   )
 }
 
-export default UserNavbar
+export default UserModal

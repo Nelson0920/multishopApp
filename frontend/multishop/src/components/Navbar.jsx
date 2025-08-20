@@ -11,9 +11,11 @@ import NotifyModal from './Navbar/NotifyModal'
 import HelpModal from './Navbar/HelpModal'
 import SearchModal from './Navbar/SearchModal'
 import UserModal from './Navbar/UserModal'
+import { useAuth } from '../context/AuthContext';
 
 
 const Navbar = () => {
+  const { user} = useAuth();
   const [showModal, setShowModal] = useState(false)
   const [showNotifyModal, setShowNotifyModal] = useState(false)
   const [showHelpModal, setShowHelpModal] = useState(false)
@@ -47,7 +49,7 @@ const Navbar = () => {
         </figure>
 
         <div className='name_company'>
-          <span>MULTISHOP - NOMBRE</span>
+          <span>MULTISHOP - {user.data.name}</span>
         </div>
 
         <div className='container_buttons'>
@@ -81,7 +83,7 @@ const Navbar = () => {
       {showNotifyModal && <NotifyModal onClose={() => setShowNotifyModal(false)} />}
       {showHelpModal && <HelpModal onClose={() => setShowHelpModal(false)} />}
       {showSearchModal && <SearchModal onClose={() => setShowSearchModal(false)} />}
-      {showUserModal && <UserModal onClose={() => setShowUserModal(false)} />}
+      {showUserModal && <UserModal onClose={() => setShowUserModal(false)} user={user.data}/>}
       {showModal && <ModalCreate onClose={closeModal} />}
     </>
     

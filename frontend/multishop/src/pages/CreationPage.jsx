@@ -8,12 +8,13 @@ import CreateClient from '../components/Creation/CreateClient'
 import '../styles/HomePage.scss'
 
 const HomePage = () => {
+
   return (
     <div>
       <div className='main_container'>
         <Sidebar />
         <section className='home_content'>
-          <Navbar />
+          <Navbar/>
 
           <section className='home_content__creation'>
             <CreateClient />
