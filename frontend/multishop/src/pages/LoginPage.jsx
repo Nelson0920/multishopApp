@@ -47,10 +47,9 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate()) return; // validación local
+    if (!validate()) return;
     
     await signIn({ email, password }); 
-    // ahora NO revisamos erroresAuth aquí, lo hará el useEffect
   };
 
   return (
@@ -70,7 +69,7 @@ export default function LoginPage() {
               <div className="form-group">
                 <label>Email o usuario</label>
                 <input
-                  type="text"   // 👈 importante: no uses "email" porque puede ser username
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Ingresa tu email o usuario"
