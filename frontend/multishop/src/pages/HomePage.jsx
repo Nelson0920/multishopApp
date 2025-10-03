@@ -11,9 +11,9 @@ const HomePage = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "tap1":
-        return <div className=""><Shortcuts/></div>;
+        return <div className=""><Shortcuts /></div>;
       case "tap2":
-        return <div className=""><Indicators/></div>;
+        return <div className=""><Indicators /></div>;
       case "tap3":
         return <div className="">Contenido de Indicadores 2</div>;
       default:
@@ -25,8 +25,7 @@ const HomePage = () => {
     <div className="main_container">
       <Sidebar />
       <section className="home_content">
-        <Navbar/>
-
+        <Navbar />
         <section className="home_content__shortcuts">
           <h1>Inicio</h1>
           <div className="buttons">
