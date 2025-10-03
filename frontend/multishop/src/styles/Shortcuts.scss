@@ -45,6 +45,7 @@ $Line: #b2b2b2;
   }
 
   .card_grid {
+    padding: 1rem;
     display: grid;
     background-color: #FFFFFF;
     grid-template-columns: repeat(4, 1fr);
@@ -56,22 +57,158 @@ $Line: #b2b2b2;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
     .card_item {
-      border-radius: 8px;
-      padding: 1rem;
+      border-radius: 12px;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+      border: 1px solid rgba(54, 170, 212, 0.1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transform: translateY(0);
 
-      img {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 0.5rem;
+      // Hover animations
+      &:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(54, 170, 212, 0.2);
+        border-color: rgba(54, 170, 212, 0.3);
+
+        .card_icon {
+          transform: scale(1.1) rotate(5deg);
+
+          img {
+            filter: brightness(1.1) contrast(1.1);
+          }
+        }
+
+        .card_title {
+          color: var(--PrimaryBlue);
+          transform: translateY(-2px);
+        }
+
+        .card_overlay {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .hover_ripple {
+          animation: ripple 0.6s ease-out;
+        }
       }
 
-      span {
-        font-size: 0.9rem;
-        color: var(--SecundaryTextColor);
+      // Active state for mobile taps
+      &:active {
+        transform: translateY(-4px) scale(0.98);
+      }
+
+      .card_icon {
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+
+        img {
+          width: 70px;
+          height: 70px;
+          margin-bottom: 0;
+          transition: all 0.3s ease;
+          border-radius: 8px;
+        }
+      }
+
+      .card_content {
+        text-align: center;
+        position: relative;
+        z-index: 2;
+
+        .card_title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--SecundaryTextColor);
+          transition: all 0.3s ease;
+          display: block;
+          margin: 0;
+        }
+      }
+
+      .card_overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg,
+            rgba(54, 170, 212, 0.05) 0%,
+            rgba(35, 105, 130, 0.05) 100%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        transform: translateY(10px);
+        border-radius: 12px;
+        z-index: 1;
+      }
+
+      .hover_ripple {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle,
+            rgba(54, 170, 212, 0.3) 0%,
+            transparent 70%);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        opacity: 0;
+      }
+    }
+
+    // Ripple animation keyframes
+    @keyframes ripple {
+      0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+      }
+
+      100% {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+      }
+    }
+
+    // Focus state for accessibility
+    .card_item:focus {
+      outline: 2px solid var(--PrimaryBlue);
+      outline-offset: 2px;
+    }
+
+    // Responsive design
+    @media (max-width: 768px) {
+      .card_item {
+        padding: 1rem;
+
+        &:hover {
+          transform: none;
+
+          .card_overlay {
+            opacity: 0;
+          }
+        }
+
+        .card_icon img {
+          width: 50px;
+          height: 50px;
+        }
+
+        .card_title {
+          font-size: 0.9rem;
+        }
       }
     }
   }
@@ -111,7 +248,7 @@ $Line: #b2b2b2;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      
+
       .progress_card {
         background-color: #fff;
         width: 100%;

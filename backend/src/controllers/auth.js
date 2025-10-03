@@ -64,27 +64,28 @@ router.post('/login', async (req, res) => {
     const token = generateToken(user);
 
     res.cookie('token', token)
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
       code: 200,
       message: 'Inicio de sesión exitoso',
     })
 
   } catch (error) {
+    console.error('🔥 Error en el inicio de sesión:', error);
     res.status(500).json({ success: false, message: 'Error al iniciar sesión' });
   }
 });
 
 // Verify
 router.get('/verify', async (req, res) => {
-  try {    
-    const {token} = req.cookies
+  try {
+    const { token } = req.cookies
 
     const filterKeys = Object.keys(req.cookies)
-  
-    if (filterKeys.length < 1 || !token ) {      
+
+    if (filterKeys.length < 1 || !token) {
       return res.status(400).json({ error: "Token no autorizado, acceso denegado" })
-    }else{
+    } else {
       const user = await Users.verifyToken(token)
       res.json(user)
     }
