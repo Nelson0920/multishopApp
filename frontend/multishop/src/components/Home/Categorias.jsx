@@ -13,8 +13,11 @@ const Categorias = () => {
       const [cuentaConsumos, setCuentaConsumos] = useState("");
       const [cuentaDevCompras, setCuentaDevCompras] = useState("");
       const [cuentaIVA, setCuentaIVA] = useState("");
-      const [auxiliarVentas, setAuxiliarVentas] = useState("");
       const [auxiliarCompras, setAuxiliarCompras] = useState("");
+      const [auxiliarConsumos, setAuxiliarConsumos] = useState("");
+      const [auxiliarDevCompras, setAuxiliarDevCompras] = useState("");
+      const [auxiliarIVA, setAuxiliarIVA] = useState("");
+      const [auxiliarIVA2, setAuxiliarIVA2] = useState("");
       const [visibleCategorias, setVisibleCategorias] = useState(false);
       const [visibleAuxiliares, setVisibleAuxiliares] = useState(false);
       const [filterText, setFilterText] = useState("");
@@ -110,12 +113,15 @@ const Categorias = () => {
             setMargenGanancia("");
             setPorcentajeComision("");
             setCuentaVentas("");
-            setAuxiliarVentas("");
             setCuentaCompras("");
-            setAuxiliarCompras("");
             setCuentaConsumos("");
             setCuentaDevCompras("");
             setCuentaIVA("");
+            setAuxiliarCompras("");
+            setAuxiliarConsumos("");
+            setAuxiliarDevCompras("");
+            setAuxiliarIVA("");
+            setAuxiliarIVA2("");
       };
 
       const handleBuscarCuenta = (field) => {
@@ -180,11 +186,20 @@ const Categorias = () => {
       const handleSelectAuxiliar = (auxiliar) => {
             const auxiliarText = `${auxiliar.codigo} - ${auxiliar.descripcion}`;
             switch (currentField) {
-                  case 'auxiliarVentas':
-                        setAuxiliarVentas(auxiliarText);
-                        break;
                   case 'auxiliarCompras':
                         setAuxiliarCompras(auxiliarText);
+                        break;
+                  case 'auxiliarConsumos':
+                        setAuxiliarConsumos(auxiliarText);
+                        break;
+                  case 'auxiliarDevCompras':
+                        setAuxiliarDevCompras(auxiliarText);
+                        break;
+                  case 'auxiliarIVA':
+                        setAuxiliarIVA(auxiliarText);
+                        break;
+                  case 'auxiliarIVA2':
+                        setAuxiliarIVA2(auxiliarText);
                         break;
                   default:
                         break;
@@ -207,13 +222,15 @@ const Categorias = () => {
       const isFormValid = () => {
             const baseValidation = nombre.trim() && margenGanancia.trim() && porcentajeComision.trim() &&
                   cuentaVentas.trim() && cuentaCompras.trim() && cuentaConsumos.trim() &&
-                  cuentaDevCompras.trim() && cuentaIVA.trim();
+                  cuentaDevCompras.trim() && cuentaIVA.trim() && auxiliarIVA2.trim();
 
-            const auxiliarVentasValidation = cuentaVentas.trim() ? auxiliarVentas.trim() && baseValidation : baseValidation;
+            const auxiliarComprasValidation = cuentaCompras.trim() ? auxiliarCompras.trim() && baseValidation : baseValidation;
+            const auxiliarConsumosValidation = cuentaConsumos.trim() ? auxiliarConsumos.trim() && auxiliarComprasValidation : auxiliarComprasValidation;
+            const auxiliarDevComprasValidation = cuentaDevCompras.trim() ? auxiliarDevCompras.trim() && auxiliarConsumosValidation : auxiliarConsumosValidation;
+            const auxiliarIVAValidation = cuentaIVA.trim() ? auxiliarIVA.trim() && auxiliarDevComprasValidation : auxiliarDevComprasValidation;
+            const auxiliarIVA2Validation = cuentaIVA.trim() ? auxiliarIVA2.trim() && auxiliarIVAValidation : auxiliarIVAValidation;
 
-            const auxiliarComprasValidation = cuentaCompras.trim() ? auxiliarCompras.trim() && auxiliarVentasValidation : auxiliarVentasValidation;
-
-            return auxiliarComprasValidation;
+            return auxiliarIVA2Validation;
       };
 
       return (
@@ -392,14 +409,14 @@ const Categorias = () => {
                                                             </div>
                                                       </div>
                                                       <div className="input_group sub_field">
-                                                            <label htmlFor="auxiliarCompras" className="input_label">
+                                                            <label htmlFor="auxiliarConsumos" className="input_label">
                                                                   ↳ Auxiliar 1 *
                                                             </label>
                                                             <div className="input_with_button">
                                                                   <input
                                                                         type="text"
-                                                                        id="auxiliarCompras"
-                                                                        value={auxiliarCompras}
+                                                                        id="auxiliarConsumos"
+                                                                        value={auxiliarConsumos}
                                                                         className="modal_input readonly_input"
                                                                         placeholder="Seleccione un auxiliar"
                                                                         maxLength={50}
@@ -408,7 +425,7 @@ const Categorias = () => {
                                                                   <button
                                                                         type="button"
                                                                         className="search_button"
-                                                                        onClick={() => handleBuscarAuxiliar('auxiliarCompras')}
+                                                                        onClick={() => handleBuscarAuxiliar('auxiliarConsumos')}
                                                                         title="Buscar auxiliares"
                                                                   >
                                                                         <MdSearch size={18} />
@@ -447,14 +464,14 @@ const Categorias = () => {
                                                             </div>
                                                       </div>
                                                       <div className="input_group sub_field">
-                                                            <label htmlFor="auxiliarCompras" className="input_label">
+                                                            <label htmlFor="auxiliarDevCompras" className="input_label">
                                                                   ↳ Auxiliar 2 *
                                                             </label>
                                                             <div className="input_with_button">
                                                                   <input
                                                                         type="text"
-                                                                        id="auxiliarCompras"
-                                                                        value={auxiliarCompras}
+                                                                        id="auxiliarDevCompras"
+                                                                        value={auxiliarDevCompras}
                                                                         className="modal_input readonly_input"
                                                                         placeholder="Seleccione un auxiliar"
                                                                         maxLength={50}
@@ -463,7 +480,7 @@ const Categorias = () => {
                                                                   <button
                                                                         type="button"
                                                                         className="search_button"
-                                                                        onClick={() => handleBuscarAuxiliar('auxiliarCompras')}
+                                                                        onClick={() => handleBuscarAuxiliar('auxiliarDevCompras')}
                                                                         title="Buscar auxiliares"
                                                                   >
                                                                         <MdSearch size={18} />
@@ -502,14 +519,14 @@ const Categorias = () => {
                                                             </div>
                                                       </div>
                                                       <div className="input_group sub_field">
-                                                            <label htmlFor="auxiliarCompras" className="input_label">
+                                                            <label htmlFor="auxiliarIVA" className="input_label">
                                                                   ↳ Auxiliar 1 *
                                                             </label>
                                                             <div className="input_with_button">
                                                                   <input
                                                                         type="text"
-                                                                        id="auxiliarCompras"
-                                                                        value={auxiliarCompras}
+                                                                        id="auxiliarIVA"
+                                                                        value={auxiliarIVA}
                                                                         className="modal_input readonly_input"
                                                                         placeholder="Seleccione un auxiliar"
                                                                         maxLength={50}
@@ -518,7 +535,7 @@ const Categorias = () => {
                                                                   <button
                                                                         type="button"
                                                                         className="search_button"
-                                                                        onClick={() => handleBuscarAuxiliar('auxiliarCompras')}
+                                                                        onClick={() => handleBuscarAuxiliar('auxiliarIVA')}
                                                                         title="Buscar auxiliares"
                                                                   >
                                                                         <MdSearch size={18} />
@@ -529,14 +546,14 @@ const Categorias = () => {
                                                             </div>
                                                       </div>
                                                       <div className="input_group sub_field">
-                                                            <label htmlFor="auxiliarCompras" className="input_label">
+                                                            <label htmlFor="auxiliarIVA2" className="input_label">
                                                                   ↳ Auxiliar 2 *
                                                             </label>
                                                             <div className="input_with_button">
                                                                   <input
                                                                         type="text"
-                                                                        id="auxiliarCompras"
-                                                                        value={auxiliarCompras}
+                                                                        id="auxiliarIVA2"
+                                                                        value={auxiliarIVA2}
                                                                         className="modal_input readonly_input"
                                                                         placeholder="Seleccione un auxiliar"
                                                                         maxLength={50}
@@ -545,7 +562,7 @@ const Categorias = () => {
                                                                   <button
                                                                         type="button"
                                                                         className="search_button"
-                                                                        onClick={() => handleBuscarAuxiliar('auxiliarCompras')}
+                                                                        onClick={() => handleBuscarAuxiliar('auxiliarIVA2')}
                                                                         title="Buscar auxiliares"
                                                                   >
                                                                         <MdSearch size={18} />
