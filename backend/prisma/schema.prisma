@@ -14,8 +14,8 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  rol String
-  id_company Json
+  rol String?
+  id_company Json?
 }
 
 model Company {

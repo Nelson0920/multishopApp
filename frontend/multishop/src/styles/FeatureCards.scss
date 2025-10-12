@@ -1,0 +1,101 @@
+.feature_section {
+      width: 100%;
+      height: 100%;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+.feature_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+.feature_card {
+      border-radius: 12px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+      border: 1px solid rgba(54, 170, 212, 0.1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      width: 280px;
+      height: 160px;
+
+      &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(54, 170, 212, 0.15);
+            border-color: rgba(54, 170, 212, 0.3);
+      }
+
+      &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(54, 170, 212, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+      }
+
+      &:hover::before {
+            opacity: 1;
+      }
+}
+
+.card_icon {
+      margin-bottom: 1rem;
+      z-index: 1;
+      position: relative;
+      filter: drop-shadow(0 2px 4px rgba(54, 170, 212, 0.2));
+
+      svg {
+            transition: transform 0.3s ease;
+      }
+}
+
+.feature_card:hover .card_icon svg {
+      transform: scale(1.1);
+}
+
+.card_content {
+      text-align: center;
+      z-index: 1;
+      position: relative;
+}
+
+.card_title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+}
+
+.feature_card:hover .card_title {
+      color: #36aad4;
+}
+
+@media (max-width: 768px) {
+      .feature_card {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            padding: 1.5rem;
+      }
+
+      .card_title {
+            font-size: 1.25rem;
+      }
+}

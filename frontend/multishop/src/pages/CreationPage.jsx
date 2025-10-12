@@ -1,28 +1,22 @@
-// Dependencies
 import React from 'react'
-// Components
-import Navbar from '../components/Navbar'
-import Sidebar from '../components/Sidebar'
+import NavbarSidebar from '../components/NavbarSidebar'
 import CreateClient from '../components/Creation/CreateClient'
-// Styles
 import '../styles/HomePage.scss'
 
-const HomePage = () => {
+const CreationPage = () => {
 
   return (
-    <div>
-      <div className='main_container'>
-        <Sidebar />
-        <section className='home_content'>
-          <Navbar/>
-
-          <section className='home_content__creation'>
-            <CreateClient />
-          </section>
+    <NavbarSidebar>
+      <div className="page-container">
+        <section className='home_content__shortcuts'>
+          <h1>Creación</h1>
+        </section>
+        <section className='home_content__creation'>
+          <CreateClient />
         </section>
       </div>
-    </div>
+    </NavbarSidebar>
   )
 }
 
-export default HomePage
+export default CreationPage

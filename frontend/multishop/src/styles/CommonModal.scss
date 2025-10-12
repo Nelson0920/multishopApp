@@ -1,0 +1,316 @@
+@forward './CommonButtons.scss';
+
+.modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+
+      &.zoom-out-active {
+            animation: zoomOut 0.3s ease-out forwards;
+      }
+
+      &.zoom-in-active {
+            animation: zoomIn 0.3s ease-out forwards;
+      }
+}
+
+@keyframes zoomOut {
+      0% {
+            opacity: 1;
+            transform: scale(1);
+      }
+
+      100% {
+            opacity: 0;
+            transform: scale(0.95);
+      }
+}
+
+@keyframes zoomIn {
+      0% {
+            opacity: 0;
+            transform: scale(0.95);
+      }
+
+      100% {
+            opacity: 1;
+            transform: scale(1);
+      }
+}
+
+@keyframes modalSlideIn {
+      from {
+            opacity: 0;
+            transform: scale(0.8) translateY(-50px);
+      }
+
+      to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+      }
+}
+
+@keyframes zoomInUp {
+      0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+      }
+
+      100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+      }
+}
+
+.modal-container {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalSlideIn 0.3s ease-out;
+
+      &.scrollable-content {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(54, 170, 212, 0.5) transparent;
+
+            &::-webkit-scrollbar {
+                  width: 6px;
+            }
+
+            &::-webkit-scrollbar-track {
+                  background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                  background-color: rgba(54, 170, 212, 0.5);
+                  border-radius: 6px;
+                  transition: background-color 0.3s ease;
+
+                  &:hover {
+                        background-color: rgba(54, 170, 212, 0.7);
+                  }
+            }
+      }
+
+      &.zoom-enabled-close-in {
+            animation: zoomInUp 0.3s ease-out forwards;
+      }
+}
+
+.modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e0e0e0;
+
+      .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+      }
+
+      .modal-icon {
+            opacity: 0.8;
+      }
+}
+
+.modal-form {
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #e0e0e0;
+
+      .input-group {
+            margin-bottom: 1.5rem;
+
+            &:last-child {
+                  margin-bottom: 0;
+            }
+
+            .input-label {
+                  display: block;
+                  font-size: 1rem;
+                  font-weight: 600;
+                  color: #333;
+                  margin-bottom: 0.5rem;
+                  transition: color 0.3s ease;
+
+                  &:focus-within {
+                        color: #36aad4;
+                  }
+
+                  &.disabled {
+                        color: #999;
+                        opacity: 0.8;
+                  }
+            }
+
+            .modal-input,
+            .modal-select,
+            .modal-textarea {
+                  width: 100%;
+                  padding: 0.875rem 1rem;
+                  border: 2px solid rgba(54, 170, 212, 0.2);
+                  border-radius: 8px;
+                  font-size: 1rem;
+                  color: #333;
+                  background-color: white;
+                  transition: all 0.3s ease;
+                  box-sizing: border-box;
+                  outline: none;
+
+                  &.focus {
+                        border-color: #36aad4;
+                        box-shadow: 0 0 0 3px rgba(54, 170, 212, 0.1);
+                        transform: translateY(-1px);
+                  }
+
+                  &:hover:not(:focus):not(.focus):not(:disabled):not(.disabled) {
+                        border-color: rgba(54, 170, 212, 0.4);
+                  }
+
+                  &::placeholder {
+                        color: rgba(48, 48, 48, 0.5);
+                  }
+
+                  &:disabled,
+                  &.disabled {
+                        cursor: not-allowed;
+                        opacity: 0.6;
+                        background-color: rgba(239, 239, 247, 0.5);
+                  }
+            }
+
+            .modal-select {
+                  appearance: none;
+                  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+                  background-repeat: no-repeat;
+                  background-position: right 0.7rem center;
+                  background-size: 1rem;
+                  padding-right: 2.5rem;
+                  cursor: pointer;
+                  background-color: white;
+                  transition: all 0.3s ease;
+
+                  &:disabled {
+                        cursor: not-allowed;
+                        opacity: 0.6;
+                  }
+            }
+
+            .modal-textarea {
+                  resize: vertical;
+                  min-height: 100px;
+                  max-height: 200px;
+                  outline: none;
+            }
+      }
+
+      .modal-actions {
+            justify-content: flex-end;
+            align-items: center;
+            display: flex;
+            gap: 1rem;
+
+            .help-link {
+                  font-size: 0.95rem;
+                  font-weight: 600;
+                  color: #36aad4;
+                  text-decoration: none;
+                  margin-right: auto;
+                  padding: 0.5rem 1rem;
+                  border-radius: 4px;
+                  transition: all 0.3s ease;
+                  white-space: nowrap;
+
+                  &:hover {
+                        background-color: rgba(54, 170, 212, 0.1);
+                        color: #2c8fb8;
+                  }
+            }
+
+            .primary {
+                  order: 2;
+            }
+
+            .secondary {
+                  order: 1;
+            }
+
+            &.single-button-per-row {
+                  flex-direction: column;
+
+                  button {
+                        width: 100%;
+                  }
+            }
+      }
+
+      &.form-centered {
+            .modal-actions {
+                  justify-content: center;
+            }
+      }
+
+      &.form-persistent-primary-actions {
+            .modal-actions {
+                  .btn-cancel {
+                        display: none;
+                  }
+            }
+      }
+
+      &:not(.modal-zoom-out-enabled) {
+            &.zoom-out-active {
+                  animation: zoomInUp 0.3s ease-out forwards;
+            }
+      }
+}
+
+@media (max-width: 768px) {
+      .modal-container {
+            margin: 1rem;
+            padding: 1.5rem;
+            width: calc(100% - 2rem);
+            max-height: calc(100vh - 2rem);
+      }
+
+      .modal-header {
+            .modal-title {
+                  font-size: 1.3rem;
+            }
+      }
+
+      .modal-form {
+            .input-group {
+                  &.form-buttons-group {
+                        flex-direction: column;
+                  }
+            }
+
+            .modal-actions {
+                  flex-direction: column;
+
+                  button {
+                        width: 100%;
+                  }
+
+                  .help-link {
+                        margin-right: 0;
+                  }
+            }
+      }
+}

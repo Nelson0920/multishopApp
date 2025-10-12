@@ -1,4 +1,3 @@
-// Variables
 $PrimaryBlue: #36aad4;
 $SecundaryBlue: #236982;
 $PrimaryBackground: #ffffff;
@@ -33,10 +32,13 @@ $Line: #b2b2b2;
   padding-bottom: 1rem;
   gap: 1.5rem;
   align-items: center;
+  flex-wrap: wrap;
 
   span {
     font-size: 1.1rem;
     color: var(--SecundaryTextColor);
+    flex: 1;
+    min-width: 200px;
   }
 
   button {
@@ -50,6 +52,7 @@ $Line: #b2b2b2;
     color: var(--PrimaryTextColor);
     border: 1px solid var(--PrimaryBlue);
     transition: 0.3s ease-in-out;
+    white-space: nowrap;
 
     &:hover {
       background-color: var(--PrimaryBlue);
@@ -66,7 +69,7 @@ $Line: #b2b2b2;
   padding: 1rem;
   width: 100%;
 
-  .indicator{
+  .indicator {
     display: flex;
     flex-direction: column;
     width: 49%;
@@ -77,11 +80,11 @@ $Line: #b2b2b2;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease-in-out;
 
-    .indicator_header{
+    .indicator_header {
       display: flex;
       align-items: center;
       border-bottom: 1px solid var(--Line);
-      
+
 
       h2 {
         font-size: 1.2rem;
@@ -96,7 +99,7 @@ $Line: #b2b2b2;
 
     }
 
-    .period_input{
+    .period_input {
       display: flex;
       flex-direction: column;
       margin-top: 2rem;
@@ -131,6 +134,160 @@ $Line: #b2b2b2;
       width: 100%;
       height: 50vh;
       background-color: #6b728011;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .indicators_header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 0.8rem;
+
+    span {
+      font-size: 1rem;
+      min-width: auto;
+      width: 100%;
+    }
+
+    button {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+
+  .indicators_container {
+    padding: 0.8rem;
+    gap: 0.8rem;
+
+    .indicator {
+      width: 100%;
+      padding: 0.8rem;
+
+      .indicator_header {
+        h2 {
+          font-size: 1.1rem;
+          margin-bottom: 1rem;
+        }
+      }
+
+      .period_input {
+        margin-top: 1.5rem;
+
+        .period-dropdown {
+          width: 100%;
+          font-size: 13px;
+        }
+      }
+
+      .indicator_content {
+        height: 40vh;
+        margin-top: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .indicators_header {
+    padding-top: 0.8rem;
+    padding-bottom: 0.6rem;
+    gap: 0.8rem;
+
+    span {
+      font-size: 0.9rem;
+    }
+
+    button {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+    }
+  }
+
+  .indicators_container {
+    padding: 0.6rem;
+    gap: 0.6rem;
+
+    .indicator {
+      padding: 0.6rem;
+
+      .indicator_header {
+        h2 {
+          font-size: 1rem;
+          margin-bottom: 0.8rem;
+        }
+      }
+
+      .period_input {
+        margin-top: 1rem;
+
+        label {
+          font-size: 13px;
+        }
+
+        .period-dropdown {
+          font-size: 12px;
+          padding: 6px 10px;
+        }
+      }
+
+      .indicator_content {
+        height: 35vh;
+        margin-top: 0.6rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .indicators_header {
+    padding-top: 0.6rem;
+    padding-bottom: 0.4rem;
+    gap: 0.6rem;
+
+    span {
+      font-size: 0.8rem;
+    }
+
+    button {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.4rem;
+    }
+  }
+
+  .indicators_container {
+    padding: 0.4rem;
+    gap: 0.4rem;
+
+    .indicator {
+      padding: 0.4rem;
+
+      .indicator_header {
+        h2 {
+          font-size: 0.9rem;
+          margin-bottom: 0.6rem;
+        }
+      }
+
+      .period_input {
+        margin-top: 0.8rem;
+
+        label {
+          font-size: 12px;
+        }
+
+        .period-dropdown {
+          font-size: 11px;
+          padding: 4px 8px;
+        }
+      }
+
+      .indicator_content {
+        height: 30vh;
+        margin-top: 0.4rem;
+      }
     }
   }
 }

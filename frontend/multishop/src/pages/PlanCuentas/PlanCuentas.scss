@@ -1,0 +1,34 @@
+@use '@styles/CommonModal.scss';
+@use '@styles/FeatureCards.scss';
+@use '@styles/CommonPage.scss';
+@use '@styles/CommonTable.scss';
+@use '@styles/CommonSearch.scss';
+@use '@styles/CommonCards.scss';
+@use '@styles/CommonVariables.scss' as *;
+
+.plan-cuentas-page {
+      @extend .page-module;
+
+      .table-container {
+            @extend .table-container-expanded;
+
+            .table-wrapper {
+                  .planes-table {
+                        @extend table;
+                  }
+            }
+
+            .cards-wrapper {
+                  @extend .cards-wrapper-expanded;
+            }
+      }
+}
+
+
+.input_with_button {
+      @extend .input-with-button;
+}
+
+.codes_list_container {
+      @extend .codes-list-container;
+}

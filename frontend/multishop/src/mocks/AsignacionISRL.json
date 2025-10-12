@@ -1,0 +1,102 @@
+[
+      {
+            "id": 1,
+            "code": "ISRL001",
+            "name": "Servicios Profesionales",
+            "percentage_pn": 10,
+            "percentage_pj": 5,
+            "subtrahend_amount_pn": 50000,
+            "subtrahend_amount_pj": 100000,
+            "createdAt": "2024-01-15T10:30:00Z"
+      },
+      {
+            "id": 2,
+            "code": "ISRL002",
+            "name": "Consultoría Técnica",
+            "percentage_pn": 8,
+            "percentage_pj": 4,
+            "subtrahend_amount_pn": 40000,
+            "subtrahend_amount_pj": 80000,
+            "createdAt": "2024-01-20T14:15:00Z"
+      },
+      {
+            "id": 3,
+            "code": "ISRL003",
+            "name": "Servicios de Mantenimiento",
+            "percentage_pn": 12,
+            "percentage_pj": 6,
+            "subtrahend_amount_pn": 60000,
+            "subtrahend_amount_pj": 120000,
+            "createdAt": "2024-02-01T09:45:00Z"
+      },
+      {
+            "id": 4,
+            "code": "ISRL004",
+            "name": "Servicios de Limpieza",
+            "percentage_pn": 15,
+            "percentage_pj": 7.5,
+            "subtrahend_amount_pn": 30000,
+            "subtrahend_amount_pj": 60000,
+            "createdAt": "2024-02-10T16:20:00Z"
+      },
+      {
+            "id": 5,
+            "code": "ISRL005",
+            "name": "Servicios de Seguridad",
+            "percentage_pn": 9,
+            "percentage_pj": 4.5,
+            "subtrahend_amount_pn": 45000,
+            "subtrahend_amount_pj": 90000,
+            "createdAt": "2024-02-15T11:30:00Z"
+      },
+      {
+            "id": 6,
+            "code": "ISRL006",
+            "name": "Servicios de Transporte",
+            "percentage_pn": 11,
+            "percentage_pj": 5.5,
+            "subtrahend_amount_pn": 35000,
+            "subtrahend_amount_pj": 70000,
+            "createdAt": "2024-02-20T13:45:00Z"
+      },
+      {
+            "id": 7,
+            "code": "ISRL007",
+            "name": "Servicios de Catering",
+            "percentage_pn": 13,
+            "percentage_pj": 6.5,
+            "subtrahend_amount_pn": 25000,
+            "subtrahend_amount_pj": 50000,
+            "createdAt": "2024-03-01T08:15:00Z"
+      },
+      {
+            "id": 8,
+            "code": "ISRL008",
+            "name": "Servicios de Publicidad",
+            "percentage_pn": 7,
+            "percentage_pj": 3.5,
+            "subtrahend_amount_pn": 55000,
+            "subtrahend_amount_pj": 110000,
+            "createdAt": "2024-03-05T15:30:00Z"
+      },
+      {
+            "id": 9,
+            "code": "ISRL009",
+            "name": "Servicios de Capacitación",
+            "percentage_pn": 14,
+            "percentage_pj": 7,
+            "subtrahend_amount_pn": 20000,
+            "subtrahend_amount_pj": 40000,
+            "createdAt": "2024-03-10T12:00:00Z"
+      },
+      {
+            "id": 10,
+            "code": "ISRL010",
+            "name": "Servicios de Auditoría",
+            "percentage_pn": 6,
+            "percentage_pj": 3,
+            "subtrahend_amount_pn": 65000,
+            "subtrahend_amount_pj": 130000,
+            "createdAt": "2024-03-15T17:45:00Z"
+      }
+]
