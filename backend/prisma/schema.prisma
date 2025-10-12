@@ -25,8 +25,8 @@ model Company {
 }
 
 model Branch {
-   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-   name      String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
 }
 
 model Categories{
@@ -86,7 +86,7 @@ model CostCenter {
   createdAt DateTime @default(now())
 }
 
-model Clients {
+model CPO {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   type      String
   rif       String
@@ -96,20 +96,20 @@ model Clients {
   name_commercial      String
   address   String
   phone     String
-  credit_conditions Int
+  // credit_conditions Int
   email     String
   observations String
-  id_categories_clients String  @db.ObjectId
+  id_categories_cpo String  @db.ObjectId
   id_sellers String  @db.ObjectId
-  credentials Json
+  // credentials Json
   marketing_environment String
   id_accounting_accounts String  @db.ObjectId
   auxiliary1 String
   auxiliary2 String
   bank_accounts String
-  credit_limit Float
-  credit_terms Float
-  discount_percentage Float
+  // credit_limit Float
+  // credit_terms Float
+  // discount_percentage Float
   id_PaymentConditions String  @db.ObjectId
   type_taxpayer String
   retention_percentage_iva Float
@@ -121,7 +121,7 @@ model Clients {
   observations_blockade String
 }
 
-model CategoriesClient {
+model CategoriesCPO {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   credit_limit Float
@@ -135,6 +135,7 @@ model CategoriesClient {
 
 model Sellers {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_CPO String  @db.ObjectId
   name      String
   rif       String
   address   String
@@ -152,7 +153,7 @@ model RetentionISLRConcepts {
   name      String
   percentage_pn Float
   percentage_pj Float
-  subtrahend_amount_pm Float
+  subtrahend_amount_pn Float
   subtrahend_amount_pj Float
   createdAt DateTime @default(now())
 }
