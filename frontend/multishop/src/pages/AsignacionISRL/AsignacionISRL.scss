@@ -1,0 +1,29 @@
+@use '@styles/CommonModal.scss';
+@use '@styles/FeatureCards.scss';
+@use '@styles/CommonPage.scss';
+@use '@styles/CommonVariables.scss' as *;
+
+.asignaciones-page {
+      @extend .page-module;
+
+      .asignacion-card {
+            @extend .module-card;
+
+            .card-header {
+                  .asignacion-code {
+                        font-weight: 600;
+                        color: $primary-color;
+                        font-size: 1rem;
+                  }
+            }
+
+            .card-content {
+                  .asignacion-name {
+                        font-weight: 600;
+                        color: $text-primary;
+                        font-size: 1.1rem;
+                        margin-bottom: 1rem;
+                  }
+            }
+      }
+}

@@ -1,26 +1,25 @@
-@use './CommonModal.scss';
-@use './FeatureCards.scss';
+$primary-color: #36aad4;
+$primary-hover: #2c8fb8;
+$border-color: #e1e5e9;
+$border-light: #e0e0e0;
+$text-primary: #333;
+$text-secondary: #666;
+$text-muted: #999;
+$background-light: #f8f9fa;
+$transition: all 0.3s ease;
 
-.modal_select {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1rem;
-      padding-right: 3rem;
-}
-
-.input_with_button {
+.input-with-button {
       position: relative;
       display: inline-block;
       width: 100%;
 
-      .modal_input {
+      .modal-input {
             width: 100%;
             padding-right: 3rem;
+            cursor: pointer;
       }
 
-      .search_button {
+      .search-button {
             position: absolute;
             right: 0.5rem;
             top: 50%;
@@ -33,12 +32,12 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: #36aad4;
+            transition: $transition;
+            color: $primary-color;
             border-radius: 2px;
 
             &:hover {
-                  color: #2c8fb8;
+                  color: $primary-hover;
                   background: rgba(54, 170, 212, 0.1);
             }
 
@@ -48,75 +47,79 @@
       }
 }
 
-.codes_list_container {
+.codes-list-container {
+      padding: 1.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
 
-      .list_header {
+      .list-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid $border-light;
 
-            .list_title {
+            .list-title {
                   font-size: 1.25rem;
                   font-weight: 600;
-                  color: #333;
+                  color: $text-primary;
                   margin: 0;
             }
 
-            .close_list_button {
+            .close-list-button {
                   background: transparent;
                   border: none;
                   font-size: 1.25rem;
                   cursor: pointer;
-                  color: #666;
+                  color: $text-secondary;
                   padding: 0.25rem;
                   border-radius: 50%;
-                  transition: all 0.2s ease;
+                  transition: $transition;
 
                   &:hover {
                         background: #f5f5f5;
-                        color: #333;
+                        color: $text-primary;
                   }
             }
       }
 
-      .filter_container {
+      .filter-container {
             margin-bottom: 1.5rem;
 
-            .input_label {
+            .input-label {
                   display: block;
                   font-size: 1rem;
                   font-weight: 600;
-                  color: #333;
+                  color: $text-primary;
                   margin-bottom: 0.5rem;
                   transition: color 0.3s ease;
 
                   &:focus-within {
-                        color: #36aad4;
+                        color: $primary-color;
                   }
             }
 
-            .filter_input_wrapper {
+            .filter-input-wrapper {
                   position: relative;
                   width: 100%;
 
-                  .modal_input {
+                  .modal-input {
                         width: 100%;
                         padding: 0.875rem 1rem;
                         padding-right: 10rem;
                         border: 2px solid rgba(54, 170, 212, 0.2);
                         border-radius: 8px;
                         font-size: 1rem;
-                        color: #333;
+                        color: $text-primary;
                         background-color: white;
-                        transition: all 0.3s ease;
+                        transition: $transition;
                         box-sizing: border-box;
                         outline: none;
 
                         &:focus {
-                              border-color: #36aad4;
+                              border-color: $primary-color;
                               box-shadow: 0 0 0 3px rgba(54, 170, 212, 0.1);
                               transform: translateY(-1px);
                         }
@@ -130,13 +133,13 @@
                         }
                   }
 
-                  .filter_count {
+                  .filter-count {
                         position: absolute;
                         right: 0.75rem;
                         top: 50%;
                         transform: translateY(-50%);
                         font-size: 0.875rem;
-                        color: #666;
+                        color: $text-secondary;
                         background: white;
                         padding: 0.125rem 0.5rem;
                         border-radius: 4px;
@@ -144,10 +147,10 @@
             }
       }
 
-      .codes_list {
-            max-height: 50vh;
+      .codes-list {
+            flex: 1;
             overflow-y: auto;
-            border: 1px solid #e0e0e0;
+            border: 1px solid $border-light;
             border-radius: 8px;
 
             scrollbar-width: thin;
@@ -171,13 +174,13 @@
                   }
             }
 
-            .code_item {
+            .code-item {
                   display: grid;
                   grid-template-columns: 200px 1fr;
                   gap: 1rem;
                   padding: 0.75rem;
                   border-bottom: 1px solid #f0f0f0;
-                  transition: all 0.2s ease;
+                  transition: $transition;
                   cursor: pointer;
                   border-radius: 6px;
                   margin-bottom: 2px;
@@ -187,7 +190,7 @@
                         transform: translateY(-1px);
                         box-shadow: 0 2px 8px rgba(54, 170, 212, 0.15);
 
-                        .code_number {
+                        .code-number {
                               background: #d4edfa;
                               color: #2980b9;
                               transform: scale(1.02);
@@ -203,42 +206,74 @@
                         border-bottom: none;
                   }
 
-                  .code_column {
+                  .code-column {
                         display: flex;
                         align-items: center;
 
-                        .code_number {
+                        .code-number {
                               font-family: 'Courier New', monospace;
                               font-weight: 600;
-                              color: #36aad4;
+                              color: $primary-color;
                               background: #f0f8ff;
                               padding: 0.25rem 0.5rem;
                               border-radius: 4px;
                               font-size: 0.9rem;
-                              transition: all 0.2s ease;
+                              transition: $transition;
                         }
                   }
 
-                  .description_column {
+                  .description-column {
                         display: flex;
                         align-items: center;
 
-                        .code_description {
-                              color: #333;
+                        .code-description {
+                              color: $text-primary;
                               font-size: 0.95rem;
                         }
                   }
             }
 
-            .no_results {
+            .no-results {
                   text-align: center;
                   padding: 2rem;
-                  color: #666;
+                  color: $text-secondary;
                   border: none;
 
                   p {
                         margin: 0;
                         font-style: italic;
+                  }
+            }
+      }
+}
+
+.modal-container {
+      .input-with-button {
+            @extend .input-with-button;
+      }
+
+      .codes-list-container {
+            @extend .codes-list-container;
+      }
+}
+
+@media (max-width: 768px) {
+      .codes-list-container {
+            padding: 1rem;
+
+            .codes-list {
+                  .code-item {
+                        grid-template-columns: 1fr;
+                        gap: 0.5rem;
+
+                        .code-column {
+                              justify-content: center;
+                        }
+
+                        .description-column {
+                              justify-content: center;
+                              text-align: center;
+                        }
                   }
             }
       }

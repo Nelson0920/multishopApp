@@ -1,0 +1,122 @@
+[
+      {
+            "id": 1,
+            "name": "Juan Pérez",
+            "rif": "V-12345678",
+            "address": "Av. Principal #123, Caracas",
+            "phone": "0412-1234567",
+            "email": "juan.perez@email.com",
+            "type_seller": "U",
+            "commission": null,
+            "credentials": "cliente001",
+            "createdAt": "2024-01-15T10:30:00Z"
+      },
+      {
+            "id": 2,
+            "name": "María González",
+            "rif": "J-87654321",
+            "address": "Calle Comercial #456, Valencia",
+            "phone": "0414-9876543",
+            "email": "maria.gonzalez@empresa.com",
+            "type_seller": "P",
+            "commission": 5.5,
+            "credentials": null,
+            "createdAt": "2024-01-20T14:15:00Z"
+      },
+      {
+            "id": 3,
+            "name": "Carlos Rodríguez",
+            "rif": "V-11223344",
+            "address": null,
+            "phone": "0424-5555555",
+            "email": "carlos.rodriguez@email.com",
+            "type_seller": "U",
+            "commission": null,
+            "credentials": "cliente002",
+            "createdAt": "2024-02-01T09:45:00Z"
+      },
+      {
+            "id": 4,
+            "name": "Ana Martínez",
+            "rif": "J-99887766",
+            "address": "Zona Industrial, Maracay",
+            "phone": "0416-7777777",
+            "email": "ana.martinez@distribuidora.com",
+            "type_seller": "P",
+            "commission": 7.2,
+            "credentials": null,
+            "createdAt": "2024-02-10T16:20:00Z"
+      },
+      {
+            "id": 5,
+            "name": "Luis Fernández",
+            "rif": "V-55667788",
+            "address": "Urbanización Los Palos Grandes, Caracas",
+            "phone": "0426-3333333",
+            "email": null,
+            "type_seller": "U",
+            "commission": null,
+            "credentials": "cliente003",
+            "createdAt": "2024-02-15T11:30:00Z"
+      },
+      {
+            "id": 6,
+            "name": "Tech Solutions C.A.",
+            "rif": "J-123456789",
+            "address": "Torre Empresarial, Piso 15, Caracas",
+            "phone": "0212-1234567",
+            "email": "ventas@techsolutions.com",
+            "type_seller": "P",
+            "commission": 8.0,
+            "credentials": null,
+            "createdAt": "2024-02-20T13:45:00Z"
+      },
+      {
+            "id": 7,
+            "name": "Roberto Silva",
+            "rif": "V-99887766",
+            "address": null,
+            "phone": "0412-9999999",
+            "email": "roberto.silva@email.com",
+            "type_seller": "U",
+            "commission": null,
+            "credentials": "cliente004",
+            "createdAt": "2024-03-01T08:15:00Z"
+      },
+      {
+            "id": 8,
+            "name": "Distribuidora Nacional",
+            "rif": "J-987654321",
+            "address": "Polígono Industrial, Valencia",
+            "phone": "0241-5555555",
+            "email": "contacto@distribuidora.com",
+            "type_seller": "P",
+            "commission": 6.8,
+            "credentials": null,
+            "createdAt": "2024-03-05T15:30:00Z"
+      },
+      {
+            "id": 9,
+            "name": "Patricia López",
+            "rif": "V-44556677",
+            "address": "Residencias El Paraíso, Maracaibo",
+            "phone": "0426-8888888",
+            "email": "patricia.lopez@email.com",
+            "type_seller": "U",
+            "commission": null,
+            "credentials": "cliente005",
+            "createdAt": "2024-03-10T12:00:00Z"
+      },
+      {
+            "id": 10,
+            "name": "Importadora del Sur",
+            "rif": "J-456789123",
+            "address": "Puerto Cabello, Edo. Carabobo",
+            "phone": "0242-7777777",
+            "email": "ventas@importadora.com",
+            "type_seller": "P",
+            "commission": 9.5,
+            "credentials": null,
+            "createdAt": "2024-03-15T17:45:00Z"
+      }
+]

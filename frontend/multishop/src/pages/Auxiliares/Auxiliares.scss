@@ -1,0 +1,76 @@
+@use '@styles/CommonModal.scss';
+@use '@styles/FeatureCards.scss';
+@use '@styles/CommonPage.scss';
+@use '@styles/CommonTable.scss';
+@use '@styles/CommonVariables.scss' as *;
+
+.auxiliares-page {
+      @extend .page-module;
+
+      .table-container {
+            @extend .table-container-expanded;
+
+            .table-wrapper {
+                  .auxiliares-table {
+                        @extend table;
+                  }
+            }
+
+            .cards-wrapper {
+                  @extend .cards-wrapper-expanded;
+
+                  .auxiliar-card {
+                        @extend .module-card-expanded;
+
+                        .card-header {
+                              .auxiliar-code {
+                                    font-family: 'Courier New', monospace;
+                                    font-weight: 600;
+                                    color: $primary-color;
+                                    font-size: 1rem;
+                              }
+                        }
+
+                        .card-content {
+                              .auxiliar-name {
+                                    margin: 0;
+                                    color: $text-primary;
+                                    font-size: 0.95rem;
+                                    font-weight: 500;
+                                    line-height: 1.4;
+                              }
+                        }
+                  }
+            }
+      }
+}
+
+.auxiliar_inputs_container {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-sm;
+      margin-bottom: 0.75rem;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+}
+
+.auxiliar_letter_input {
+      flex: 1;
+      text-align: center;
+}
+
+.auxiliar_number_input {
+      flex: 5;
+}
+
+.auxiliar_preview {
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      color: $text-secondary;
+      background: $background-secondary;
+      padding: $spacing-sm;
+      border-radius: $border-radius-tiny;
+      text-align: center;
+}

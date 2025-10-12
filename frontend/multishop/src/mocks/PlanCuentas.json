@@ -1,0 +1,164 @@
+[
+      {
+            "id": 1,
+            "codigo": "1.01.1.01",
+            "nombre": "Caja General",
+            "auxiliarContable1": "A,B,C",
+            "auxiliarContable2": "X,Y,Z",
+            "categoria": "activos",
+            "fechaCreacion": "2024-01-15"
+      },
+      {
+            "id": 2,
+            "codigo": "1.01.1.02",
+            "nombre": "Caja Chica",
+            "auxiliarContable1": "A,B",
+            "auxiliarContable2": "X,Y",
+            "categoria": "activos",
+            "fechaCreacion": "2024-01-16"
+      },
+      {
+            "id": 3,
+            "codigo": "1.01.1.03",
+            "nombre": "Bancos Nacionales",
+            "auxiliarContable1": "A,B,C,D",
+            "auxiliarContable2": "X,Y,Z,W",
+            "categoria": "activos",
+            "fechaCreacion": "2024-01-17"
+      },
+      {
+            "id": 4,
+            "codigo": "2.01.1.01",
+            "nombre": "Cuentas por Pagar Comerciales",
+            "auxiliarContable1": "A,B",
+            "auxiliarContable2": "X,Y",
+            "categoria": "pasivos",
+            "fechaCreacion": "2024-01-18"
+      },
+      {
+            "id": 5,
+            "codigo": "3.01.1.01",
+            "nombre": "Capital Social",
+            "auxiliarContable1": "A",
+            "auxiliarContable2": "X",
+            "categoria": "otros",
+            "fechaCreacion": "2024-01-19"
+      },
+      {
+            "id": 6,
+            "codigo": "4.01.1.01",
+            "nombre": "Ventas Nacionales",
+            "auxiliarContable1": "A,B,C",
+            "auxiliarContable2": "X,Y,Z",
+            "categoria": "otros",
+            "fechaCreacion": "2024-01-20"
+      },
+      {
+            "id": 7,
+            "codigo": "5.01.1.01",
+            "nombre": "Compras Nacionales",
+            "auxiliarContable1": "A,B",
+            "auxiliarContable2": "X,Y",
+            "categoria": "gasto",
+            "fechaCreacion": "2024-01-21"
+      },
+      {
+            "id": 8,
+            "codigo": "5.02.1.01",
+            "nombre": "Gastos Administrativos",
+            "auxiliarContable1": "A,B,C,D,E",
+            "auxiliarContable2": "X,Y,Z,W,V",
+            "categoria": "gasto",
+            "fechaCreacion": "2024-01-22"
+      },
+      {
+            "id": 9,
+            "codigo": "1.01.2.01",
+            "nombre": "Inversiones Temporales",
+            "auxiliarContable1": "A,B,C",
+            "auxiliarContable2": "X,Y,Z",
+            "categoria": "activos",
+            "fechaCreacion": "2024-01-23"
+      },
+      {
+            "id": 10,
+            "codigo": "1.02.1.01",
+            "nombre": "Cuentas por Cobrar Comerciales",
+            "auxiliarContable1": "A,B,C,D",
+            "auxiliarContable2": "X,Y,Z,W",
+            "categoria": "activos",
+            "fechaCreacion": "2024-01-24"
+      },
+      {
+            "id": 11,
+            "codigo": "1.03.1.01",
+            "nombre": "Inventarios de Mercancías",
+            "auxiliarContable1": "A,B,C,D,E",
+            "auxiliarContable2": "X,Y,Z,W,V",
+            "categoria": "activos",
+            "fechaCreacion": "2024-01-25"
+      },
+      {
+            "id": 12,
+            "codigo": "1.04.1.01",
+            "nombre": "Propiedad, Planta y Equipo",
+            "auxiliarContable1": "A,B,C",
+            "auxiliarContable2": "X,Y,Z",
+            "categoria": "activos",
+            "fechaCreacion": "2024-01-26"
+      },
+      {
+            "id": 13,
+            "codigo": "2.01.2.01",
+            "nombre": "Obligaciones Financieras",
+            "auxiliarContable1": "A,B,C,D",
+            "auxiliarContable2": "X,Y,Z,W",
+            "categoria": "pasivos",
+            "fechaCreacion": "2024-01-27"
+      },
+      {
+            "id": 14,
+            "codigo": "2.02.1.01",
+            "nombre": "Cuentas por Pagar a Proveedores",
+            "auxiliarContable1": "A,B,C",
+            "auxiliarContable2": "X,Y,Z",
+            "categoria": "pasivos",
+            "fechaCreacion": "2024-01-28"
+      },
+      {
+            "id": 15,
+            "codigo": "2.03.1.01",
+            "nombre": "Impuestos por Pagar",
+            "auxiliarContable1": "A,B",
+            "auxiliarContable2": "X,Y",
+            "categoria": "pasivos",
+            "fechaCreacion": "2024-01-29"
+      },
+      {
+            "id": 16,
+            "codigo": "3.01.2.01",
+            "nombre": "Reservas Legales",
+            "auxiliarContable1": "A",
+            "auxiliarContable2": "X",
+            "categoria": "otros",
+            "fechaCreacion": "2024-01-30"
+      },
+      {
+            "id": 17,
+            "codigo": "4.01.2.01",
+            "nombre": "Ingresos por Servicios",
+            "auxiliarContable1": "A,B,C,D",
+            "auxiliarContable2": "X,Y,Z,W",
+            "categoria": "otros",
+            "fechaCreacion": "2024-01-31"
+      },
+      {
+            "id": 18,
+            "codigo": "5.03.1.01",
+            "nombre": "Gastos de Ventas",
+            "auxiliarContable1": "A,B,C,D,E,F",
+            "auxiliarContable2": "X,Y,Z,W,V,U",
+            "categoria": "gasto",
+            "fechaCreacion": "2024-02-01"
+      }
+]

@@ -1,0 +1,62 @@
+[
+      {
+            "id": 1,
+            "days": 30,
+            "discount_percentage": 5,
+            "createdAt": "2024-01-15T10:30:00Z"
+      },
+      {
+            "id": 2,
+            "days": 15,
+            "discount_percentage": 3,
+            "createdAt": "2024-01-20T14:15:00Z"
+      },
+      {
+            "id": 3,
+            "days": 60,
+            "discount_percentage": 0,
+            "createdAt": "2024-02-01T09:45:00Z"
+      },
+      {
+            "id": 4,
+            "days": 45,
+            "discount_percentage": 2,
+            "createdAt": "2024-02-10T16:20:00Z"
+      },
+      {
+            "id": 5,
+            "days": 90,
+            "discount_percentage": 0,
+            "createdAt": "2024-02-15T11:30:00Z"
+      },
+      {
+            "id": 6,
+            "days": 7,
+            "discount_percentage": 8,
+            "createdAt": "2024-02-20T13:45:00Z"
+      },
+      {
+            "id": 7,
+            "days": 120,
+            "discount_percentage": 0,
+            "createdAt": "2024-03-01T08:15:00Z"
+      },
+      {
+            "id": 8,
+            "days": 21,
+            "discount_percentage": 4,
+            "createdAt": "2024-03-05T15:30:00Z"
+      },
+      {
+            "id": 9,
+            "days": 75,
+            "discount_percentage": 1,
+            "createdAt": "2024-03-10T12:00:00Z"
+      },
+      {
+            "id": 10,
+            "days": 0,
+            "discount_percentage": 10,
+            "createdAt": "2024-03-15T17:45:00Z"
+      }
+]

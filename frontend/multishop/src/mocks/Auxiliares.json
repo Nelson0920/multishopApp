@@ -1,0 +1,122 @@
+[
+      {
+            "auxiliar": "A0000001",
+            "nombre": "BANCO NACIONAL"
+      },
+      {
+            "auxiliar": "A0000002",
+            "nombre": "CAJA GENERAL"
+      },
+      {
+            "auxiliar": "A0000003",
+            "nombre": "CUENTAS POR COBRAR CLIENTES"
+      },
+      {
+            "auxiliar": "A0000004",
+            "nombre": "INVENTARIO DE MERCANCIA"
+      },
+      {
+            "auxiliar": "A0000005",
+            "nombre": "PROPIEDAD PLANTA Y EQUIPO"
+      },
+      {
+            "auxiliar": "A0000006",
+            "nombre": "CUENTAS POR PAGAR PROVEEDORES"
+      },
+      {
+            "auxiliar": "A0000007",
+            "nombre": "IMPUESTOS POR PAGAR"
+      },
+      {
+            "auxiliar": "A0000008",
+            "nombre": "SUELDOS Y SALARIOS POR PAGAR"
+      },
+      {
+            "auxiliar": "A0000009",
+            "nombre": "CAPITAL SOCIAL"
+      },
+      {
+            "auxiliar": "A0000010",
+            "nombre": "UTILIDADES RETENIDAS"
+      },
+      {
+            "auxiliar": "A0000011",
+            "nombre": "VENTAS DE PRODUCTOS"
+      },
+      {
+            "auxiliar": "A0000012",
+            "nombre": "COSTO DE VENTAS"
+      },
+      {
+            "auxiliar": "A0000013",
+            "nombre": "GASTOS ADMINISTRATIVOS"
+      },
+      {
+            "auxiliar": "A0000014",
+            "nombre": "GASTOS DE VENTAS"
+      },
+      {
+            "auxiliar": "A0000015",
+            "nombre": "DEPRECIACION ACUMULADA"
+      },
+      {
+            "auxiliar": "A0000016",
+            "nombre": "PROVISIONES"
+      },
+      {
+            "auxiliar": "A0000017",
+            "nombre": "INTERESES GANADOS"
+      },
+      {
+            "auxiliar": "A0000018",
+            "nombre": "DESCUENTOS OBTENIDOS"
+      },
+      {
+            "auxiliar": "A0000019",
+            "nombre": "DEVOLUCIONES EN VENTAS"
+      },
+      {
+            "auxiliar": "A0000020",
+            "nombre": "MERCADERIA EN TRANSITO"
+      },
+      {
+            "auxiliar": "A0000021",
+            "nombre": "GASTOS PREOPERATIVOS"
+      },
+      {
+            "auxiliar": "A0000022",
+            "nombre": "INVERSIONES TEMPORALES"
+      },
+      {
+            "auxiliar": "A0000023",
+            "nombre": "DOCUMENTOS POR COBRAR"
+      },
+      {
+            "auxiliar": "A0000024",
+            "nombre": "ANTICIPOS A PROVEEDORES"
+      },
+      {
+            "auxiliar": "A0000025",
+            "nombre": "GASTOS PAGADOS POR ANTICIPADO"
+      },
+      {
+            "auxiliar": "A0000026",
+            "nombre": "SEGUROS PAGADOS POR ANTICIPADO"
+      },
+      {
+            "auxiliar": "A0000027",
+            "nombre": "RENTAS PAGADAS POR ANTICIPADO"
+      },
+      {
+            "auxiliar": "A0000028",
+            "nombre": "IMPUESTOS PAGADOS POR ANTICIPADO"
+      },
+      {
+            "auxiliar": "A0000029",
+            "nombre": "INTERESES PAGADOS POR ANTICIPADO"
+      },
+      {
+            "auxiliar": "A0000030",
+            "nombre": "PATENTES Y MARCAS"
+      }
+]

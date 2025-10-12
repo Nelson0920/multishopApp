@@ -1,12 +1,17 @@
 import React from "react";
-import "../../styles/Shortcuts.scss";
-import Auxiliares from "./Auxiliares";
-import PlanCuentas from "./PlanCuentas";
-import Categorias from "./Categorias";
+import "@styles/Shortcuts.scss";
+import Auxiliares from "@pages/Auxiliares/components/Auxiliares";
+import PlanCuentas from "@pages/PlanCuentas/components/PlanCuentas";
+import Categorias from "@pages/Categorias/components/Categorias";
+import CategoriasCPO from "@pages/CategoriasCPO/components/Categorias";
+import CondicionesPago from "@pages/CondicionesPago/components/CondicionesPago";
+import AsignacionISRL from "@pages/AsignacionISRL/components/AsignacionISRL";
+import Usuarios from "@pages/Usuarios/components/Usuarios";
+import CPO from "@pages/CPO/components/CPO";
 
 const Shortcuts = () => {
-  const progress = 5;
-  const total = 9;
+  const progress = 6;
+  const total = 10;
   const percentage = Math.round((progress / total) * 100);
 
   return (
@@ -21,6 +26,11 @@ const Shortcuts = () => {
             <Auxiliares />
             <PlanCuentas />
             <Categorias />
+            <CategoriasCPO />
+            <CondicionesPago />
+            <AsignacionISRL />
+            <Usuarios />
+            <CPO />
           </div>
         </div>
 
