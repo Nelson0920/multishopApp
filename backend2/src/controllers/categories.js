@@ -178,17 +178,64 @@ router.post('/cost/center/change', async (req, res) => {
 // --- Categorias de Cuentas ---
 
 // Obtener todas las categorías de cuentas
+// ✅ Obtener todas las cuentas contables con información de la categoría
 router.get('/accounts', async (req, res) => {
   try {
-    const categories = await prisma.account_Categories.findMany()
-    if (categories.length > 0) {
-      return res.status(200).json({ success: true, code:200, message: 'Account categories found', categories })
-    }else{
-      return res.status(404).json({ success: false, code:404 , message: 'Account categories not found' })
+    const accountCategories = await prisma.account_Categories.findMany({
+      include: {
+        category: {
+          select: {
+            name: true,
+            profit_percentage: true,
+            discount_percentage: true
+          }
+        }
+      }
+    })
+
+    if (accountCategories.length === 0) {
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'Account categories not found'
+      })
     }
+
+    // ✅ Formatear la respuesta
+    const formattedAccounts = accountCategories.map(acc => ({
+      name: acc.category?.name,
+      profit_percentage: acc.category?.profit_percentage,
+      discount_percentage: acc.category?.discount_percentage,
+      account_Sales: acc.account_Sales,
+      account_buy: acc.account_buy,
+      account_consumos: acc.account_consumos,
+      account_devbuy: acc.account_devbuy,
+      account_tax: acc.account_tax,
+      auxiliary1_Sales: acc.auxiliary1_Sales,
+      auxiliary2_Sales: acc.auxiliary2_Sales,
+      auxiliary1_buy: acc.auxiliary1_buy,
+      auxiliary2_buy: acc.auxiliary2_buy,
+      auxiliary1_consumos: acc.auxiliary1_consumos,
+      auxiliary2_consumos: acc.auxiliary2_consumos,
+      auxiliary1_devbuy: acc.auxiliary1_devbuy,
+      auxiliary2_devbuy: acc.auxiliary2_devbuy,
+      auxiliary1_tax: acc.auxiliary1_tax,
+      auxiliary2_tax: acc.auxiliary2_tax
+    }))
+
+    return res.status(200).json({
+      success: true,
+      code: 200,
+      message: 'Account categories found',
+      data: formattedAccounts
+    })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, message: 'Error fetching account categories' })
+    res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error fetching account categories'
+    })
   }
 })
 

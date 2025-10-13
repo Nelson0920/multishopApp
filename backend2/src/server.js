@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
 // ** Rutas **
-app.use('/api', routes)
+app.use('/api/two', routes)
 
 // ** Manejo de errores 404 **
 app.use((req, res, next) => {

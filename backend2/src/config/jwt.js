@@ -1,4 +1,7 @@
 import { JWT } from '../global/_var.js'
+
+console.log(JWT)
+
 import jwt from 'jsonwebtoken'
 
 export const generateToken = (user) => {
