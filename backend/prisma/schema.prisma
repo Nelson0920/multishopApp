@@ -37,6 +37,8 @@ model Categories{
   id_cost_center String  @db.ObjectId
   band_management Boolean
   createdAt DateTime @default(now())
+
+  accounts Account_Categories[]
 }
 
 model Account_Categories{
@@ -58,6 +60,8 @@ model Account_Categories{
   auxiliary1_tax String
   auxiliary2_tax String
   createdAt DateTime @default(now())
+
+  category Categories @relation(fields: [id_Categories], references: [id])
 }
 
 model AccountingAccounts {
@@ -124,8 +128,8 @@ model CPO {
 model CategoriesCPO {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  credit_limit Float
-  credit_terms Float
+  credit_limit Int
+  credit_terms Int
   discount_percentage Float
   id_accounting_accounts String  @db.ObjectId
   auxiliary1 String

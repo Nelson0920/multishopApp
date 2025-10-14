@@ -128,8 +128,8 @@ model CPO {
 model CategoriesCPO {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  credit_limit Float
-  credit_terms Float
+  credit_limit Int
+  credit_terms Int
   discount_percentage Float
   id_accounting_accounts String  @db.ObjectId
   auxiliary1 String

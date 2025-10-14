@@ -6,8 +6,6 @@ const router = express.Router()
 // Auth - Users
 import authUsers from '../controllers/auth.js'
 import users from '../controllers/users.js'
-// Accounts 
-import accounts from '../controllers/accounts.js'
 // Clients
 import clients from '../controllers/clients.js'
 // Sellers
@@ -22,9 +20,6 @@ import images from '../controllers/img.js'
 router.use('/auth', authUsers)
 //router.use('/user', authMiddleware, users)
 router.use('/user', users)
-
-// Accounts
-router.use('/accounts', accounts)
 
 // Clients
 router.use('/clients', clients)

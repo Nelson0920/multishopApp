@@ -60,7 +60,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Validaciones de relaciones
-    const searchCategory = await prisma.categoriesClient.findUnique({
+    const searchCategory = await prisma.categoriesCPO.findUnique({
       where: { id: id_categories_clients }
     })
     if (!searchCategory) {
@@ -150,7 +150,7 @@ router.put('/edit/:id', async (req, res) => {
     const search = await prisma.clients.findUnique({ where: { id } })
 
     if(search){
-      const categoryClient = await prisma.categoriesClient.update({ 
+      const categoryClient = await prisma.categoriesCPO.update({ 
         data,
         where: { id } 
       })
@@ -191,7 +191,7 @@ router.delete('/delete/:id', async (req, res) => {
 // Obtener todos las categorias de los clientes
 router.get('/category', async (req, res) => {
   try {
-    const clients = await prisma.categoriesClient.findMany()
+    const clients = await prisma.categoriesCPO.findMany()
     if (clients.length > 0) {
       return res.status(200).json({ success: true, code:200, message: 'Categories clients found', clients })
     }else{
@@ -208,7 +208,7 @@ router.get('/category/:id', async (req, res) => {
   try {
   const { id } = req.params
 
-    const client = await prisma.categoriesClient.findUnique({ where: { id } })
+    const client = await prisma.categoriesCPO.findUnique({ where: { id } })
 
     if (!client) return res.status(404).json({ success: false, message: 'Category client not found' })
 
@@ -225,7 +225,7 @@ router.post('/category/register', async (req, res) => {
   try {
     const data = req.body
 
-    const existingCategory = await prisma.categoriesClient.findMany({ where: { name: data.name } })
+    const existingCategory = await prisma.categoriesCPO.findMany({ where: { name: data.name } })
 
     if (existingCategory.length > 0) {
       return res.status(400).json({ success: false, code:400, message: 'This category name already exists', data })
@@ -237,7 +237,7 @@ router.post('/category/register', async (req, res) => {
     //   return res.status(404).json({ success: false, message: 'No available cost center found' })
     // }
 
-    const categoryClient = await prisma.categoriesClient.create({data})
+    const categoryClient = await prisma.categoriesCPO.create({data})
 
     res.status(200).json({ success: true, code:200,  message: 'Category client created successfully', categoryClient })
 
@@ -253,10 +253,10 @@ router.put('/category/edit/:id', async (req, res) => {
     const { id } = req.params
     const data = req.body
 
-    const search = await prisma.categoriesClient.findUnique({ where: { id } })
+    const search = await prisma.categoriesCPO.findUnique({ where: { id } })
 
     if(search){
-      const categoryClient = await prisma.categoriesClient.update({ 
+      const categoryClient = await prisma.categoriesCPO.update({ 
         data,
         where: { id } 
       })
@@ -276,10 +276,10 @@ router.delete('/category/delete/:id', async (req, res) => {
   try {
     const { id } = req.params
 
-    const search = await prisma.categoriesClient.findUnique({ where: { id } })
+    const search = await prisma.categoriesCPO.findUnique({ where: { id } })
 
     if(search){
-      const categoryClient = await prisma.categoriesClient.delete({ where: { id } })
+      const categoryClient = await prisma.categoriesCPO.delete({ where: { id } })
 
       res.status(200).json({ success: true, code:200, message: 'Category client deleted successfully', categoryClient })
     }else{
