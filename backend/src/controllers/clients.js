@@ -191,15 +191,51 @@ router.delete('/delete/:id', async (req, res) => {
 // Obtener todos las categorias de los clientes
 router.get('/category', async (req, res) => {
   try {
-    const clients = await prisma.categoriesCPO.findMany()
-    if (clients.length > 0) {
-      return res.status(200).json({ success: true, code:200, message: 'Categories clients found', clients })
-    }else{
-      return res.status(404).json({ success: false, code:404 , message: 'No categories clients found' })
+    const categoriesData = await prisma.categoriesCPO.findMany({
+      include: {
+        accountingAccount: {
+          select: {
+            id: true,
+            name: true,
+            code_account: true,
+            auxiliary1_initials: true,
+            auxiliary2_initials: true,
+            category_account: true,
+            createdAt: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    })
+
+    if (!categoriesData.length) {
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'No categories found'
+      })
     }
+
+    const categories = categoriesData.map(cat => {
+      const { id_accounting_accounts, ...rest } = cat
+      return rest
+    })
+
+    return res.status(200).json({
+      success: true,
+      code: 200,
+      message: 'Categories with accounting info found',
+      categories
+    })
+
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, code:500, message: 'Error fetching categories clients' })
+    return res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error fetching categories with accounting info',
+      error: error.message
+    })
   }
 })
 

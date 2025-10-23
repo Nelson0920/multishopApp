@@ -261,71 +261,67 @@ router.get('/auxiliaries/specific/:id', async (req, res) => {
 // Crear una nueva cuenta auxiliar
 router.post('/auxiliaries/register', async (req, res) => {
   try {
-    const data = req.body;
-    const { name, auxiliary_code } = data;
+    const { name, auxiliary_code } = req.body
 
-    // 🔸 Validar formato del código auxiliar (Ejemplo: J.0000001)
-    const codePattern = /^[A-Z]\.\d{7}$/;
-    if (!codePattern.test(auxiliary_code)) {
+    // 🔹 Validar que se haya enviado una letra
+    const prefixPattern = /^[A-Z]$/i
+    if (!prefixPattern.test(auxiliary_code)) {
       return res.status(400).json({
         success: false,
         code: 400,
-        message: 'Invalid auxiliary code format. It must be like N.1234567'
-      });
+        message: 'Invalid code. You must send only one letter, e.g., "L".'
+      })
     }
 
-    // 🔸 Verificar si el nombre ya existe
-    const searchName = await prisma.auxiliariesAccounts.findFirst({ where: { name } });
-    if (searchName) {
-      return res.status(400).json({
-        success: false,
-        code: 400,
-        message: 'This name already exists',
-        account_name: searchName.name,
-        account_code: searchName.auxiliary_code
-      });
+    const prefix = auxiliary_code.toUpperCase()
+
+    // 🔹 Buscar el último código existente con ese prefijo
+    const lastAccount = await prisma.auxiliariesAccounts.findFirst({
+      where: {
+        auxiliary_code: {
+          startsWith: `${prefix}.`
+        }
+      },
+      orderBy: {
+        auxiliary_code: 'desc'
+      }
+    })
+
+    // 🔹 Calcular el nuevo número correlativo
+    let nextNumber = 1
+    if (lastAccount) {
+      const lastNumber = parseInt(lastAccount.auxiliary_code.split('.')[1])
+      nextNumber = lastNumber + 1
     }
 
-    // 🔸 Verificar si el código ya existe
-    const searchCode = await prisma.auxiliariesAccounts.findFirst({ where: { auxiliary_code } });
-    if (searchCode) {
-      return res.status(400).json({
-        success: false,
-        code: 400,
-        message: 'This auxiliary code already exists',
-        account_name: searchCode.name,
-        account_code: searchCode.auxiliary_code
-      });
-    }
+    // 🔹 Generar el nuevo código completo
+    const newAuxiliaryCode = `${prefix}.${nextNumber.toString().padStart(7, '0')}`
 
-    // 🔸 Crear la nueva cuenta
-    const account = await prisma.auxiliariesAccounts.create({ data });
-
-    // 🔸 Calcular el siguiente código
-    const prefix = auxiliary_code.charAt(0); // Ejemplo: "J"
-    const numericPart = parseInt(auxiliary_code.slice(2)); // Ejemplo: 0000001 → 1
-    const nextNumber = numericPart + 1;
-    const nextCode = `${prefix}.${nextNumber.toString().padStart(7, '0')}`;
+    // 🔹 Crear la nueva cuenta
+    const account = await prisma.auxiliariesAccounts.create({
+      data: {
+        name,
+        auxiliary_code: newAuxiliaryCode
+      }
+    })
 
     res.status(201).json({
       success: true,
       code: 200,
       message: 'Auxiliary account created successfully',
-      account,
-      next_auxiliary_code: nextCode
-    });
+      account
+    })
 
   } catch (error) {
-    console.error(error);
+    console.error(error)
     res.status(500).json({
       success: false,
       code: 500,
       message: 'Error creating the auxiliary account',
       error: error.message
-    });
+    })
   }
-});
-
+})
 
 // Actualizar una cuenta auxiliar
 router.put('/auxiliaries/edit/:id', async (req, res) => {

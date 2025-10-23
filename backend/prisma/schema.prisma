@@ -65,13 +65,16 @@ model Account_Categories{
 }
 
 model AccountingAccounts {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  code_account      String
-  auxiliary1_initials String
-  auxiliary2_initials String
-  category_account String
-  createdAt DateTime @default(now())
+  id                      String             @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String
+  code_account            String
+  auxiliary1_initials     String
+  auxiliary2_initials     String
+  category_account        String
+  createdAt               DateTime           @default(now())
+
+  // Relación inversa con CategoriesCPO
+  categories              CategoriesCPO[]
 }
 
 model AuxiliariesAccounts {
@@ -128,15 +131,18 @@ model CPO {
 }
 
 model CategoriesCPO {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  credit_limit Int
-  credit_terms Int
-  discount_percentage Float
-  id_accounting_accounts String  @db.ObjectId
-  auxiliary1 String
-  auxiliary2 String
-  createdAt DateTime @default(now())
+  id                      String              @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String
+  credit_limit            Int
+  credit_terms            Int
+  discount_percentage     Float
+  id_accounting_accounts  String              @db.ObjectId
+  auxiliary1              String
+  auxiliary2              String
+  createdAt               DateTime            @default(now())
+
+  // Relación con AccountingAccounts
+  accountingAccount       AccountingAccounts  @relation(fields: [id_accounting_accounts], references: [id])
 }
 
 model Sellers {
