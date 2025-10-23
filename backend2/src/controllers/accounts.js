@@ -203,30 +203,46 @@ router.delete('/accounting/delete/:id', async (req, res) => {
 
 // --- Cuentas Auxiliares ---
 
-// Buscar cuentas auxiliares (por código o todas)
+// Buscar cuentas auxiliares
 router.get('/auxiliaries', async (req, res) => {
   try {
-    const { codigo } = req.query // Ejemplo: /api/two/auxiliaries/search?codigo=J.000005
+    const { codigo } = req.query // Ejemplo: /api/two/auxiliaries?codigo=J.000005 o /api/two/auxiliaries?codigo=ventas
 
     let auxiliaries
 
     if (codigo && codigo.trim() !== '') {
-      // Si se envía un código, buscar coincidencias
       auxiliaries = await prisma.auxiliariesAccounts.findMany({
         where: {
-          auxiliary_code: {
-            contains: codigo,
-            mode: 'insensitive' // Ignora mayúsculas/minúsculas
-          }
-        }
+          OR: [
+            {
+              auxiliary_code: {
+                contains: codigo,
+                mode: 'insensitive'
+              }
+            },
+            {
+              name: {
+                contains: codigo,
+                mode: 'insensitive'
+              }
+            }
+          ]
+        },
+        orderBy: { createdAt: 'desc' }
       })
     } else {
       // Si no se envía código, traer todos
-      auxiliaries = await prisma.auxiliariesAccounts.findMany()
+      auxiliaries = await prisma.auxiliariesAccounts.findMany({
+        orderBy: { createdAt: 'desc' }
+      })
     }
 
     if (auxiliaries.length === 0) {
-      return res.status(404).json({ success: false, code: 404, message: 'No se encontraron cuentas auxiliares' })
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'No se encontraron cuentas auxiliares'
+      })
     }
 
     return res.status(200).json({
@@ -235,9 +251,15 @@ router.get('/auxiliaries', async (req, res) => {
       message: 'Cuentas auxiliares encontradas',
       auxiliaries
     })
+
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, code: 500, message: 'Error al buscar cuentas auxiliares' })
+    res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error al buscar cuentas auxiliares',
+      error: error.message
+    })
   }
 })
 
@@ -327,45 +349,74 @@ router.post('/auxiliaries/register', async (req, res) => {
 router.put('/auxiliaries/edit/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const data = req.body
+    const { name, auxiliary_code } = req.body
 
+    // Validar formato: solo una letra mayúscula
+    const codePattern = /^[A-Z]$/
+    if (!codePattern.test(auxiliary_code)) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'El código auxiliar debe ser solo una letra mayúscula (ejemplo: "J")'
+      })
+    }
+
+    // Buscar cuenta existente
     const existingAccount = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
-
     if (!existingAccount) {
       return res.status(404).json({
         success: false,
         code: 404,
-        message: 'Auxiliary account not found'
+        message: 'Cuenta auxiliar no encontrada'
       })
     }
 
-    const verifyCode = await prisma.auxiliariesAccounts.findFirst({
-      where: {
-        auxiliary_code: data.auxiliary_code,
-        NOT: { id }
-      }
-    })
+    // Obtener la inicial actual del código existente
+    const currentInitial = existingAccount.auxiliary_code.charAt(0)
 
-    if (verifyCode) {
-      return res.status(400).json({
-        success: false,
-        code: 400,
-        message: 'Este código auxiliar ya está en uso por otra cuenta',
+    let newAuxiliaryCode = existingAccount.auxiliary_code
+
+    // 🔹 Si la inicial cambia, generar un nuevo número correlativo
+    if (auxiliary_code !== currentInitial) {
+      const lastAccount = await prisma.auxiliariesAccounts.findFirst({
+        where: {
+          auxiliary_code: {
+            startsWith: `${auxiliary_code}.`
+          }
+        },
+        orderBy: {
+          auxiliary_code: 'desc'
+        }
       })
+
+      let nextNumber = 1
+      if (lastAccount) {
+        const lastNum = parseInt(lastAccount.auxiliary_code.split('.')[1], 10)
+        nextNumber = lastNum + 1
+      }
+
+      newAuxiliaryCode = `${auxiliary_code}.${nextNumber.toString().padStart(7, '0')}`
     }
 
     // Actualizar la cuenta auxiliar
     const updatedAccount = await prisma.auxiliariesAccounts.update({
       where: { id },
-      data
+      data: {
+        name,
+        auxiliary_code: newAuxiliaryCode
+      }
     })
 
     return res.status(200).json({
       success: true,
       code: 200,
-      message: 'Codigo auxiliar actualizado correctamente',
+      message:
+        auxiliary_code === currentInitial
+          ? 'Cuenta auxiliar actualizada sin cambio de código'
+          : 'Cuenta auxiliar actualizada con nuevo código generado',
       account: updatedAccount
     })
+
   } catch (error) {
     console.error(error)
     return res.status(500).json({
@@ -376,7 +427,6 @@ router.put('/auxiliaries/edit/:id', async (req, res) => {
     })
   }
 })
-
 
 // Eliminar una cuenta auxiliar
 router.delete('/auxiliaries/delete/:id', async (req, res) => {

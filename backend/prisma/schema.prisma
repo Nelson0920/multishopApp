@@ -139,6 +139,7 @@ model CategoriesCPO {
   id_accounting_accounts  String              @db.ObjectId
   auxiliary1              String
   auxiliary2              String
+  deadline_day            Int
   createdAt               DateTime            @default(now())
 
   // Relación con AccountingAccounts
