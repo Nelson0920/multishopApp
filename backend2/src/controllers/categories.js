@@ -44,6 +44,7 @@ router.get('/get/:id', async (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const data = req.body
+    const {  } = data
 
     const existingCategory = await prisma.categories.findMany({
       where: { name: data.name }
@@ -178,7 +179,6 @@ router.post('/cost/center/change', async (req, res) => {
 // --- Categorias de Cuentas ---
 
 // Obtener todas las categorías de cuentas
-// ✅ Obtener todas las cuentas contables con información de la categoría
 router.get('/accounts', async (req, res) => {
   try {
     const accountCategories = await prisma.account_Categories.findMany({

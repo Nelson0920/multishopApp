@@ -6,10 +6,36 @@ const router = express.Router()
 
 // --- Cuentas Contables ---
 
-// Obtener todas las cuentas contables
+// Obtener cuentas contables (buscar por nombre/código o categoría)
 router.get('/accounting', async (req, res) => {
   try {
-    const accounting = await prisma.accountingAccounts.findMany()
+    const { search, category } = req.query
+
+    const whereClause = {}
+
+    if (search || category) {
+      whereClause.AND = []
+
+      if (search) {
+        whereClause.AND.push({
+          OR: [
+            { name: { contains: search, mode: 'insensitive' } },
+            { code_account: { contains: search, mode: 'insensitive' } }
+          ]
+        })
+      }
+
+      if (category) {
+        whereClause.AND.push({
+          category_account: { contains: category, mode: 'insensitive' }
+        })
+      }
+    }
+
+    const accounting = await prisma.accountingAccounts.findMany({
+      where: whereClause,
+      orderBy: { createdAt: 'desc' }
+    })
 
     if (accounting.length === 0) {
       return res.status(404).json({
@@ -18,29 +44,44 @@ router.get('/accounting', async (req, res) => {
         message: 'No accounting accounts found'
       })
     }
-    const formattedAccounting = accounting.map(acc => {
-      let formattedCode = ''
-      const code = acc.code_account ? acc.code_account.toString().trim() : ''
 
-      if (code.length >= 6) {
-        formattedCode = `${code[0]}.${code.slice(1, 3)}.${code[3]}.${code.slice(4)}`
-      } else if (code.length === 5) {
-        formattedCode = `${code[0]}.${code.slice(1, 3)}.${code[3]}.${code[4]}`
-      } else if (code.length === 4) {
-        formattedCode = `${code[0]}.${code.slice(1, 3)}.${code[3]}.`
-      } else if (code.length === 3) {
-        formattedCode = `${code[0]}.${code.slice(1)}.`
-      } else {
-        formattedCode = code
+    // Formatear códigos solo si aún no lo están
+    const formattedAccounting = accounting.map(acc => {
+      const code = acc.code_account ? acc.code_account.toString().trim() : ''
+      let formattedCode = code
+
+      // Solo formatear si no tiene puntos (significa que no está formateado)
+      if (!code.includes('.')) {
+        if (code.length >= 6) {
+          formattedCode = `${code[0]}.${code.slice(1, 3)}.${code[3]}.${code.slice(4)}`
+        } else if (code.length === 5) {
+          formattedCode = `${code[0]}.${code.slice(1, 3)}.${code[3]}.${code[4]}`
+        } else if (code.length === 4) {
+          formattedCode = `${code[0]}.${code.slice(1, 3)}.${code[3]}.`
+        } else if (code.length === 3) {
+          formattedCode = `${code[0]}.${code.slice(1)}.`
+        }
       }
+
+      formattedCode = formattedCode.replace(/\.\.+/g, '.').replace(/\.$/, '')
 
       return { ...acc, code_account: formattedCode }
     })
 
+    // Mensaje dinámico
+    let message = 'All accounting accounts found'
+    if (search && category) {
+      message = `Accounting accounts found for search '${search}' and category '${category}'`
+    } else if (search) {
+      message = `Accounting accounts found for search '${search}'`
+    } else if (category) {
+      message = `Accounting accounts found for category '${category}'`
+    }
+
     return res.status(200).json({
       success: true,
       code: 200,
-      message: "Accounting accounts Found",
+      message,
       accounting: formattedAccounting
     })
 
@@ -49,10 +90,12 @@ router.get('/accounting', async (req, res) => {
     res.status(500).json({
       success: false,
       code: 500,
-      message: 'Error fetching accounting accounts'
+      message: 'Error fetching accounting accounts',
+      error: error.message
     })
   }
 })
+
 
 // Obtener una cuenta contable por ID
 router.get('/accounting/specific/:id', async (req, res) => {
@@ -160,18 +203,41 @@ router.delete('/accounting/delete/:id', async (req, res) => {
 
 // --- Cuentas Auxiliares ---
 
-// Obtener todas las cuentas auxiliares
+// Buscar cuentas auxiliares (por código o todas)
 router.get('/auxiliaries', async (req, res) => {
   try {
-    const auxiliaries = await prisma.auxiliariesAccounts.findMany()
-    if (auxiliaries.length > 0) {
-      return res.status(200).json({ success: true, code: 200, message: "Auxilaries accounts found", auxiliaries })
+    const { codigo } = req.query // Ejemplo: /api/two/auxiliaries/search?codigo=J.000005
+
+    let auxiliaries
+
+    if (codigo && codigo.trim() !== '') {
+      // Si se envía un código, buscar coincidencias
+      auxiliaries = await prisma.auxiliariesAccounts.findMany({
+        where: {
+          auxiliary_code: {
+            contains: codigo,
+            mode: 'insensitive' // Ignora mayúsculas/minúsculas
+          }
+        }
+      })
     } else {
-      return res.status(404).json({ success: false, code: 404, message: 'No auxiliaries accounts found' })
+      // Si no se envía código, traer todos
+      auxiliaries = await prisma.auxiliariesAccounts.findMany()
     }
+
+    if (auxiliaries.length === 0) {
+      return res.status(404).json({ success: false, code: 404, message: 'No se encontraron cuentas auxiliares' })
+    }
+
+    return res.status(200).json({
+      success: true,
+      code: 200,
+      message: 'Cuentas auxiliares encontradas',
+      auxiliaries
+    })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, code: 500, message: 'Error fetching auxiliaries accounts' })
+    res.status(500).json({ success: false, code: 500, message: 'Error al buscar cuentas auxiliares' })
   }
 })
 
@@ -267,43 +333,54 @@ router.put('/auxiliaries/edit/:id', async (req, res) => {
     const { id } = req.params
     const data = req.body
 
-    const search = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
+    const existingAccount = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
 
-    if (!search) {
-      return res.status(404).json({ success: false, message: 'No accounting account found' })
+    if (!existingAccount) {
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'Auxiliary account not found'
+      })
     }
 
-    // Verificar si el nombre ya existe en otro registro
-    const verifyName = await prisma.auxiliariesAccounts.findFirst({
-      where: { name: data.name }
-    })
-
-    // Verificar si el código auxiliar ya existe en otro registro
     const verifyCode = await prisma.auxiliariesAccounts.findFirst({
-      where: { auxiliary_code: data.auxiliary_code }
+      where: {
+        auxiliary_code: data.auxiliary_code,
+        NOT: { id }
+      }
     })
-    
-    if (verifyName) {
-      return res.status(400).json({ success: false, message: 'The name is already in use', verifyName })
-    }
 
     if (verifyCode) {
-      return res.status(400).json({ success: false, code: 400, message: 'The auxiliary code is already in use', verifyCode })
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Este código auxiliar ya está en uso por otra cuenta',
+      })
     }
 
     // Actualizar la cuenta auxiliar
-    const account = await prisma.auxiliariesAccounts.update({
+    const updatedAccount = await prisma.auxiliariesAccounts.update({
       where: { id },
       data
     })
 
-    res.status(200).json({ success: true, code: 200, message: 'Accounting account updated successfully', account })
-
+    return res.status(200).json({
+      success: true,
+      code: 200,
+      message: 'Codigo auxiliar actualizado correctamente',
+      account: updatedAccount
+    })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, code: 500, message: 'Error updating the accounting account', error })
+    return res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error actualizando la cuenta auxiliar',
+      error: error.message
+    })
   }
 })
+
 
 // Eliminar una cuenta auxiliar
 router.delete('/auxiliaries/delete/:id', async (req, res) => {

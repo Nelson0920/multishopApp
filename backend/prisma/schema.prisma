@@ -70,6 +70,7 @@ model AccountingAccounts {
   code_account      String
   auxiliary1_initials String
   auxiliary2_initials String
+  category_account String
   createdAt DateTime @default(now())
 }
 
@@ -82,6 +83,7 @@ model AuxiliariesAccounts {
 
 model CostCenter {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  // id_branch           String   @db.ObjectId
   current_cost Int
   average_cost Int
   previous_cost Int
@@ -171,6 +173,7 @@ model PaymentConditions{
 
 model Inventory {
   id_product          String   @id @default(auto()) @map("_id") @db.ObjectId
+  // id_branch           String   @db.ObjectId
   long_description    String
   short_description   String
   id_Categories       String  @db.ObjectId
@@ -202,6 +205,7 @@ model Inventory {
 
 model Prices {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  // id_branch           String   @db.ObjectId
   id_product          String  @db.ObjectId
   id_cost_center      String  @db.ObjectId
   id_cost             String  @db.ObjectId
@@ -238,6 +242,7 @@ model AlternateCodes {
 
 model Costs {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  // id_branch           String   @db.ObjectId
   id_product          String  @db.ObjectId
   id_cost_center      String  @db.ObjectId
   average_cost        Float
@@ -303,8 +308,9 @@ model Deposits{
 
 model DetailStock {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  // id_branch           String   @db.ObjectId
   id_product          String  @db.ObjectId
-  id_warehouses         String  @db.ObjectId
+  id_warehouses       String  @db.ObjectId
   code1               String
   code2               String
   code3               String
@@ -403,6 +409,7 @@ model PurchaseStatistics {
 
 model KardexEvent {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_branch           String   @db.ObjectId
   id_product          String  @db.ObjectId
   date                DateTime
   initial_stock       Float
@@ -424,6 +431,7 @@ model KardexEvent {
 
 model MiniKardexDeposit {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_branch           String   @db.ObjectId
   id_product          String  @db.ObjectId
   id_warehouses       String  @db.ObjectId
   date                DateTime
