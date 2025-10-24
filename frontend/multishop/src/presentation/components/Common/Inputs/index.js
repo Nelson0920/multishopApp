@@ -1,0 +1,16 @@
+export { default as TextInput } from './TextInput';
+export { default as NumberInput } from './NumberInput';
+export { default as EmailInput } from './EmailInput';
+export { default as PhoneInput } from './PhoneInput';
+export { default as TextareaInput } from './TextareaInput';
+export { default as SelectInput } from './SelectInput';
+export { default as DateInput } from './DateInput';
+export { default as CheckboxInput } from './CheckboxInput';
+export { default as RifInput } from './RifInput';
+export { default as SearchInput } from './SearchInput';
+export { default as AuxiliarInput } from './AuxiliarInput';
+export { default as AuxiliarRules } from './AuxiliarRules';
+export { default as AccountGroup } from './AccountGroup';
+export { default as FormSection } from './FormSection';
+export { default as ModalActions } from './ModalActions';
+export { default as ModalHeader } from './ModalHeader';

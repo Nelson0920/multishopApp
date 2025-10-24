@@ -1,0 +1,96 @@
+@use '@presentation-styles/components/CommonModal.scss';
+@use '@presentation-styles/components/FeatureCards.scss';
+@use '@presentation-styles/components/CommonPage.scss';
+@use '@presentation-styles/components/CommonTable.scss';
+@use '@presentation-styles/components/CommonSearch.scss';
+@use '@shared-styles/variables/CommonVariables.scss' as *;
+
+.condiciones-page {
+      @extend .page-module;
+
+      .table-container {
+            @extend .table-container-expanded;
+
+            .table-wrapper {
+                  .condiciones-table {
+                        @extend table;
+                  }
+            }
+
+            .cards-wrapper {
+                  @extend .cards-wrapper-expanded;
+
+                  .condicion-card {
+                        @extend .module-card-expanded;
+
+                        .card-header {
+                              .condicion-name {
+                                    font-weight: 600;
+                                    color: $text-primary;
+                                    font-size: 1.1rem;
+                              }
+                        }
+                  }
+            }
+
+            .no-results {
+                  text-align: center;
+                  padding: 2rem;
+                  color: $text-secondary;
+                  font-style: italic;
+            }
+      }
+}
+
+.loading-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      margin: 20px 0;
+
+      p {
+            margin: 0;
+            color: $primary-color;
+            font-weight: 500;
+      }
+}
+
+.error-indicator {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #fee;
+      border: 1px solid #fcc;
+      border-radius: 8px;
+      margin: 20px 0;
+
+      p {
+            margin: 0;
+            color: #c33;
+            font-weight: 500;
+      }
+
+      button {
+            background-color: #c33;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+
+            &:hover {
+                  background-color: #a22;
+            }
+      }
+}
+
+.modal-textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+}

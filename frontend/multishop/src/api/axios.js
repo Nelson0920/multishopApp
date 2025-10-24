@@ -1,12 +1,16 @@
 import axios from "axios"
 
-// Obtener la IP del servidor desde el archivo .env
-const IP_SERVICE = import.meta.env.VITE_IP_SERVICE
+const IP_SERVICE_AUTENTICACION = import.meta.env.VITE_IP_SERVICE_AUTENTICACION
+const IP_SERVICE_SERVICES = import.meta.env.VITE_IP_SERVICE_SERVICES
 
-// Configurar las instancias de Axios con la IP dinámica
 const instanceUser = axios.create({
-  baseURL: `http://${IP_SERVICE}:3001/api`,
+  baseURL: `${IP_SERVICE_AUTENTICACION}/api`,
   withCredentials: true
 })
 
-export { instanceUser }
+const instanceServices = axios.create({
+  baseURL: `${IP_SERVICE_SERVICES}/api/two`,
+  withCredentials: false
+})
+
+export { instanceUser, instanceServices }

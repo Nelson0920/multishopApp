@@ -1,0 +1,27 @@
+@use '@presentation-styles/components/CommonModal.scss';
+@use '@presentation-styles/components/FeatureCards.scss';
+@use '@presentation-styles/components/CommonPage.scss';
+@use '@presentation-styles/components/CommonCards.scss';
+@use '@shared-styles/variables/CommonVariables.scss' as *;
+
+.usuarios-page {
+      @extend .page-module;
+
+      .usuario-card {
+            @extend .usuario-card;
+
+            .card-header {
+                  .usuario-name {
+                        font-weight: 600;
+                        color: $text-primary;
+                        font-size: 1.1rem;
+                  }
+            }
+      }
+}
+
+.modal-textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+}
