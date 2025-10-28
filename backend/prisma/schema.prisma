@@ -35,10 +35,12 @@ model Categories{
   discount_percentage Float
   profit_percentage Float
   id_cost_center String  @db.ObjectId
-  band_management Boolean
+  // band_management Boolean
   createdAt DateTime @default(now())
 
   accounts Account_Categories[]
+  costCenter          CostCenter @relation(fields: [id_cost_center], references: [id])
+
 }
 
 model Account_Categories{
@@ -93,42 +95,80 @@ model CostCenter {
   higher_current_average Int
   lower_current_previous_average Int
   createdAt DateTime @default(now())
+
+  categories Categories[]
 }
+
+// model CPO {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+//   type      String
+//   rif       String
+//   name      String
+//   gender      String
+//   birthdate   DateTime
+//   name_commercial      String
+//   address   String
+//   phone     String
+//   // credit_conditions Int
+//   email     String
+//   observations String
+//   id_categories_cpo String  @db.ObjectId
+//   id_sellers String  @db.ObjectId
+//   // credentials Json
+//   marketing_environment String
+//   id_accounting_accounts String  @db.ObjectId
+//   auxiliary1 String
+//   auxiliary2 String
+//   bank_accounts String
+//   // credit_limit Float
+//   // credit_terms Float
+//   // discount_percentage Float
+//   id_PaymentConditions String?  @db.ObjectId
+//   type_taxpayer String
+//   retention_percentage_iva Float
+//   id_RetentionISLRConcepts String?  @db.ObjectId
+//   automatic_islr Boolean
+//   createdAt DateTime @default(now())
+//   last_visit DateTime
+//   blockade Int
+//   observations_blockade String
+
+//   paymentConditions              P[]
+// }
 
 model CPO {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   type      String
   rif       String
   name      String
-  gender      String
-  birthdate   DateTime
-  name_commercial      String
+  gender    String
+  birthdate DateTime
+  name_commercial String
   address   String
   phone     String
-  // credit_conditions Int
   email     String
   observations String
   id_categories_cpo String  @db.ObjectId
-  id_sellers String  @db.ObjectId
-  // credentials Json
+  id_sellers        String  @db.ObjectId
   marketing_environment String
   id_accounting_accounts String  @db.ObjectId
   auxiliary1 String
   auxiliary2 String
   bank_accounts String
-  // credit_limit Float
-  // credit_terms Float
-  // discount_percentage Float
-  id_PaymentConditions String  @db.ObjectId
+  id_PaymentConditions String?  @db.ObjectId
   type_taxpayer String
   retention_percentage_iva Float
-  id_RetentionISLRConcepts String  @db.ObjectId
+  id_RetentionISLRConcepts String?  @db.ObjectId
   automatic_islr Boolean
   createdAt DateTime @default(now())
   last_visit DateTime
   blockade Int
   observations_blockade String
+
+  // 🔹 Relación: un CPO puede tener muchas PaymentConditions
+  paymentConditions PaymentConditions[]
 }
+
 
 model CategoriesCPO {
   id                      String              @id @default(auto()) @map("_id") @db.ObjectId
@@ -171,12 +211,17 @@ model RetentionISLRConcepts {
   createdAt DateTime @default(now())
 }
 
-model PaymentConditions{
+model PaymentConditions {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id_cpo    String   @db.ObjectId
   days      Int
   discount_percentage Float
   createdAt DateTime @default(now())
+
+  // 🔹 Relación con CPO (muchas condiciones pertenecen a un CPO)
+  cpo CPO @relation(fields: [id_cpo], references: [id])
 }
+
 
 model Inventory {
   id_product          String   @id @default(auto()) @map("_id") @db.ObjectId

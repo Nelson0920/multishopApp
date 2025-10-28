@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
 // Crear un nuevo Vendedor
 router.post('/register', async (req, res) => {
   try {
-    const { name, rif, address, phone, email, type, commission, credentials } = req.body
+    const { id_CPO , name, rif, address, phone, email, type, commission, credentials } = req.body
   
     const search = await prisma.sellers.findMany({ where: { rif } })
 
@@ -52,7 +52,7 @@ router.post('/register', async (req, res) => {
   
       const seller = await prisma.sellers.create({
         data: {
-          name, rif, address, phone, email, type_seller: type, commission,
+          id_CPO ,name, rif, address, phone, email, type_seller: type, commission,
           credentials: {
             email: credentials.username.toUpperCase(),
             password: hashedPassword,

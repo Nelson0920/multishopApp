@@ -4,20 +4,67 @@ import prisma from '../config/prisma.js'
 
 const router = express.Router()
 
-// Obtener todos los clientes
+// --- Obtener CPOs (Clientes, Proveedores u Otros) ---
 router.get('/', async (req, res) => {
   try {
-    const clients = await prisma.clients.findMany()
-    if (clients.length > 0) {
-      return res.status(200).json({ success: true, code:200, message: 'Clients found', clients })
-    }else{
-      return res.status(404).json({ success: false, code:404 , message: 'No clients found' })
+    const { search, type } = req.query;
+
+    // --- Filtro dinámico ---
+    let whereClause = {};
+
+    // Si se especifica tipo (cliente, proveedor, otro)
+    if (type) {
+      whereClause.type = type;
     }
+
+    // Si se incluye texto de búsqueda
+    if (search) {
+      whereClause.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { rif: { contains: search, mode: 'insensitive' } },
+        { name_commercial: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search, mode: 'insensitive' } },
+        { address: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    // Si no hay búsqueda → limitar a 50 resultados
+    const takeLimit = search ? undefined : 50;
+
+    const cpos = await prisma.cPO.findMany({
+      where: whereClause,
+      take: takeLimit,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        paymentConditions: true, // si quieres traer también las condiciones de pago
+      },
+    });
+
+    if (!cpos.length) {
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'No CPOs found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      code: 200,
+      message: 'CPOs found',
+      cpos,
+    });
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ success: false, message: 'Error fetching clients' })
+    console.error('❌ Error fetching CPOs:', error);
+    res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error fetching CPOs',
+    });
   }
-})
+});
+
 
 // Obtener un cliente por ID
 router.get('/get/:id', async (req, res) => {
@@ -39,17 +86,32 @@ router.get('/get/:id', async (req, res) => {
 // Crear un nuevo cliente
 router.post('/register', async (req, res) => {
   try {
-    const { type, rif, id_categories_clients, id_sellers, id_accounting_accounts, id_PaymentConditions, id_RetentionISLRConcepts } = req.body
+    const {
+      type,
+      rif,
+      id_categories_cpo,
+      id_sellers,
+      id_accounting_accounts,
+      id_PaymentConditions,
+      id_RetentionISLRConcepts
+    } = req.body
+
     const data = req.body
 
+    // Validar tipo
     if (!['client', 'provider'].includes(type)) {
-      return res.status(400).json({ success: false, code: 400, message: 'Invalid type provided', data })
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Invalid type provided',
+        data
+      })
     }
 
-    const existing = await prisma.clients.findMany({
+    // Verificar si ya existe
+    const existing = await prisma.cPO.findMany({
       where: { rif, type }
     })
-
     if (existing.length > 0) {
       return res.status(400).json({
         success: false,
@@ -59,32 +121,42 @@ router.post('/register', async (req, res) => {
       })
     }
 
-    // Validaciones de relaciones
+    // 🔹 Validar categoría (obligatoria)
+    if (!id_categories_cpo) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Category ID is required'
+      })
+    }
     const searchCategory = await prisma.categoriesCPO.findUnique({
-      where: { id: id_categories_clients }
+      where: { id: id_categories_cpo }
     })
     if (!searchCategory) {
       return res.status(400).json({
         success: false,
         code: 400,
         message: 'Invalid category ID',
-        data: id_categories_clients
+        data: id_categories_cpo
       })
     }
 
-    const searchSeller = await prisma.sellers.findUnique({
-      where: { id: id_sellers }
-    })
-    if (!searchSeller) {
-      return res.status(400).json({
-        success: false,
-        code: 400,
-        message: 'Invalid Seller ID',
-        data: id_sellers
+    // 🔹 Validar vendedor (obligatorio)
+    if(id_sellers){
+      const searchSeller = await prisma.sellers.findUnique({
+        where: { id: id_sellers }
       })
+      if (!searchSeller) {
+        return res.status(400).json({
+          success: false,
+          code: 400,
+          message: 'Invalid Seller ID',
+          data: id_sellers
+        })
+      }
     }
 
-
+    // 🔹 Validar cuenta contable (obligatoria)
     const searchAccounting = await prisma.accountingAccounts.findUnique({
       where: { id: id_accounting_accounts }
     })
@@ -97,36 +169,43 @@ router.post('/register', async (req, res) => {
       })
     }
 
-    const searchPayCondition = await prisma.paymentConditions.findUnique({
-      where: { id: id_PaymentConditions }
-    })
-    if (!searchPayCondition) {
-      return res.status(400).json({
-        success: false,
-        code: 400,
-        message: 'Invalid payment condition ID',
-        data: id_PaymentConditions
+    // 🔹 Validar condición de pago (solo si se envía)
+    if (id_PaymentConditions) {
+      const searchPayCondition = await prisma.paymentConditions.findUnique({
+        where: { id: id_PaymentConditions }
       })
+      if (!searchPayCondition) {
+        return res.status(400).json({
+          success: false,
+          code: 400,
+          message: 'Invalid payment condition ID',
+          data: id_PaymentConditions
+        })
+      }
     }
 
-    const searchRetention = await prisma.retentionISLRConcepts.findUnique({
-      where: { id: id_RetentionISLRConcepts }
-    })
-    if (!searchRetention) {
-      return res.status(400).json({
-        success: false,
-        code: 400,
-        message: 'Invalid ISLR retention concept ID',
-        data: id_RetentionISLRConcepts
+    // 🔹 Validar concepto de retención ISLR (solo si se envía)
+    if (id_RetentionISLRConcepts) {
+      const searchRetention = await prisma.retentionISLRConcepts.findUnique({
+        where: { id: id_RetentionISLRConcepts }
       })
+      if (!searchRetention) {
+        return res.status(400).json({
+          success: false,
+          code: 400,
+          message: 'Invalid ISLR retention concept ID',
+          data: id_RetentionISLRConcepts
+        })
+      }
     }
 
-    const created = await prisma.clients.create({ data })
+    // Crear el CPO
+    const created = await prisma.cPO.create({ data })
 
     res.status(200).json({
       success: true,
       code: 200,
-      message: `${type.charAt(0).toUpperCase() + type.slice(1)} created successfully`,
+      message: `CPO created successfully`,
       [type]: created
     })
 
@@ -136,7 +215,7 @@ router.post('/register', async (req, res) => {
       success: false,
       code: 500,
       message: 'Error creating client or provider',
-      error
+      error: error.message
     })
   }
 })
@@ -188,10 +267,34 @@ router.delete('/delete/:id', async (req, res) => {
 
 // --- Categorias Cliente ---
 
-// Obtener todos las categorias de los clientes
+// Obtener todas las categorías de los clientes (con filtros opcionales)
 router.get('/category', async (req, res) => {
   try {
+    const { name, filterDays, days } = req.query
+
+    const whereClause = {}
+
+    // 🔍 Filtro por nombre
+    if (name && name.trim() !== '') {
+      whereClause.name = {
+        contains: name.trim(),
+        mode: 'insensitive'
+      }
+    }
+
+    // 🔢 Filtro por número exacto de días de vigencia
+    if (days && !isNaN(days)) {
+      whereClause.deadline_day = Number(days)
+    }
+
+    // ⚙️ Ordenar según filtro de días de vigencia
+    const orderByClause =
+      filterDays === 'true'
+        ? { deadline_day: 'asc' } // ordenar de menor a mayor
+        : { createdAt: 'desc' } // orden por defecto
+
     const categoriesData = await prisma.categoriesCPO.findMany({
+      where: whereClause,
       include: {
         accountingAccount: {
           select: {
@@ -205,7 +308,7 @@ router.get('/category', async (req, res) => {
           }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: orderByClause
     })
 
     if (!categoriesData.length) {
@@ -216,6 +319,7 @@ router.get('/category', async (req, res) => {
       })
     }
 
+    // Limpiar campos no necesarios
     const categories = categoriesData.map(cat => {
       const { id_accounting_accounts, ...rest } = cat
       return rest

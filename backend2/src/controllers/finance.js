@@ -143,20 +143,49 @@ router.get('/payment/condition/:id', async (req, res) => {
 router.post('/payment/condition/register', async (req, res) => {
   try {
     const data = req.body
+    const { id_cpo, days } = data
 
-    const existingCondition = await prisma.paymentConditions.findMany({ where: { days: data.days } })
+    const existingCondition = await prisma.paymentConditions.findFirst({
+      where: { days, id_cpo }
+    })
 
-    if (existingCondition.length > 0) {
-      return res.status(400).json({ success: false, code: 400, message: 'Payment Condition already exists', data })
+    if (existingCondition) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Esta condición de pago ya existe para este CPO',
+      })
     }
 
     const condition = await prisma.paymentConditions.create({ data })
 
-    res.status(201).json({ success: true, code: 200, message: 'Payment condition created successfully', condition })
+    const cpo = await prisma.cPO.findUnique({
+      where: { id: id_cpo },
+    })
+
+    if (cpo && !cpo.id_PaymentConditions) {
+      await prisma.cPO.update({
+        where: { id: id_cpo },
+        data: {
+          id_PaymentConditions: condition.id,
+        },
+      })
+    }
+
+    res.status(201).json({
+      success: true,
+      code: 200,
+      message: 'Condición de pago creada exitosamente',
+      condition,
+    })
 
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, message: 'Error creating Payment condition', error })
+    res.status(500).json({
+      success: false,
+      message: 'Error al crear la condición de pago',
+      error: error.message,
+    })
   }
 })
 

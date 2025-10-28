@@ -447,4 +447,72 @@ router.delete('/auxiliaries/delete/:id', async (req, res) => {
   }
 })
 
+// Obtener auxiliares disponibles según las iniciales enviadas
+router.get('/auxiliaries/available', async (req, res) => {
+  try {
+    const { initials } = req.query
+
+    if (!initials || initials.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'Debes enviar al menos una inicial como parámetro (ejemplo: ?initials=A,B,J)'
+      })
+    }
+
+    // Dividir las iniciales recibidas por comas, limpiar espacios y convertir a mayúsculas
+    const initialsArray = initials
+      .split(',')
+      .map(i => i.trim().toUpperCase())
+      .filter(i => i !== '')
+
+    if (initialsArray.length === 0) {
+      return res.status(400).json({
+        success: false,
+        code: 400,
+        message: 'No se enviaron iniciales válidas'
+      })
+    }
+
+    // Buscar auxiliares que comiencen con cualquiera de las iniciales enviadas
+    const auxiliaries = await prisma.auxiliariesAccounts.findMany({
+      where: {
+        OR: initialsArray.map(initial => ({
+          auxiliary_code: {
+            startsWith: initial,
+            mode: 'insensitive'
+          }
+        }))
+      },
+      orderBy: { auxiliary_code: 'asc' }
+    })
+
+    if (auxiliaries.length === 0) {
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: `No se encontraron auxiliares para las iniciales: ${initialsArray.join(', ')}`
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      code: 200,
+      message: `Auxiliares disponibles para las iniciales: ${initialsArray.join(', ')}`,
+      auxiliaries
+    })
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error al obtener auxiliares disponibles',
+      error: error.message
+    })
+  }
+})
+
+
+
 export default router
