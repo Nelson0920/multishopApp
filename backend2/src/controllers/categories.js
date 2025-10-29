@@ -10,10 +10,22 @@ const router = express.Router()
 // --- Categories ---
 router.get('/', async (req, res) => {
   try {
-    const categories = await prisma.categories.findMany();
+    const { name } = req.query // ejemplo: /api/categories?name=ropa
+
+    // Condición dinámica de búsqueda
+    const whereCondition = name
+      ? { name: { contains: name, mode: 'insensitive' } }
+      : {}
+
+    // Buscar categorías (todas o filtradas)
+    const categories = await prisma.categories.findMany({
+      where: whereCondition,
+    })
 
     if (!categories.length) {
-      return res.status(404).json({ success: false, code: 404, message: 'No categories found' });
+      return res
+        .status(404)
+        .json({ success: false, code: 404, message: 'No categories found' })
     }
 
     const categoriesWithAccounts = await Promise.all(
@@ -21,10 +33,10 @@ router.get('/', async (req, res) => {
         // Buscar el Account_Categories relacionado
         const accountCat = await prisma.account_Categories.findFirst({
           where: { id_Categories: category.id },
-        });
+        })
 
         // Buscar el centro de costos
-        let costCenterData = null;
+        let costCenterData = null
         if (category.id_cost_center) {
           costCenterData = await prisma.costCenter.findUnique({
             where: { id: category.id_cost_center },
@@ -37,7 +49,7 @@ router.get('/', async (req, res) => {
               lower_current_previous_average: true,
               createdAt: true,
             },
-          });
+          })
         }
 
         // Si no hay cuentas relacionadas, devolvemos campos vacíos
@@ -47,34 +59,33 @@ router.get('/', async (req, res) => {
             name: category.name,
             discount_percentage: category.discount_percentage,
             profit_percentage: category.profit_percentage,
-            // id_cost_center: category.id_cost_center,
             cost_center: costCenterData || {},
             createdAt: category.createdAt,
             accounts: {
-              account_Sales: "",
-              auxiliary1_Sales: "",
-              auxiliary2_Sales: "",
-              account_buy: "",
-              auxiliary1_buy: "",
-              auxiliary2_buy: "",
-              account_consumos: "",
-              auxiliary1_consumos: "",
-              auxiliary2_consumos: "",
-              account_devbuy: "",
-              auxiliary1_devbuy: "",
-              auxiliary2_devbuy: "",
-              account_tax: "",
-              auxiliary1_tax: "",
-              auxiliary2_tax: "",
+              account_Sales: '',
+              auxiliary1_Sales: '',
+              auxiliary2_Sales: '',
+              account_buy: '',
+              auxiliary1_buy: '',
+              auxiliary2_buy: '',
+              account_consumos: '',
+              auxiliary1_consumos: '',
+              auxiliary2_consumos: '',
+              account_devbuy: '',
+              auxiliary1_devbuy: '',
+              auxiliary2_devbuy: '',
+              account_tax: '',
+              auxiliary1_tax: '',
+              auxiliary2_tax: '',
             },
-          };
+          }
         }
 
-        // Funciones para traer info completa de accounts y auxiliares
+        // Funciones auxiliares
         const getAccountData = async (id) => {
-          if (!id || !ObjectId.isValid(id)) return "";
-          const account = await prisma.accountingAccounts.findUnique({ where: { id } });
-          if (!account) return "";
+          if (!id || !ObjectId.isValid(id)) return ''
+          const account = await prisma.accountingAccounts.findUnique({ where: { id } })
+          if (!account) return ''
           return {
             id: account.id,
             name: account.name,
@@ -82,19 +93,19 @@ router.get('/', async (req, res) => {
             auxiliary1_initials: account.auxiliary1_initials,
             auxiliary2_initials: account.auxiliary2_initials,
             category_account: account.category_account,
-          };
-        };
+          }
+        }
 
         const getAuxiliaryData = async (id) => {
-          if (!id || !ObjectId.isValid(id)) return "";
-          const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } });
-          if (!aux) return "";
+          if (!id || !ObjectId.isValid(id)) return ''
+          const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
+          if (!aux) return ''
           return {
             id: aux.id,
             name: aux.name,
             auxiliary_code: aux.auxiliary_code,
-          };
-        };
+          }
+        }
 
         // Construimos el objeto accounts completo
         const detailedAccount = {
@@ -113,53 +124,55 @@ router.get('/', async (req, res) => {
           account_tax: await getAccountData(accountCat.account_tax),
           auxiliary1_tax: await getAuxiliaryData(accountCat.auxiliary1_tax),
           auxiliary2_tax: await getAuxiliaryData(accountCat.auxiliary2_tax),
-        };
+        }
 
         return {
           id: category.id,
           name: category.name,
           discount_percentage: category.discount_percentage,
           profit_percentage: category.profit_percentage,
-          // id_cost_center: category.id_cost_center,
           cost_center: costCenterData || {},
           createdAt: category.createdAt,
           accounts: detailedAccount,
-        };
+        }
       })
-    );
+    )
 
     res.status(200).json({
       success: true,
       code: 200,
-      message: 'Account categories found',
+      message: 'Categories found',
       data: categoriesWithAccounts,
-    });
+    })
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Error fetching categories' });
+    console.error(error)
+    res
+      .status(500)
+      .json({ success: false, message: 'Error fetching categories', error: error.message })
   }
-});
+})
+
 
 
 // Obtener categoría por ID
 router.get('/get/:id', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params
 
     // Buscar la categoría
-    const category = await prisma.categories.findUnique({ where: { id } });
+    const category = await prisma.categories.findUnique({ where: { id } })
 
     if (!category) {
-      return res.status(404).json({ success: false, code: 404, message: 'No category found' });
+      return res.status(404).json({ success: false, code: 404, message: 'No category found' })
     }
 
     // Buscar Account_Categories relacionado
     const accountCat = await prisma.account_Categories.findFirst({
       where: { id_Categories: category.id },
-    });
+    })
 
     // Buscar información del centro de costos
-    let costCenterData = null;
+    let costCenterData = null
     if (category.id_cost_center) {
       costCenterData = await prisma.costCenter.findUnique({
         where: { id: category.id_cost_center },
@@ -172,14 +185,14 @@ router.get('/get/:id', async (req, res) => {
           lower_current_previous_average: true,
           createdAt: true,
         },
-      });
+      })
     }
 
     // Funciones para traer info completa de accounts y auxiliares
     const getAccountData = async (id) => {
-      if (!id || !ObjectId.isValid(id)) return "";
-      const account = await prisma.accountingAccounts.findUnique({ where: { id } });
-      if (!account) return "";
+      if (!id || !ObjectId.isValid(id)) return ""
+      const account = await prisma.accountingAccounts.findUnique({ where: { id } })
+      if (!account) return ""
       return {
         id: account.id,
         name: account.name,
@@ -187,19 +200,19 @@ router.get('/get/:id', async (req, res) => {
         auxiliary1_initials: account.auxiliary1_initials,
         auxiliary2_initials: account.auxiliary2_initials,
         category_account: account.category_account,
-      };
-    };
+      }
+    }
 
     const getAuxiliaryData = async (id) => {
-      if (!id || !ObjectId.isValid(id)) return "";
-      const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } });
-      if (!aux) return "";
+      if (!id || !ObjectId.isValid(id)) return ""
+      const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
+      if (!aux) return ""
       return {
         id: aux.id,
         name: aux.name,
         auxiliary_code: aux.auxiliary_code,
-      };
-    };
+      }
+    }
 
     // Construir objeto accounts
     let detailedAccount = {
@@ -218,7 +231,7 @@ router.get('/get/:id', async (req, res) => {
       account_tax: "",
       auxiliary1_tax: "",
       auxiliary2_tax: "",
-    };
+    }
 
     if (accountCat) {
       detailedAccount = {
@@ -237,7 +250,7 @@ router.get('/get/:id', async (req, res) => {
         account_tax: await getAccountData(accountCat.account_tax),
         auxiliary1_tax: await getAuxiliaryData(accountCat.auxiliary1_tax),
         auxiliary2_tax: await getAuxiliaryData(accountCat.auxiliary2_tax),
-      };
+      }
     }
 
     // Respuesta final
@@ -254,12 +267,12 @@ router.get('/get/:id', async (req, res) => {
         createdAt: category.createdAt,
         accounts: detailedAccount,
       },
-    });
+    })
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Error fetching category', error });
+    console.error(error)
+    res.status(500).json({ success: false, message: 'Error fetching category', error })
   }
-});
+})
 
 
 router.post('/register', async (req, res) => {
@@ -352,31 +365,31 @@ router.post('/register', async (req, res) => {
 // Actualizar una categoria
 router.put('/edit/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const data = req.body;
+    const { id } = req.params
+    const data = req.body
 
     // Verificar que la categoría exista
-    const categoryExists = await prisma.categories.findUnique({ where: { id } });
+    const categoryExists = await prisma.categories.findUnique({ where: { id } })
     if (!categoryExists) {
-      return res.status(404).json({ success: false, code: 404, message: 'Category not found' });
+      return res.status(404).json({ success: false, code: 404, message: 'Category not found' })
     }
 
     // Actualizar la categoría
     const updatedCategory = await prisma.categories.update({
       where: { id },
       data,
-    });
+    })
 
     // Buscar Account_Categories relacionado
     const accountCat = await prisma.account_Categories.findFirst({
       where: { id_Categories: updatedCategory.id },
-    });
+    })
 
     // Funciones para traer info completa de accounts y auxiliares
     const getAccountData = async (id) => {
-      if (!id || !ObjectId.isValid(id)) return "";
-      const account = await prisma.accountingAccounts.findUnique({ where: { id } });
-      if (!account) return "";
+      if (!id || !ObjectId.isValid(id)) return ""
+      const account = await prisma.accountingAccounts.findUnique({ where: { id } })
+      if (!account) return ""
       return {
         id: account.id,
         name: account.name,
@@ -384,19 +397,19 @@ router.put('/edit/:id', async (req, res) => {
         auxiliary1_initials: account.auxiliary1_initials,
         auxiliary2_initials: account.auxiliary2_initials,
         category_account: account.category_account,
-      };
-    };
+      }
+    }
 
     const getAuxiliaryData = async (id) => {
-      if (!id || !ObjectId.isValid(id)) return "";
-      const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } });
-      if (!aux) return "";
+      if (!id || !ObjectId.isValid(id)) return ""
+      const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
+      if (!aux) return ""
       return {
         id: aux.id,
         name: aux.name,
         auxiliary_code: aux.auxiliary_code,
-      };
-    };
+      }
+    }
 
     // Construir objeto accounts
     let detailedAccount = {
@@ -415,7 +428,7 @@ router.put('/edit/:id', async (req, res) => {
       account_tax: "",
       auxiliary1_tax: "",
       auxiliary2_tax: "",
-    };
+    }
 
     if (accountCat) {
       detailedAccount = {
@@ -434,7 +447,7 @@ router.put('/edit/:id', async (req, res) => {
         account_tax: await getAccountData(accountCat.account_tax),
         auxiliary1_tax: await getAuxiliaryData(accountCat.auxiliary1_tax),
         auxiliary2_tax: await getAuxiliaryData(accountCat.auxiliary2_tax),
-      };
+      }
     }
 
     res.status(200).json({
@@ -450,13 +463,13 @@ router.put('/edit/:id', async (req, res) => {
         createdAt: updatedCategory.createdAt,
         accounts: detailedAccount,
       },
-    });
+    })
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Error updating the category', error });
+    console.error(error)
+    res.status(500).json({ success: false, message: 'Error updating the category', error })
   }
-});
+})
 
 // Eliminar una Categoria
 router.delete('/delete/:id', async (req, res) => {

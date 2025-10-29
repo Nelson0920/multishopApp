@@ -206,42 +206,59 @@ router.delete('/accounting/delete/:id', async (req, res) => {
 // Buscar cuentas auxiliares
 router.get('/auxiliaries', async (req, res) => {
   try {
-    const { codigo } = req.query // Ejemplo: /api/two/auxiliaries?codigo=J.000005 o /api/two/auxiliaries?codigo=ventas
-
+    const { codigo } = req.query
     let auxiliaries
 
     if (codigo && codigo.trim() !== '') {
+      const cleanCode = codigo.trim().toUpperCase()
+
+      // Generar versiones equivalentes del código
+      let searchVariants = [cleanCode]
+
+      // Si viene como J1 → generar J.000001
+      if (/^[A-Z]\d+$/i.test(cleanCode)) {
+        const letter = cleanCode[0]
+        const number = cleanCode.slice(1)
+        const padded = number.padStart(6, '0') // "1" -> "000001"
+        searchVariants.push(`${letter}.${padded}`)
+      }
+
+      // Si viene como J.000001 → generar J1
+      if (/^[A-Z]\.\d+$/i.test(cleanCode)) {
+        const [letter, num] = cleanCode.split('.')
+        const simple = `${letter}${parseInt(num, 10)}` // "J.000001" -> "J1"
+        searchVariants.push(simple)
+      }
+
       auxiliaries = await prisma.auxiliariesAccounts.findMany({
         where: {
           OR: [
-            {
-              auxiliary_code: {
-                contains: codigo,
-                mode: 'insensitive'
-              }
-            },
+            // Buscar por código exacto o parcial en cualquiera de las variantes
+            ...searchVariants.map(variant => ({
+              auxiliary_code: { contains: variant, mode: 'insensitive' },
+            })),
             {
               name: {
-                contains: codigo,
-                mode: 'insensitive'
-              }
-            }
-          ]
+                contains: cleanCode,
+                mode: 'insensitive',
+              },
+            },
+          ],
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       })
     } else {
       // Si no se envía código, traer todos
       auxiliaries = await prisma.auxiliariesAccounts.findMany({
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       })
     }
 
-    if (auxiliaries.length === 0) {
+    if (!auxiliaries || auxiliaries.length === 0) {
       return res.status(404).json({
         success: false,
         code: 404,
-        message: 'No se encontraron cuentas auxiliares'
+        message: 'No se encontraron cuentas auxiliares',
       })
     }
 
@@ -249,19 +266,19 @@ router.get('/auxiliaries', async (req, res) => {
       success: true,
       code: 200,
       message: 'Cuentas auxiliares encontradas',
-      auxiliaries
+      auxiliaries,
     })
-
   } catch (error) {
     console.error(error)
     res.status(500).json({
       success: false,
       code: 500,
       message: 'Error al buscar cuentas auxiliares',
-      error: error.message
+      error: error.message,
     })
   }
 })
+
 
 // Obtener una cuenta auxiliar
 router.get('/auxiliaries/specific/:id', async (req, res) => {
