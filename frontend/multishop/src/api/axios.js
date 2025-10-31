@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const IP_SERVICE_AUTENTICACION = import.meta.env.VITE_IP_SERVICE_AUTENTICACION
+const IP_SERVICE_AUTENTICACION = import.meta.env.VITE_IP_SERVICE_AUTH
 const IP_SERVICE_SERVICES = import.meta.env.VITE_IP_SERVICE_SERVICES
 
 const instanceUser = axios.create({

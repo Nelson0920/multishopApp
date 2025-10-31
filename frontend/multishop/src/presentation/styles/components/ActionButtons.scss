@@ -1,0 +1,264 @@
+/* Estilos comunes para botones de acción en tablas - Usado en todos los módulos */
+@use '@shared-styles/variables/CommonVariables.scss' as *;
+
+/* Contenedor de botones de acción */
+.action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+}
+
+/* Botones de acción estándar */
+.action-buttons .btn {
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      background: none;
+      color: inherit;
+
+      svg {
+            color: inherit;
+            transition: all 0.3s ease;
+      }
+
+      &:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      &:active {
+            transform: scale(0.95);
+      }
+
+      &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+
+            &:hover {
+                  transform: none;
+                  box-shadow: none;
+            }
+      }
+}
+
+/* Variantes de colores para botones de acción */
+.action-buttons .btn {
+
+      /* Botón de editar */
+      &.btn-edit {
+            color: #36aad4;
+
+            &:hover {
+                  background: rgba(54, 170, 212, 0.1);
+            }
+      }
+
+      /* Botón de eliminar */
+      &.btn-delete {
+            color: #e74c3c;
+
+            &:hover {
+                  background: rgba(231, 76, 60, 0.1);
+            }
+      }
+
+      /* Botón de ver detalles */
+      &.btn-view {
+            color: #17a2b8;
+
+            &:hover {
+                  background: rgba(23, 162, 184, 0.1);
+            }
+      }
+
+      /* Botón de actualizar stock */
+      &.btn-stock {
+            color: #ffc107;
+
+            &:hover {
+                  background: rgba(255, 193, 7, 0.1);
+            }
+      }
+
+      /* Botón de información */
+      &.btn-info {
+            color: #17a2b8;
+
+            &:hover {
+                  background: rgba(23, 162, 184, 0.1);
+            }
+      }
+
+      /* Botón de advertencia */
+      &.btn-warning {
+            color: #ffc107;
+
+            &:hover {
+                  background: rgba(255, 193, 7, 0.1);
+            }
+      }
+
+      /* Botón de peligro */
+      &.btn-danger {
+            color: #e74c3c;
+
+            &:hover {
+                  background: rgba(231, 76, 60, 0.1);
+            }
+      }
+
+      /* Botón de éxito */
+      &.btn-success {
+            color: #28a745;
+
+            &:hover {
+                  background: rgba(40, 167, 69, 0.1);
+            }
+      }
+
+      /* Botón primario */
+      &.btn-primary {
+            color: #36aad4;
+
+            &:hover {
+                  background: rgba(54, 170, 212, 0.1);
+            }
+      }
+}
+
+/* Celda de acciones en tablas */
+.actions-cell,
+.actions {
+      text-align: center;
+      vertical-align: middle;
+      padding: 0.75rem 0.5rem;
+      white-space: nowrap;
+}
+
+/* Responsive para botones de acción */
+@media (max-width: 768px) {
+      .action-buttons {
+            gap: 0.25rem;
+            flex-direction: column;
+            align-items: stretch;
+      }
+
+      .action-buttons .btn {
+            min-width: 28px;
+            height: 28px;
+            padding: 0.375rem;
+            font-size: 0.8rem;
+      }
+
+      .actions-cell,
+      .actions {
+            padding: 0.5rem 0.25rem;
+      }
+}
+
+@media (max-width: 480px) {
+      .action-buttons {
+            flex-direction: row;
+            justify-content: center;
+      }
+
+      .action-buttons .btn {
+            min-width: 24px;
+            height: 24px;
+            padding: 0.25rem;
+            font-size: 0.75rem;
+      }
+}
+
+/* Estados especiales para botones de acción */
+.action-buttons .btn {
+
+      /* Botón con texto */
+      &.btn-with-text {
+            min-width: auto;
+            padding: 0.5rem 0.75rem;
+            gap: 0.25rem;
+
+            svg {
+                  margin-right: 0.25rem;
+            }
+      }
+
+      /* Botón pequeño */
+      &.btn-sm {
+            min-width: 24px;
+            height: 24px;
+            padding: 0.25rem;
+            font-size: 0.75rem;
+      }
+
+      /* Botón grande */
+      &.btn-lg {
+            min-width: 40px;
+            height: 40px;
+            padding: 0.75rem;
+            font-size: 1rem;
+      }
+}
+
+/* Animaciones adicionales */
+@keyframes pulse {
+      0% {
+            transform: scale(1);
+      }
+
+      50% {
+            transform: scale(1.05);
+      }
+
+      100% {
+            transform: scale(1);
+      }
+}
+
+.action-buttons .btn {
+      &.btn-pulse {
+            animation: pulse 2s infinite;
+      }
+}
+
+/* Estados de carga para botones */
+.action-buttons .btn {
+      &.btn-loading {
+            position: relative;
+            color: transparent;
+
+            &::after {
+                  content: '';
+                  position: absolute;
+                  width: 16px;
+                  height: 16px;
+                  border: 2px solid transparent;
+                  border-top: 2px solid currentColor;
+                  border-radius: 50%;
+                  animation: spin 1s linear infinite;
+            }
+      }
+}
+
+@keyframes spin {
+      0% {
+            transform: rotate(0deg);
+      }
+
+      100% {
+            transform: rotate(360deg);
+      }
+}

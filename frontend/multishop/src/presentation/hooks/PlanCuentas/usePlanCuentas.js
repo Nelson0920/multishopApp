@@ -59,7 +59,7 @@ export const useCreateCuenta = (options = {}) => {
                   return planCuentasService.create(adaptedData);
             },
             onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lists() })
+                  queryClient.invalidateQueries({ queryKey: ['plan-cuentas', 'list'] })
                   toast.success('Cuenta creada correctamente');
             },
             onError: (error) => {
@@ -84,7 +84,7 @@ export const useUpdateCuenta = (options = {}) => {
                   return planCuentasService.update(adaptedData);
             },
             onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lists() })
+                  queryClient.invalidateQueries({ queryKey: ['plan-cuentas', 'list'] })
                   toast.success('Cuenta actualizada correctamente');
             },
             onError: (error) => {

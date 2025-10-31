@@ -90,6 +90,8 @@ const UsuariosModal = ({
                                     onChange={handleInputChange}
                                     placeholder="Ingrese el nombre completo"
                                     required
+                                    hasError={false}
+                                    errorMessage=""
                               />
 
                               <RifInput
@@ -160,6 +162,8 @@ const UsuariosModal = ({
                                           onChange={handleInputChange}
                                           placeholder="Ejemplo: cliente001"
                                           required
+                                          hasError={false}
+                                          errorMessage=""
                                     />
                               )}
                         </div>

@@ -12,6 +12,8 @@ import AsignacionISRL from "@pages/AsignacionISRL/";
 import Usuarios from "@pages/Usuarios/";
 import CPO from "@pages/CPO/";
 import CPODetails from "@pages/CPO/CPODetails";
+import Inventario from "@pages/Inventario/";
+import InventarioDetails from "@pages/Inventario/InventarioDetails";
 import { AuthProvider } from "@context/AuthContext";
 import { ToastContainer } from "react-toastify";
 
@@ -35,6 +37,8 @@ function App() {
               <Route path="/usuarios" element={<Usuarios />}></Route>
               <Route path="/cpo" element={<CPO />}></Route>
               <Route path="/cpo/details/:id" element={<CPODetails />}></Route>
+              <Route path="/inventario" element={<Inventario />}></Route>
+              <Route path="/inventario/:id" element={<InventarioDetails />}></Route>
             </Route>
           </Routes>
         </BrowserRouter>

@@ -38,7 +38,7 @@ class PlanCuentasAdapter {
        */
       static adaptServiceToFormData(serviceData) {
             if (!serviceData || typeof serviceData !== 'object') {
-                  throw new Error('Los datos del servicio son requeridos');
+                  return null;
             }
 
             const { name, code_account, auxiliary1_initials, auxiliary2_initials, category_account, id } = serviceData;

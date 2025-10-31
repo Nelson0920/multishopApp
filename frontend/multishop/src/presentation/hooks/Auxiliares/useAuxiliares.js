@@ -22,7 +22,6 @@ export const useAuxiliares = (options = {}, searchTerm = '') => {
       return useQuery({
             queryKey: QUERY_KEYS.lists(searchTerm),
             queryFn: async () => {
-                  console.log('searchTerm', searchTerm);
                   const data = await auxiliaresService.getAll(searchTerm);
                   const adaptedData = data.map((data) => AuxiliaresAdapter.adaptServiceToFormData(data));
                   return adaptedData;

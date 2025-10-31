@@ -32,7 +32,7 @@ const AuxiliaresModal = ({
                         />
 
                         <div className="modal-form">
-                              <div className="input-group">
+                              {!editingAuxiliar && <div className="input-group">
                                     <label htmlFor="auxiliar" className="input-label">
                                           Auxiliar *
                                     </label>
@@ -51,25 +51,24 @@ const AuxiliaresModal = ({
                                                 {errors.auxiliar}
                                           </div>
                                     )}
-                              </div>
+                              </div>}
+                              {editingAuxiliar && <div className="input-group">
+                                    <label className="input-label">
+                                          Auxiliar: {editingAuxiliar.auxiliar}
+                                    </label>
+                              </div>}
 
-                              <div className="input-group">
-                                    <TextInput
-                                          id="nombre"
-                                          name="nombre"
-                                          label="Nombre"
-                                          value={formData.nombre}
-                                          onChange={handleNombreChange}
-                                          placeholder="Ingrese el nombre del auxiliar"
-                                          required
-                                          className={errors.nombre ? 'error' : 'modal-input'}
-                                    />
-                                    {errors.nombre && (
-                                          <div className="error-message">
-                                                {errors.nombre}
-                                          </div>
-                                    )}
-                              </div>
+                              <TextInput
+                                    id="nombre"
+                                    name="nombre"
+                                    label="Nombre"
+                                    value={formData.nombre}
+                                    onChange={handleNombreChange}
+                                    placeholder="Ingrese el nombre del auxiliar"
+                                    required
+                                    hasError={!!errors.nombre}
+                                    errorMessage={errors.nombre}
+                              />
                         </div>
 
                         <ModalActions

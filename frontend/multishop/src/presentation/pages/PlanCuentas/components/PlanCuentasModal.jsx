@@ -44,13 +44,9 @@ const PlanCuentasModal = ({
                                           onChange={handleCodigoChange}
                                           placeholder="Ejemplo: 1.42.5.31"
                                           required
-                                          className={errors.codigo ? 'error' : 'modal-input'}
+                                          hasError={!!errors.codigo}
+                                          errorMessage={errors.codigo}
                                     />
-                                    {errors.codigo && (
-                                          <div className="error-message">
-                                                {errors.codigo}
-                                          </div>
-                                    )}
                               </div>
 
                               <div className="input-group">
@@ -62,13 +58,9 @@ const PlanCuentasModal = ({
                                           onChange={handleNombreChange}
                                           placeholder="Ejemplo: Cuentas por pagar"
                                           required
-                                          className={errors.nombre ? 'error' : 'modal-input'}
+                                          hasError={!!errors.nombre}
+                                          errorMessage={errors.nombre}
                                     />
-                                    {errors.nombre && (
-                                          <div className="error-message">
-                                                {errors.nombre}
-                                          </div>
-                                    )}
                               </div>
 
                               <div className="input-group">
@@ -79,13 +71,9 @@ const PlanCuentasModal = ({
                                           value={formData.auxiliar1}
                                           onChange={handleAuxiliar1Change}
                                           placeholder="Ejemplo: M, N, Q"
-                                          className={errors.auxiliar1 ? 'error' : 'modal-input'}
+                                          hasError={!!errors.auxiliar1}
+                                          errorMessage={errors.auxiliar1}
                                     />
-                                    {errors.auxiliar1 && (
-                                          <div className="error-message">
-                                                {errors.auxiliar1}
-                                          </div>
-                                    )}
                               </div>
 
                               <div className="input-group">
@@ -96,13 +84,9 @@ const PlanCuentasModal = ({
                                           value={formData.auxiliar2}
                                           onChange={handleAuxiliar2Change}
                                           placeholder="Ejemplo: A, C"
-                                          className={errors.auxiliar2 ? 'error' : 'modal-input'}
+                                          hasError={!!errors.auxiliar2}
+                                          errorMessage={errors.auxiliar2}
                                     />
-                                    {errors.auxiliar2 && (
-                                          <div className="error-message">
-                                                {errors.auxiliar2}
-                                          </div>
-                                    )}
                               </div>
 
                               <div className="input-group">

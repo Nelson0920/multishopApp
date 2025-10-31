@@ -66,7 +66,6 @@ class CondicionesPagoService {
        */
       async update(condicionData) {
             try {
-                  console.log(condicionData);
                   const response = await instanceServices.put(`${this.baseURL}/edit/${condicionData.id}`, {
                         days: condicionData.days,
                         discount_percentage: condicionData.discount_percentage

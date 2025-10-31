@@ -53,8 +53,9 @@ const AsignacionISRLModal = ({
                                     value={formData.code}
                                     onChange={handleCodeChange}
                                     placeholder="Ejemplo: ISRL001"
-                                    error={errors.code}
                                     required
+                                    hasError={!!errors.code}
+                                    errorMessage={errors.code}
                               />
 
                               <TextInput
@@ -64,8 +65,9 @@ const AsignacionISRLModal = ({
                                     value={formData.name}
                                     onChange={handleNameChange}
                                     placeholder="Ejemplo: Servicios Profesionales"
-                                    error={errors.name}
                                     required
+                                    hasError={!!errors.name}
+                                    errorMessage={errors.name}
                               />
 
                               <NumberInput

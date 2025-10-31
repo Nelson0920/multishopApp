@@ -70,7 +70,6 @@ class PlanCuentasService {
        */
       async update(cuentaData) {
             try {
-                  console.log('cuentaData update', cuentaData);
                   const response = await instanceServices.put(`${this.baseURL}/edit/${cuentaData.id}`, {
                         name: cuentaData.name,
                         code_account: cuentaData.code_account,

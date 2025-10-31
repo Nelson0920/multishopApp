@@ -10,8 +10,12 @@ const TextInput = ({
       required = false,
       maxLength,
       className = "modal-input",
-      disabled = false
+      disabled = false,
+      hasError = false,
+      errorMessage = ""
 }) => {
+      const inputClassName = `${className}${hasError ? ' error' : ''}`;
+
       return (
             <div className="input-group">
                   <label htmlFor={id} className="input-label">
@@ -23,11 +27,16 @@ const TextInput = ({
                         name={name}
                         value={value}
                         onChange={onChange}
-                        className={className}
+                        className={inputClassName}
                         placeholder={placeholder}
                         maxLength={maxLength}
                         disabled={disabled}
                   />
+                  {hasError && errorMessage && (
+                        <div className="error-message">
+                              {errorMessage}
+                        </div>
+                  )}
             </div>
       );
 };

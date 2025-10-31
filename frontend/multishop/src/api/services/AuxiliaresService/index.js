@@ -28,9 +28,6 @@ class AuxiliaresService {
                         throw new AuxiliaresErrors('AUXILIARES_GET_ALL_ERROR', 'No se encontraron auxiliares', 404);
                   }
             } catch (error) {
-                  if (error instanceof AuxiliaresErrors) {
-                        throw error;
-                  }
                   if (error instanceof AxiosError) {
                         throw new AuxiliaresErrors('AUXILIARES_GET_ALL_ERROR', error.response.data.message ?? 'Error al obtener auxiliares', error.response.status);
                   }
@@ -48,9 +45,6 @@ class AuxiliaresService {
                   const response = await instanceServices.post(`${this.baseURL}/register`, auxiliarData);
                   return response.data;
             } catch (error) {
-                  if (error instanceof AuxiliaresErrors) {
-                        throw error;
-                  }
                   if (error instanceof AxiosError) {
                         throw new AuxiliaresErrors('AUXILIARES_CREATE_ERROR', error.response.data.message ?? 'Error al crear auxiliar', error.response.status);
                   }
@@ -69,13 +63,27 @@ class AuxiliaresService {
                   const response = await instanceServices.put(`${this.baseURL}/edit/${auxiliarData.id}`, auxiliarData);
                   return response.data;
             } catch (error) {
-                  if (error instanceof AuxiliaresErrors) {
-                        throw error;
-                  }
                   if (error instanceof AxiosError) {
                         throw new AuxiliaresErrors('AUXILIARES_UPDATE_ERROR', error.response.data.message ?? 'Error al actualizar auxiliar', error.response.status);
                   }
                   throw new AuxiliaresErrors('AUXILIARES_UPDATE_ERROR', error.message ?? 'Error al actualizar auxiliar', 500);
+            }
+      }
+
+      /**
+       * Obtener auxiliares disponibles por letra
+       * @param {string} letters - Letras del auxiliar
+       * @returns {Promise<Array>} Lista de auxiliares disponibles
+       */
+      async getByLetters(letters) {
+            try {
+                  const response = await instanceServices.get(`${this.baseURL}/available/?initials=${letters}`);
+                  return response.data.auxiliaries;
+            } catch (error) {
+                  if (error instanceof AxiosError) {
+                        throw new AuxiliaresErrors('AUXILIARES_GET_BY_LETTERS_ERROR', error.response.data.message ?? 'Error al obtener auxiliares disponibles', error.response.status);
+                  }
+                  throw new AuxiliaresErrors('AUXILIARES_GET_BY_LETTERS_ERROR', error.message ?? 'Error al obtener auxiliares disponibles', 500);
             }
       }
 

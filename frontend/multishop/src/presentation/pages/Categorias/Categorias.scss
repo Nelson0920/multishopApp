@@ -91,8 +91,17 @@
 
 .modal-container {
       max-width: 600px;
-      max-height: 90vh;
       overflow-y: auto;
+      min-height: 60vh;
+
+      .modal-form-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+            min-height: 70vh;
+            margin-bottom: 1rem;
+      }
 
       &.large-modal {
             max-width: 800px;

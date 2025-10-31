@@ -23,6 +23,12 @@ export const useAuxiliaresModal = (
       const handleLetterChange = (e) => {
             const value = e.target.value.toUpperCase();
             const letter = value.replace(/[^A-Z]/g, '').substring(value.length - 1, value.length);
+            if (errors.auxiliar) {
+                  setErrors(prev => ({
+                        ...prev,
+                        auxiliar: null
+                  }));
+            }
             setFormData(prev => ({
                   ...prev,
                   auxiliar: letter
@@ -32,6 +38,12 @@ export const useAuxiliaresModal = (
       const handleNombreChange = (e) => {
             const value = e.target.value.toUpperCase();
             const name = value.replace(/[^A-Z ]/g, '');
+            if (errors.nombre) {
+                  setErrors(prev => ({
+                        ...prev,
+                        nombre: null
+                  }));
+            }
             setFormData(prev => ({
                   ...prev,
                   nombre: name
@@ -121,7 +133,8 @@ export const useAuxiliaresModal = (
        * Verificar si el formulario es válido
        */
       const isFormValid = useMemo(() => {
-            return Object.keys(errors).length === 0 &&
+            const errorsArray = Object.keys(errors).filter(error => errors[error] !== null);
+            return errorsArray.length === 0 &&
                   formData.nombre.trim() !== ''
       }, [errors, formData])
 

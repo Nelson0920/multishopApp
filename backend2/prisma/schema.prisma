@@ -47,20 +47,20 @@ model Account_Categories{
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   id_Categories String  @db.ObjectId
   account_Sales String
-  auxiliary1_Sales String
-  auxiliary2_Sales String
+  auxiliary1_Sales String?
+  auxiliary2_Sales String?
   account_buy String
-  auxiliary1_buy String
-  auxiliary2_buy String
+  auxiliary1_buy String?
+  auxiliary2_buy String?
   account_consumos String
-  auxiliary1_consumos String
-  auxiliary2_consumos String
+  auxiliary1_consumos String?
+  auxiliary2_consumos String?
   account_devbuy String
-  auxiliary1_devbuy String
-  auxiliary2_devbuy String
+  auxiliary1_devbuy String?
+  auxiliary2_devbuy String?
   account_tax String
-  auxiliary1_tax String
-  auxiliary2_tax String
+  auxiliary1_tax String?
+  auxiliary2_tax String?
   createdAt DateTime @default(now())
 
   category Categories @relation(fields: [id_Categories], references: [id])
