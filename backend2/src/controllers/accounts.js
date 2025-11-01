@@ -464,43 +464,62 @@ router.delete('/auxiliaries/delete/:id', async (req, res) => {
   }
 })
 
-// Obtener auxiliares disponibles según las iniciales enviadas
+// Obtener auxiliares disponibles según iniciales o nombre
 router.get('/auxiliaries/available', async (req, res) => {
   try {
-    const { initials } = req.query
+    const { initials, name } = req.query
 
-    if (!initials || initials.trim() === '') {
+    // Si no se envía ni initials ni name
+    if ((!initials || initials.trim() === '') && (!name || name.trim() === '')) {
       return res.status(400).json({
         success: false,
         code: 400,
-        message: 'Debes enviar al menos una inicial como parámetro (ejemplo: ?initials=A,B,J)'
+        message: 'Debes enviar al menos una inicial (?initials=A,B,J) o un nombre (?name=Juan)'
       })
     }
 
-    // Dividir las iniciales recibidas por comas, limpiar espacios y convertir a mayúsculas
-    const initialsArray = initials
-      .split(',')
-      .map(i => i.trim().toUpperCase())
-      .filter(i => i !== '')
+    let whereCondition = {}
 
-    if (initialsArray.length === 0) {
-      return res.status(400).json({
-        success: false,
-        code: 400,
-        message: 'No se enviaron iniciales válidas'
-      })
-    }
+    // Si se envían iniciales
+    if (initials && initials.trim() !== '') {
+      const initialsArray = initials
+        .split(',')
+        .map(i => i.trim().toUpperCase())
+        .filter(i => i !== '')
 
-    // Buscar auxiliares que comiencen con cualquiera de las iniciales enviadas
-    const auxiliaries = await prisma.auxiliariesAccounts.findMany({
-      where: {
-        OR: initialsArray.map(initial => ({
+      if (initialsArray.length > 0) {
+        whereCondition.OR = initialsArray.map(initial => ({
           auxiliary_code: {
             startsWith: initial,
             mode: 'insensitive'
           }
         }))
-      },
+      }
+    }
+
+    // Si se envía un nombre
+    if (name && name.trim() !== '') {
+      // Si ya había una condición OR (por iniciales), la agregamos
+      if (whereCondition.OR) {
+        whereCondition.OR.push({
+          name: {
+            contains: name,
+            mode: 'insensitive'
+          }
+        })
+      } else {
+        // Si no, la creamos solo para el nombre
+        whereCondition = {
+          name: {
+            contains: name,
+            mode: 'insensitive'
+          }
+        }
+      }
+    }
+
+    const auxiliaries = await prisma.auxiliariesAccounts.findMany({
+      where: whereCondition,
       orderBy: { auxiliary_code: 'asc' }
     })
 
@@ -508,14 +527,14 @@ router.get('/auxiliaries/available', async (req, res) => {
       return res.status(404).json({
         success: false,
         code: 404,
-        message: `No se encontraron auxiliares para las iniciales: ${initialsArray.join(', ')}`
+        message: 'No se encontraron auxiliares con los criterios especificados'
       })
     }
 
     return res.status(200).json({
       success: true,
       code: 200,
-      message: `Auxiliares disponibles para las iniciales: ${initialsArray.join(', ')}`,
+      message: 'Auxiliares encontrados',
       auxiliaries
     })
 
@@ -529,7 +548,5 @@ router.get('/auxiliaries/available', async (req, res) => {
     })
   }
 })
-
-
 
 export default router

@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
 
     const categoriesWithAccounts = await Promise.all(
       categories.map(async (category) => {
-        // Buscar el Account_Categories relacionado
+        // Buscar relación en Account_Categories
         const accountCat = await prisma.account_Categories.findFirst({
           where: { id_Categories: category.id },
         })
@@ -52,40 +52,11 @@ router.get('/', async (req, res) => {
           })
         }
 
-        // Si no hay cuentas relacionadas, devolvemos campos vacíos
-        if (!accountCat) {
-          return {
-            id: category.id,
-            name: category.name,
-            discount_percentage: category.discount_percentage,
-            profit_percentage: category.profit_percentage,
-            cost_center: costCenterData || {},
-            createdAt: category.createdAt,
-            accounts: {
-              account_Sales: '',
-              auxiliary1_Sales: '',
-              auxiliary2_Sales: '',
-              account_buy: '',
-              auxiliary1_buy: '',
-              auxiliary2_buy: '',
-              account_consumos: '',
-              auxiliary1_consumos: '',
-              auxiliary2_consumos: '',
-              account_devbuy: '',
-              auxiliary1_devbuy: '',
-              auxiliary2_devbuy: '',
-              account_tax: '',
-              auxiliary1_tax: '',
-              auxiliary2_tax: '',
-            },
-          }
-        }
-
         // Funciones auxiliares
         const getAccountData = async (id) => {
-          if (!id || !ObjectId.isValid(id)) return ''
+          if (!id || !ObjectId.isValid(id)) return null
           const account = await prisma.accountingAccounts.findUnique({ where: { id } })
-          if (!account) return ''
+          if (!account) return null
           return {
             id: account.id,
             name: account.name,
@@ -97,9 +68,9 @@ router.get('/', async (req, res) => {
         }
 
         const getAuxiliaryData = async (id) => {
-          if (!id || !ObjectId.isValid(id)) return ''
+          if (!id || !ObjectId.isValid(id)) return null
           const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
-          if (!aux) return ''
+          if (!aux) return null
           return {
             id: aux.id,
             name: aux.name,
@@ -107,8 +78,39 @@ router.get('/', async (req, res) => {
           }
         }
 
-        // Construimos el objeto accounts completo
-        const detailedAccount = {
+        // Si NO existe relación, devolver estructura vacía
+        if (!accountCat) {
+          return {
+            id: category.id,
+            name: category.name,
+            discount_percentage: category.discount_percentage,
+            profit_percentage: category.profit_percentage,
+            cost_center: costCenterData || {},
+            createdAt: category.createdAt,
+            accounts: {
+              id_accounting_account: null,
+              account_Sales: null,
+              auxiliary1_Sales: null,
+              auxiliary2_Sales: null,
+              account_buy: null,
+              auxiliary1_buy: null,
+              auxiliary2_buy: null,
+              account_consumos: null,
+              auxiliary1_consumos: null,
+              auxiliary2_consumos: null,
+              account_devbuy: null,
+              auxiliary1_devbuy: null,
+              auxiliary2_devbuy: null,
+              account_tax: null,
+              auxiliary1_tax: null,
+              auxiliary2_tax: null,
+            },
+          }
+        }
+
+        // Si existe relación, construir objeto completo
+        const detailedAccounts = {
+          id_accounting_account: accountCat.id,
           account_Sales: await getAccountData(accountCat.account_Sales),
           auxiliary1_Sales: await getAuxiliaryData(accountCat.auxiliary1_Sales),
           auxiliary2_Sales: await getAuxiliaryData(accountCat.auxiliary2_Sales),
@@ -133,7 +135,7 @@ router.get('/', async (req, res) => {
           profit_percentage: category.profit_percentage,
           cost_center: costCenterData || {},
           createdAt: category.createdAt,
-          accounts: detailedAccount,
+          accounts: detailedAccounts,
         }
       })
     )
@@ -152,8 +154,6 @@ router.get('/', async (req, res) => {
   }
 })
 
-
-
 // Obtener categoría por ID
 router.get('/get/:id', async (req, res) => {
   try {
@@ -163,10 +163,14 @@ router.get('/get/:id', async (req, res) => {
     const category = await prisma.categories.findUnique({ where: { id } })
 
     if (!category) {
-      return res.status(404).json({ success: false, code: 404, message: 'No category found' })
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'No category found'
+      })
     }
 
-    // Buscar Account_Categories relacionado
+    // Buscar relación con Account_Categories
     const accountCat = await prisma.account_Categories.findFirst({
       where: { id_Categories: category.id },
     })
@@ -188,11 +192,11 @@ router.get('/get/:id', async (req, res) => {
       })
     }
 
-    // Funciones para traer info completa de accounts y auxiliares
+    // Funciones auxiliares para obtener info detallada
     const getAccountData = async (id) => {
-      if (!id || !ObjectId.isValid(id)) return ""
+      if (!id || !ObjectId.isValid(id)) return null
       const account = await prisma.accountingAccounts.findUnique({ where: { id } })
-      if (!account) return ""
+      if (!account) return null
       return {
         id: account.id,
         name: account.name,
@@ -204,9 +208,9 @@ router.get('/get/:id', async (req, res) => {
     }
 
     const getAuxiliaryData = async (id) => {
-      if (!id || !ObjectId.isValid(id)) return ""
+      if (!id || !ObjectId.isValid(id)) return null
       const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
-      if (!aux) return ""
+      if (!aux) return null
       return {
         id: aux.id,
         name: aux.name,
@@ -214,27 +218,30 @@ router.get('/get/:id', async (req, res) => {
       }
     }
 
-    // Construir objeto accounts
+    // Construir objeto accounts con estructura estándar
     let detailedAccount = {
-      account_Sales: "",
-      auxiliary1_Sales: "",
-      auxiliary2_Sales: "",
-      account_buy: "",
-      auxiliary1_buy: "",
-      auxiliary2_buy: "",
-      account_consumos: "",
-      auxiliary1_consumos: "",
-      auxiliary2_consumos: "",
-      account_devbuy: "",
-      auxiliary1_devbuy: "",
-      auxiliary2_devbuy: "",
-      account_tax: "",
-      auxiliary1_tax: "",
-      auxiliary2_tax: "",
+      id_accounting_account: null,
+      account_Sales: null,
+      auxiliary1_Sales: null,
+      auxiliary2_Sales: null,
+      account_buy: null,
+      auxiliary1_buy: null,
+      auxiliary2_buy: null,
+      account_consumos: null,
+      auxiliary1_consumos: null,
+      auxiliary2_consumos: null,
+      account_devbuy: null,
+      auxiliary1_devbuy: null,
+      auxiliary2_devbuy: null,
+      account_tax: null,
+      auxiliary1_tax: null,
+      auxiliary2_tax: null,
     }
 
+    // Si existe relación, completar los datos
     if (accountCat) {
       detailedAccount = {
+        id_accounting_account: accountCat.id,
         account_Sales: await getAccountData(accountCat.account_Sales),
         auxiliary1_Sales: await getAuxiliaryData(accountCat.auxiliary1_Sales),
         auxiliary2_Sales: await getAuxiliaryData(accountCat.auxiliary2_Sales),
@@ -253,7 +260,7 @@ router.get('/get/:id', async (req, res) => {
       }
     }
 
-    // Respuesta final
+    // Respuesta final uniforme
     res.status(200).json({
       success: true,
       code: 200,
@@ -270,22 +277,26 @@ router.get('/get/:id', async (req, res) => {
     })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ success: false, message: 'Error fetching category', error })
+    res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error fetching category',
+      error: error.message,
+    })
   }
 })
 
-
+// Crear categoría
 router.post('/register', async (req, res) => {
   try {
-    const data = req.body
     const {
       name,
       description,
       discount_percentage,
       profit_percentage,
       id_cost_center,
-      accounts // objeto con los IDs de cuentas y auxiliares
-    } = data
+      accounts = {}
+    } = req.body
 
     // Verificar duplicado
     const existingCategory = await prisma.categories.findFirst({
@@ -295,37 +306,39 @@ router.post('/register', async (req, res) => {
     if (existingCategory) {
       return res.status(400).json({
         success: false,
+        code: 400,
         message: 'The category already exists',
         name
       })
     }
 
-    // Si no se envía id_cost_center, busca uno por defecto
+    // Buscar centro de costo (usar el indicado o uno por defecto)
     let costCenterId = id_cost_center
     if (!costCenterId) {
       const search = await prisma.costCenter.findFirst()
       if (!search) {
         return res.status(404).json({
           success: false,
+          code: 404,
           message: 'No available cost center found'
         })
       }
       costCenterId = search.id
     }
 
-    // Crear la categoría principal
+    // Crear categoría
     const category = await prisma.categories.create({
       data: {
         name,
         description,
         discount_percentage: discount_percentage || 0,
         profit_percentage: profit_percentage || 0,
-        id_cost_center: costCenterId,
+        id_cost_center: costCenterId
       }
     })
 
-    // Crear el registro asociado en Account_Categories
-    const accountCategories = await prisma.account_Categories.create({
+    // Crear registro en account_Categories
+    const accountCat = await prisma.account_Categories.create({
       data: {
         id_Categories: category.id,
         account_Sales: accounts.account_Sales || null,
@@ -346,148 +359,315 @@ router.post('/register', async (req, res) => {
       }
     })
 
+    // Traer info del centro de costos
+    const costCenterData = await prisma.costCenter.findUnique({
+      where: { id: costCenterId },
+      select: {
+        id: true,
+        current_cost: true,
+        average_cost: true,
+        previous_cost: true,
+        higher_current_average: true,
+        lower_current_previous_average: true,
+        createdAt: true
+      }
+    })
+
+    // Helpers para obtener la info completa
+    const getAccountData = async (id) => {
+      if (!id || !ObjectId.isValid(id)) return ""
+      const acc = await prisma.accountingAccounts.findUnique({ where: { id } })
+      return acc
+        ? {
+            id: acc.id,
+            name: acc.name,
+            code_account: acc.code_account,
+            auxiliary1_initials: acc.auxiliary1_initials,
+            auxiliary2_initials: acc.auxiliary2_initials,
+            category_account: acc.category_account
+          }
+        : ""
+    }
+
+    const getAuxData = async (id) => {
+      if (!id || !ObjectId.isValid(id)) return ""
+      const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
+      return aux
+        ? {
+            id: aux.id,
+            name: aux.name,
+            auxiliary_code: aux.auxiliary_code
+          }
+        : ""
+    }
+
+    // Construcción del objeto final "accounts"
+    const detailedAccounts = {
+      id_accounting_account: accountCat.id,
+      account_Sales: await getAccountData(accountCat.account_Sales),
+      auxiliary1_Sales: await getAuxData(accountCat.auxiliary1_Sales),
+      auxiliary2_Sales: await getAuxData(accountCat.auxiliary2_Sales),
+      account_buy: await getAccountData(accountCat.account_buy),
+      auxiliary1_buy: await getAuxData(accountCat.auxiliary1_buy),
+      auxiliary2_buy: await getAuxData(accountCat.auxiliary2_buy),
+      account_consumos: await getAccountData(accountCat.account_consumos),
+      auxiliary1_consumos: await getAuxData(accountCat.auxiliary1_consumos),
+      auxiliary2_consumos: await getAuxData(accountCat.auxiliary2_consumos),
+      account_devbuy: await getAccountData(accountCat.account_devbuy),
+      auxiliary1_devbuy: await getAuxData(accountCat.auxiliary1_devbuy),
+      auxiliary2_devbuy: await getAuxData(accountCat.auxiliary2_devbuy),
+      account_tax: await getAccountData(accountCat.account_tax),
+      auxiliary1_tax: await getAuxData(accountCat.auxiliary1_tax),
+      auxiliary2_tax: await getAuxData(accountCat.auxiliary2_tax)
+    }
+
+    // Respuesta final
     res.status(201).json({
       success: true,
-      message: 'Category and account mapping created successfully',
-      category,
-      accountCategories
+      code: 201,
+      message: 'Category created successfully',
+      data: {
+        id: category.id,
+        name: category.name,
+        discount_percentage: category.discount_percentage,
+        profit_percentage: category.profit_percentage,
+        cost_center: costCenterData || {},
+        createdAt: category.createdAt,
+        accounts: detailedAccounts
+      }
     })
   } catch (error) {
     console.error(error)
     res.status(500).json({
       success: false,
+      code: 500,
       message: 'Error creating category',
-      error
+      error: error.message
     })
   }
 })
 
-// Actualizar una categoria
+// Actualizar una categoría y su configuración contable
 router.put('/edit/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const data = req.body
+    const {
+      name,
+      discount_percentage,
+      profit_percentage,
+      id_cost_center,
+      accounts
+    } = req.body
 
-    // Verificar que la categoría exista
+    // 1️⃣ Verificar existencia de la categoría
     const categoryExists = await prisma.categories.findUnique({ where: { id } })
     if (!categoryExists) {
-      return res.status(404).json({ success: false, code: 404, message: 'Category not found' })
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'Category not found'
+      })
     }
 
-    // Actualizar la categoría
+    // 2️⃣ Actualizar la categoría
     const updatedCategory = await prisma.categories.update({
       where: { id },
-      data,
+      data: {
+        name,
+        discount_percentage,
+        profit_percentage,
+        id_cost_center
+      }
     })
 
-    // Buscar Account_Categories relacionado
+    // 3️⃣ Buscar configuración contable
     const accountCat = await prisma.account_Categories.findFirst({
-      where: { id_Categories: updatedCategory.id },
+      where: { id_Categories: id }
     })
 
-    // Funciones para traer info completa de accounts y auxiliares
+    // 4️⃣ Si no existe configuración contable
+    if (!accountCat) {
+      return res.status(200).json({
+        success: true,
+        code: 200,
+        message: 'Category updated (no accounting configuration found to edit)',
+        data: {
+          id: updatedCategory.id,
+          name: updatedCategory.name,
+          discount_percentage: updatedCategory.discount_percentage,
+          profit_percentage: updatedCategory.profit_percentage,
+          cost_center: {},
+          createdAt: updatedCategory.createdAt,
+          accounts: {}
+        }
+      })
+    }
+
+    // 5️⃣ Actualizar configuración contable
+    const updatedAccountCat = await prisma.account_Categories.update({
+      where: { id: accountCat.id },
+      data: {
+        account_Sales: accounts?.account_Sales || null,
+        auxiliary1_Sales: accounts?.auxiliary1_Sales || null,
+        auxiliary2_Sales: accounts?.auxiliary2_Sales || null,
+        account_buy: accounts?.account_buy || null,
+        auxiliary1_buy: accounts?.auxiliary1_buy || null,
+        auxiliary2_buy: accounts?.auxiliary2_buy || null,
+        account_consumos: accounts?.account_consumos || null,
+        auxiliary1_consumos: accounts?.auxiliary1_consumos || null,
+        auxiliary2_consumos: accounts?.auxiliary2_consumos || null,
+        account_devbuy: accounts?.account_devbuy || null,
+        auxiliary1_devbuy: accounts?.auxiliary1_devbuy || null,
+        auxiliary2_devbuy: accounts?.auxiliary2_devbuy || null,
+        account_tax: accounts?.account_tax || null,
+        auxiliary1_tax: accounts?.auxiliary1_tax || null,
+        auxiliary2_tax: accounts?.auxiliary2_tax || null
+      }
+    })
+
+    // 6️⃣ Traer información del centro de costos
+    let costCenterData = null
+    if (updatedCategory.id_cost_center) {
+      costCenterData = await prisma.costCenter.findUnique({
+        where: { id: updatedCategory.id_cost_center },
+        select: {
+          id: true,
+          current_cost: true,
+          average_cost: true,
+          previous_cost: true,
+          higher_current_average: true,
+          lower_current_previous_average: true,
+          createdAt: true
+        }
+      })
+    }
+
+    // 7️⃣ Funciones auxiliares para obtener info detallada
     const getAccountData = async (id) => {
       if (!id || !ObjectId.isValid(id)) return ""
       const account = await prisma.accountingAccounts.findUnique({ where: { id } })
-      if (!account) return ""
-      return {
-        id: account.id,
-        name: account.name,
-        code_account: account.code_account,
-        auxiliary1_initials: account.auxiliary1_initials,
-        auxiliary2_initials: account.auxiliary2_initials,
-        category_account: account.category_account,
-      }
+      return account
+        ? {
+            id: account.id,
+            name: account.name,
+            code_account: account.code_account,
+            auxiliary1_initials: account.auxiliary1_initials,
+            auxiliary2_initials: account.auxiliary2_initials,
+            category_account: account.category_account
+          }
+        : ""
     }
 
     const getAuxiliaryData = async (id) => {
       if (!id || !ObjectId.isValid(id)) return ""
       const aux = await prisma.auxiliariesAccounts.findUnique({ where: { id } })
-      if (!aux) return ""
-      return {
-        id: aux.id,
-        name: aux.name,
-        auxiliary_code: aux.auxiliary_code,
-      }
+      return aux
+        ? {
+            id: aux.id,
+            name: aux.name,
+            auxiliary_code: aux.auxiliary_code
+          }
+        : ""
     }
 
-    // Construir objeto accounts
-    let detailedAccount = {
-      account_Sales: "",
-      auxiliary1_Sales: "",
-      auxiliary2_Sales: "",
-      account_buy: "",
-      auxiliary1_buy: "",
-      auxiliary2_buy: "",
-      account_consumos: "",
-      auxiliary1_consumos: "",
-      auxiliary2_consumos: "",
-      account_devbuy: "",
-      auxiliary1_devbuy: "",
-      auxiliary2_devbuy: "",
-      account_tax: "",
-      auxiliary1_tax: "",
-      auxiliary2_tax: "",
+    // 8️⃣ Construir respuesta con estructura uniforme
+    const detailedAccount = {
+      id_accounting_account: updatedAccountCat.id,
+      account_Sales: await getAccountData(updatedAccountCat.account_Sales),
+      auxiliary1_Sales: await getAuxiliaryData(updatedAccountCat.auxiliary1_Sales),
+      auxiliary2_Sales: await getAuxiliaryData(updatedAccountCat.auxiliary2_Sales),
+
+      account_buy: await getAccountData(updatedAccountCat.account_buy),
+      auxiliary1_buy: await getAuxiliaryData(updatedAccountCat.auxiliary1_buy),
+      auxiliary2_buy: await getAuxiliaryData(updatedAccountCat.auxiliary2_buy),
+
+      account_consumos: await getAccountData(updatedAccountCat.account_consumos),
+      auxiliary1_consumos: await getAuxiliaryData(updatedAccountCat.auxiliary1_consumos),
+      auxiliary2_consumos: await getAuxiliaryData(updatedAccountCat.auxiliary2_consumos),
+
+      account_devbuy: await getAccountData(updatedAccountCat.account_devbuy),
+      auxiliary1_devbuy: await getAuxiliaryData(updatedAccountCat.auxiliary1_devbuy),
+      auxiliary2_devbuy: await getAuxiliaryData(updatedAccountCat.auxiliary2_devbuy),
+
+      account_tax: await getAccountData(updatedAccountCat.account_tax),
+      auxiliary1_tax: await getAuxiliaryData(updatedAccountCat.auxiliary1_tax),
+      auxiliary2_tax: await getAuxiliaryData(updatedAccountCat.auxiliary2_tax)
     }
 
-    if (accountCat) {
-      detailedAccount = {
-        account_Sales: await getAccountData(accountCat.account_Sales),
-        auxiliary1_Sales: await getAuxiliaryData(accountCat.auxiliary1_Sales),
-        auxiliary2_Sales: await getAuxiliaryData(accountCat.auxiliary2_Sales),
-        account_buy: await getAccountData(accountCat.account_buy),
-        auxiliary1_buy: await getAuxiliaryData(accountCat.auxiliary1_buy),
-        auxiliary2_buy: await getAuxiliaryData(accountCat.auxiliary2_buy),
-        account_consumos: await getAccountData(accountCat.account_consumos),
-        auxiliary1_consumos: await getAuxiliaryData(accountCat.auxiliary1_consumos),
-        auxiliary2_consumos: await getAuxiliaryData(accountCat.auxiliary2_consumos),
-        account_devbuy: await getAccountData(accountCat.account_devbuy),
-        auxiliary1_devbuy: await getAuxiliaryData(accountCat.auxiliary1_devbuy),
-        auxiliary2_devbuy: await getAuxiliaryData(accountCat.auxiliary2_devbuy),
-        account_tax: await getAccountData(accountCat.account_tax),
-        auxiliary1_tax: await getAuxiliaryData(accountCat.auxiliary1_tax),
-        auxiliary2_tax: await getAuxiliaryData(accountCat.auxiliary2_tax),
-      }
-    }
-
+    // 9️⃣ Respuesta final unificada
     res.status(200).json({
       success: true,
       code: 200,
-      message: 'Category updated successfully',
+      message: 'Category and accounting configuration updated successfully',
       data: {
         id: updatedCategory.id,
         name: updatedCategory.name,
         discount_percentage: updatedCategory.discount_percentage,
         profit_percentage: updatedCategory.profit_percentage,
-        id_cost_center: updatedCategory.id_cost_center,
+        cost_center: costCenterData || {},
         createdAt: updatedCategory.createdAt,
-        accounts: detailedAccount,
-      },
+        accounts: detailedAccount
+      }
     })
-
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ success: false, message: 'Error updating the category', error })
+    console.error('❌ Error updating the category:', error)
+    res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error updating the category',
+      error: error.message
+    })
   }
 })
 
-// Eliminar una Categoria
+// Eliminar una categoría
 router.delete('/delete/:id', async (req, res) => {
   try {
     const { id } = req.params
 
-    const search = await prisma.categories.findUnique({ where: { id } })
-
-    if(search){
-      const deleteCategory = await prisma.categories.delete({ where: {id} })
-      res.json({ success: true, code: 200, message: 'Category successfully deleted', deleteCategory })    
-    }else{
-      res.status(404).json({ success: false, code: 404 , message: 'Category not found' })
+    // 1️⃣ Verificar si la categoría existe
+    const category = await prisma.categories.findUnique({ where: { id } })
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'Category not found'
+      })
     }
 
+    // 2️⃣ Verificar si tiene relación contable
+    const accountCat = await prisma.account_Categories.findFirst({
+      where: { id_Categories: id }
+    })
+
+    // 3️⃣ Si existe relación, eliminarla
+    if (accountCat) {
+      await prisma.account_Categories.delete({
+        where: { id: accountCat.id }
+      })
+    }
+
+    // 4️⃣ Eliminar la categoría
+    const deletedCategory = await prisma.categories.delete({
+      where: { id }
+    })
+
+    // 5️⃣ Responder con confirmación
+    return res.status(200).json({
+      success: true,
+      code: 200,
+      message: 'Category and related accounting configuration deleted successfully',
+      data: deletedCategory
+    })
+
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ success: false, message: 'Error deleting the category'})
+    console.error('❌ Error deleting category:', error)
+    return res.status(500).json({
+      success: false,
+      code: 500,
+      message: 'Error deleting the category',
+      error: error.message
+    })
   }
 })
 

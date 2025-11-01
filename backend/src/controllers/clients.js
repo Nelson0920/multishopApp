@@ -270,29 +270,30 @@ router.delete('/delete/:id', async (req, res) => {
 // Obtener todas las categorías de los clientes (con filtros opcionales)
 router.get('/category', async (req, res) => {
   try {
-    const { name, filterDays, days } = req.query
+    const { name, filterDays, days } = req.query;
 
-    const whereClause = {}
+    const whereClause = {};
 
     // 🔍 Filtro por nombre
     if (name && name.trim() !== '') {
       whereClause.name = {
         contains: name.trim(),
         mode: 'insensitive'
-      }
+      };
     }
 
     // 🔢 Filtro por número exacto de días de vigencia
     if (days && !isNaN(days)) {
-      whereClause.deadline_day = Number(days)
+      whereClause.deadline_day = Number(days);
     }
 
     // ⚙️ Ordenar según filtro de días de vigencia
     const orderByClause =
       filterDays === 'true'
         ? { deadline_day: 'asc' } // ordenar de menor a mayor
-        : { createdAt: 'desc' } // orden por defecto
+        : { createdAt: 'desc' }; // orden por defecto
 
+    // 🔹 Buscar las categorías con su cuenta contable
     const categoriesData = await prisma.categoriesCPO.findMany({
       where: whereClause,
       include: {
@@ -309,39 +310,54 @@ router.get('/category', async (req, res) => {
         }
       },
       orderBy: orderByClause
-    })
+    });
 
     if (!categoriesData.length) {
       return res.status(404).json({
         success: false,
         code: 404,
         message: 'No categories found'
-      })
+      });
     }
 
-    // Limpiar campos no necesarios
-    const categories = categoriesData.map(cat => {
-      const { id_accounting_accounts, ...rest } = cat
-      return rest
-    })
+    // 🔄 Obtener info completa de auxiliares
+    const categories = await Promise.all(
+      categoriesData.map(async (cat) => {
+        const { auxiliary1, auxiliary2, id_accounting_accounts, ...rest } = cat;
+
+        // Buscar auxiliares por ID si existen
+        const [aux1Data, aux2Data] = await Promise.all([
+          auxiliary1 ? prisma.auxiliariesAccounts.findUnique({ where: { id: auxiliary1 } }) : null,
+          auxiliary2 ? prisma.auxiliariesAccounts.findUnique({ where: { id: auxiliary2 } }) : null
+        ]);
+
+        return {
+          ...rest,
+          accountingAccount: cat.accountingAccount,
+          auxiliary1: aux1Data,
+          auxiliary2: aux2Data
+        };
+      })
+    );
 
     return res.status(200).json({
       success: true,
       code: 200,
-      message: 'Categories with accounting info found',
+      message: 'Categories with accounting and auxiliaries info found',
       categories
-    })
+    });
 
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return res.status(500).json({
       success: false,
       code: 500,
-      message: 'Error fetching categories with accounting info',
+      message: 'Error fetching categories with accounting and auxiliaries info',
       error: error.message
-    })
+    });
   }
-})
+});
+
 
 // Obtener categoría de un cliente por ID
 router.get('/category/:id', async (req, res) => {
