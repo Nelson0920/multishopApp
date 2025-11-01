@@ -6,10 +6,10 @@ const AuxiliaresListItem = ({ auxiliar, onEdit }) => {
             <tr>
                   <td>{auxiliar.auxiliar}</td>
                   <td>{auxiliar.nombre}</td>
-                  <td className="actions-cell">
+                  <td className="actions">
                         <div className="action-buttons">
                               <button
-                                    className="btn-action btn-edit"
+                                    className="btn btn-edit"
                                     onClick={() => onEdit(auxiliar)}
                                     title="Editar auxiliar"
                               >

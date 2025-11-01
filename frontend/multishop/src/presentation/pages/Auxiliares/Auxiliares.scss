@@ -2,6 +2,7 @@
 @use '@presentation-styles/components/FeatureCards.scss';
 @use '@presentation-styles/components/CommonPage.scss';
 @use '@presentation-styles/components/CommonTable.scss';
+@use '@presentation-styles/components/ActionButtons.scss';
 @use '@shared-styles/variables/CommonVariables.scss' as *;
 
 .auxiliares-page {
@@ -100,8 +101,9 @@
 }
 
 .modal-input.error {
-      border-color: #c33;
-      box-shadow: 0 0 0 2px rgba(204, 51, 51, 0.1);
+      border-color: #c33 !important;
+      box-shadow: 0 0 0 2px rgba(204, 51, 51, 0.1) !important;
+      background-color: #fef2f2;
 }
 
 .auxiliar_inputs_container {

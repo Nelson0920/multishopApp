@@ -8,10 +8,10 @@ const CategoriasListItem = ({ categoria, onEdit }) => {
                   <td>{categoria.descuento}</td>
                   <td>{categoria.ganancia}</td>
                   <td>{categoria.gestionBanda ? "Si" : "No"}</td>
-                  <td className="actions-cell">
+                  <td className="actions">
                         <div className="action-buttons">
                               <button
-                                    className="btn-action btn-edit"
+                                    className="btn btn-edit"
                                     onClick={() => onEdit(categoria)}
                                     title="Editar categoría"
                               >

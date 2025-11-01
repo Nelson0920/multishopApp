@@ -8,10 +8,10 @@ const PlanCuentasListItem = ({ cuenta, onEdit }) => {
                   <td>{cuenta.nombre}</td>
                   <td>{cuenta.auxiliar1 || '-'}</td>
                   <td>{cuenta.auxiliar2 || '-'}</td>
-                  <td className="actions-cell">
+                  <td className="actions">
                         <div className="action-buttons">
                               <button
-                                    className="btn-action btn-edit"
+                                    className="btn btn-edit"
                                     onClick={() => onEdit(cuenta)}
                                     title="Editar cuenta"
                               >

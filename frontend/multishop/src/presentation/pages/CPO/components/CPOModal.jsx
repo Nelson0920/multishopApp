@@ -13,6 +13,8 @@ import {
       ModalHeader,
       ModalActions
 } from "@components/Common/Inputs";
+import LookupList from "@components/Common/LookupList";
+import AccountSelector from "@components/Common/AccountSelector";
 import AuxiliaresModal from "../../Auxiliares/components/AuxiliaresModal";
 import "../CPO.scss";
 import PLAN_CUENTAS from "@mocks/PlanCuentas.json";
@@ -317,6 +319,8 @@ const CPOModal = ({
                                                             onChange={handleInputChange}
                                                             placeholder="Ingrese el nombre completo"
                                                             required
+                                                            hasError={false}
+                                                            errorMessage=""
                                                       />
 
                                                       {formData.type === "cliente" && (
@@ -349,6 +353,8 @@ const CPOModal = ({
                                                             value={formData.name_commercial}
                                                             onChange={handleInputChange}
                                                             placeholder="Nombre comercial o razón social"
+                                                            hasError={false}
+                                                            errorMessage=""
                                                       />
                                                 </FormSection>
 
@@ -506,20 +512,16 @@ const CPOModal = ({
                                                       </div>
 
                                                       {formData.type === "cliente" && (
-                                                            <div className="input-group">
-                                                                  <label htmlFor="credentials" className="input-label">
-                                                                        Credenciales * (Solo Clientes)
-                                                                  </label>
-                                                                  <input
-                                                                        type="text"
-                                                                        id="credentials"
-                                                                        name="credentials"
-                                                                        value={formData.credentials}
-                                                                        onChange={handleInputChange}
-                                                                        className="modal-input"
-                                                                        placeholder="Ejemplo: cliente001"
-                                                                  />
-                                                            </div>
+                                                            <TextInput
+                                                                  id="credentials"
+                                                                  name="credentials"
+                                                                  label="Credenciales * (Solo Clientes)"
+                                                                  value={formData.credentials}
+                                                                  onChange={handleInputChange}
+                                                                  placeholder="Ejemplo: cliente001"
+                                                                  hasError={false}
+                                                                  errorMessage=""
+                                                            />
                                                       )}
 
                                                       <div className="input-group">
@@ -543,100 +545,24 @@ const CPOModal = ({
                                                 <div className="form-section">
                                                       <h3 className="section-title">Configuración Contable</h3>
 
-                                                      {/* Grupo Cuenta Contable */}
-                                                      <div className="account-group">
-                                                            <div className="input-group">
-                                                                  <label htmlFor="id_accounting_accounts" className="input-label">
-                                                                        Cuenta Contable *
-                                                                  </label>
-                                                                  <div className="search_input_wrapper">
-                                                                        <input
-                                                                              type="text"
-                                                                              id="id_accounting_accounts"
-                                                                              name="id_accounting_accounts"
-                                                                              value={getSelectedText('id_accounting_accounts')}
-                                                                              readOnly
-                                                                              className="modal-input"
-                                                                              placeholder="Seleccionar cuenta contable"
-                                                                              onClick={() => handleOpenList('plan_cuentas', 'id_accounting_accounts')}
-                                                                        />
-                                                                        <button
-                                                                              type="button"
-                                                                              className="search_button"
-                                                                              onClick={() => handleOpenList('plan_cuentas', 'id_accounting_accounts')}
-                                                                              title="Buscar cuenta contable"
-                                                                        >
-                                                                              <MdSearch size={16} />
-                                                                        </button>
-                                                                  </div>
-                                                            </div>
-
-                                                            <div className="input-group auxiliar-group">
-                                                                  <label htmlFor="auxiliary1" className="input-label">
-                                                                        <MdAccountTree size={16} className="auxiliar-icon" />
-                                                                        Auxiliar 1 *
-                                                                  </label>
-                                                                  <div className="search_input_wrapper">
-                                                                        <input
-                                                                              type="text"
-                                                                              id="auxiliary1"
-                                                                              name="auxiliary1"
-                                                                              value={getSelectedText('auxiliary1')}
-                                                                              readOnly
-                                                                              disabled={!isAuxiliarEnabled('id_accounting_accounts')}
-                                                                              className="modal-input"
-                                                                              placeholder="Seleccionar auxiliar 1"
-                                                                              onClick={() => isAuxiliarEnabled('id_accounting_accounts') && handleOpenList('auxiliares', 'auxiliary1')}
-                                                                        />
-                                                                        <button
-                                                                              type="button"
-                                                                              className="search_button"
-                                                                              disabled={!isAuxiliarEnabled('id_accounting_accounts')}
-                                                                              onClick={() => handleOpenList('auxiliares', 'auxiliary1')}
-                                                                              title="Buscar auxiliar 1"
-                                                                        >
-                                                                              <MdSearch size={16} />
-                                                                        </button>
-
-                                                                  </div>
-                                                            </div>
-                                                            <div className="auxiliar-rules">
-                                                                  {getAuxiliarRules('id_accounting_accounts')}
-                                                            </div>
-
-                                                            <div className="input-group auxiliar-group">
-                                                                  <label htmlFor="auxiliary2" className="input-label">
-                                                                        <MdAccountTree size={16} className="auxiliar-icon" />
-                                                                        Auxiliar 2
-                                                                  </label>
-                                                                  <div className="search_input_wrapper">
-                                                                        <input
-                                                                              type="text"
-                                                                              id="auxiliary2"
-                                                                              name="auxiliary2"
-                                                                              value={getSelectedText('auxiliary2')}
-                                                                              readOnly
-                                                                              disabled={!isAuxiliarEnabled('id_accounting_accounts')}
-                                                                              className="modal-input"
-                                                                              placeholder="Seleccionar auxiliar 2"
-                                                                              onClick={() => isAuxiliarEnabled('id_accounting_accounts') && handleOpenList('auxiliares', 'auxiliary2')}
-                                                                        />
-                                                                        <button
-                                                                              type="button"
-                                                                              className="search_button"
-                                                                              disabled={!isAuxiliarEnabled('id_accounting_accounts')}
-                                                                              onClick={() => handleOpenList('auxiliares', 'auxiliary2')}
-                                                                              title="Buscar auxiliar 2"
-                                                                        >
-                                                                              <MdSearch size={16} />
-                                                                        </button>
-
-                                                                  </div>
-                                                            </div>
-                                                            <div className="auxiliar-rules">
-                                                                  {getAuxiliarRules('id_accounting_accounts')}
-                                                            </div>
-                                                      </div>
+                                                      {/* Grupo Cuenta Contable + Auxiliares */}
+                                                      <AccountSelector
+                                                            labelAccount="Cuenta Contable *"
+                                                            labelAux1="Auxiliar 1 *"
+                                                            labelAux2="Auxiliar 2"
+                                                            numAuxiliaries={2}
+                                                            value={{
+                                                                  accountId: formData.id_accounting_accounts,
+                                                                  auxiliary1: formData.auxiliary1,
+                                                                  auxiliary2: formData.auxiliary2,
+                                                            }}
+                                                            onChange={({ accountId, auxiliary1, auxiliary2 }) => setFormData(prev => ({
+                                                                  ...prev,
+                                                                  id_accounting_accounts: accountId ?? prev.id_accounting_accounts,
+                                                                  auxiliary1: auxiliary1 ?? prev.auxiliary1,
+                                                                  auxiliary2: auxiliary2 ?? prev.auxiliary2,
+                                                            }))}
+                                                      />
 
                                                       <div className="input-group">
                                                             <label htmlFor="bank_accounts" className="input-label">
@@ -790,100 +716,15 @@ const CPOModal = ({
                                           />
                                     </>
                               ) : (
-                                    <>
-                                          <div className="modal-header">
-                                                <h2 className="modal-title">
-                                                      {listType === 'plan_cuentas' && 'Seleccionar Cuenta Contable'}
-                                                      {listType === 'auxiliares' && 'Seleccionar Auxiliar'}
-                                                      {listType === 'categorias' && 'Seleccionar Categoría'}
-                                                      {listType === 'condiciones' && 'Seleccionar Condiciones de Pago'}
-                                                      {listType === 'isrl' && 'Seleccionar Concepto de Retención ISRL'}
-                                                      {listType === 'usuarios' && 'Seleccionar Vendedor'}
-                                                </h2>
-                                                <div className="modal-icon">
-                                                      <MdSearch size={24} color="#36aad4" />
-                                                </div>
-                                          </div>
-
-                                          <div className="filter_container">
-                                                <label className="input_label">Buscar:</label>
-                                                <div className="filter_input_wrapper">
-                                                      <input
-                                                            type="text"
-                                                            value={searchTerm}
-                                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                                            className="modal_input"
-                                                            placeholder={
-                                                                  listType === 'plan_cuentas' ? 'Buscar por código o nombre...' :
-                                                                        listType === 'auxiliares' ? 'Buscar por código o nombre...' :
-                                                                              listType === 'categorias' ? 'Buscar por nombre...' :
-                                                                                    listType === 'condiciones' ? 'Buscar por días o descuento...' :
-                                                                                          listType === 'isrl' ? 'Buscar por código o concepto...' :
-                                                                                                'Buscar por nombre o RIF...'
-                                                            }
-                                                      />
-                                                      <div className="filter_count">
-                                                            {getFilteredData().length} resultados
-                                                      </div>
-                                                </div>
-                                          </div>
-
-                                          <div className="codes_list">
-                                                {getFilteredData().length === 0 ? (
-                                                      <div className="no_results">
-                                                            No se encontraron resultados
-                                                      </div>
-                                                ) : (
-                                                      getFilteredData().map((item, index) => (
-                                                            <div
-                                                                  key={index}
-                                                                  className="code_item"
-                                                                  onClick={() => handleSelectItem(item)}
-                                                            >
-                                                                  {listType === 'plan_cuentas' ? (
-                                                                        <>
-                                                                              <div className="code_item_code">{item.codigo}</div>
-                                                                              <div className="code_item_name">{item.nombre}</div>
-                                                                        </>
-                                                                  ) : listType === 'auxiliares' ? (
-                                                                        <>
-                                                                              <div className="code_item_code">{item.auxiliar}</div>
-                                                                              <div className="code_item_name">{item.nombre}</div>
-                                                                        </>
-                                                                  ) : listType === 'categorias' ? (
-                                                                        <>
-                                                                              <div className="code_item_code">{item.name}</div>
-                                                                              <div className="code_item_name">{item.name}</div>
-                                                                        </>
-                                                                  ) : listType === 'condiciones' ? (
-                                                                        <>
-                                                                              <div className="code_item_code">{item.days} días</div>
-                                                                              <div className="code_item_name">{item.discount_percentage}% descuento</div>
-                                                                        </>
-                                                                  ) : listType === 'isrl' ? (
-                                                                        <>
-                                                                              <div className="code_item_code">{item.code}</div>
-                                                                              <div className="code_item_name">{item.name}</div>
-                                                                        </>
-                                                                  ) : (
-                                                                        <>
-                                                                              <div className="code_item_code">{item.name}</div>
-                                                                              <div className="code_item_name">{item.rif}</div>
-                                                                        </>
-                                                                  )}
-                                                            </div>
-                                                      ))
-                                                )}
-                                          </div>
-
-                                          <ModalActions
-                                                onCancel={handleCloseList}
-                                                cancelText="Volver"
-                                                onSave={handleOpenAuxiliarModal}
-                                                isFormValid={true}
-                                                isEditMode={false}
-                                          />
-                                    </>
+                                    <LookupList
+                                          listType={listType}
+                                          items={getFilteredData()}
+                                          isLoading={false}
+                                          searchTerm={searchTerm}
+                                          onSearchChange={setSearchTerm}
+                                          onSelect={handleSelectItem}
+                                          onBack={handleCloseList}
+                                    />
                               )}
                         </div>
                   </div>

@@ -29,7 +29,7 @@ class AuxiliaresValidator {
             }
 
             const trimmedNombre = nombre.trim();
-            return trimmedNombre.length >= 3 && trimmedNombre.length <= 20;
+            return trimmedNombre.length >= 3 && trimmedNombre.length <= 50;
       }
 
       /**
@@ -47,7 +47,7 @@ class AuxiliaresValidator {
             }
 
             if (!this.validateNombre(auxiliarData.nombre)) {
-                  errors.nombre = 'El nombre debe tener entre 3 y 20 caracteres';
+                  errors.nombre = 'El nombre debe tener entre 3 y 50 caracteres';
                   isValid = false;
             }
 

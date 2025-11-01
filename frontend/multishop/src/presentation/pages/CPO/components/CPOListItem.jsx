@@ -72,13 +72,13 @@ const CPOListItem = ({
                               </span>
                         </div>
                   </td>
-                  <td className="actions-cell">
+                  <td className="actions">
                         <div className="action-buttons">
-                              <button className="btn-action btn-view" onClick={viewDetails} title="Ver detalles">
+                              <button className="btn btn-view" onClick={viewDetails} title="Ver detalles">
                                     <MdVisibility size={16} />
                               </button>
                               <button
-                                    className="btn-action btn-delete"
+                                    className="btn btn-delete"
                                     onClick={() => onDelete(cpo.id)}
                                     title="Eliminar CPO"
                               >

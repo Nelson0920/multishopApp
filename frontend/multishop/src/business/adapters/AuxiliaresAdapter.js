@@ -35,7 +35,7 @@ class AuxiliaresAdapter {
        */
       static adaptServiceToFormData(serviceData) {
             if (!serviceData || typeof serviceData !== 'object') {
-                  throw new Error('Los datos del servicio son requeridos');
+                  return null;
             }
 
 

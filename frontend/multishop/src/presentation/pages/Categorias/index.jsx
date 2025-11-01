@@ -67,57 +67,6 @@ const Categorias = () => {
             setEditingId(null);
       };
 
-      const getInitialData = () => {
-            if (isEditMode && editingId) {
-                  const categoria = categorias.find(c => c.id === editingId);
-                  return categoria ? {
-                        nombre: categoria.nombre,
-                        margenGanancia: categoria.margenGanancia,
-                        porcentajeComision: categoria.porcentajeComision,
-                        cuentaVentas: categoria.cuentaVentas,
-                        cuentaCompras: categoria.cuentaCompras,
-                        cuentaConsumos: categoria.cuentaConsumos,
-                        cuentaDevCompras: categoria.cuentaDevCompras,
-                        cuentaIVA: categoria.cuentaIVA,
-                        auxiliarCompras: categoria.auxiliarCompras,
-                        auxiliarConsumos: categoria.auxiliarConsumos,
-                        auxiliarDevCompras: categoria.auxiliarDevCompras,
-                        auxiliarIVA: categoria.auxiliarIVA,
-                        auxiliarIVA2: categoria.auxiliarIVA2
-                  } : {
-                        nombre: "",
-                        margenGanancia: "",
-                        porcentajeComision: "",
-                        cuentaVentas: "",
-                        cuentaCompras: "",
-                        cuentaConsumos: "",
-                        cuentaDevCompras: "",
-                        cuentaIVA: "",
-                        auxiliarCompras: "",
-                        auxiliarConsumos: "",
-                        auxiliarDevCompras: "",
-                        auxiliarIVA: "",
-                        auxiliarIVA2: ""
-                  };
-            }
-            return {
-                  nombre: "",
-                  margenGanancia: "",
-                  porcentajeComision: "",
-                  cuentaVentas: "",
-                  cuentaCompras: "",
-                  cuentaConsumos: "",
-                  cuentaDevCompras: "",
-                  cuentaIVA: "",
-                  auxiliarCompras: "",
-                  auxiliarConsumos: "",
-                  auxiliarDevCompras: "",
-                  auxiliarIVA: "",
-                  auxiliarIVA2: ""
-            };
-      };
-
-
       return (
             <NavbarSidebar>
                   <div className="page-container">
@@ -212,7 +161,7 @@ const Categorias = () => {
                                           onClose={handleCloseModal}
                                           onSave={handleSave}
                                           isEditMode={isEditMode}
-                                          initialData={getInitialData()}
+                                          data={currentCategorias.find(c => c.id === editingId)}
                                     />
                               </div>
                         </section>

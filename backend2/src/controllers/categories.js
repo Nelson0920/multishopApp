@@ -1,7 +1,7 @@
 import express from 'express'
 import bcrypt from 'bcryptjs'
 import prisma from '../config/prisma.js'
-import {ObjectId} from 'mongodb'
+import { ObjectId } from 'mongodb'
 
 import { validateAccountAndAuxiliaries } from './helpers/funct_categories.js'
 
@@ -340,7 +340,9 @@ router.post('/register', async (req, res) => {
     // Crear registro en account_Categories
     const accountCat = await prisma.account_Categories.create({
       data: {
-        id_Categories: category.id,
+        category: {
+          connect: { id: category.id }
+        },
         account_Sales: accounts.account_Sales || null,
         auxiliary1_Sales: accounts.auxiliary1_Sales || null,
         auxiliary2_Sales: accounts.auxiliary2_Sales || null,
@@ -801,12 +803,12 @@ router.get('/accounts', async (req, res) => {
 router.get('/account/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const categories = await prisma.account_Categories.findUnique({where : { id }})
+    const categories = await prisma.account_Categories.findUnique({ where: { id } })
 
     if (categories) {
-      return res.status(200).json({ success: true, code:200, message: 'Account category found', categories })
-    }else{
-      return res.status(404).json({ success: false, code:404 , message: 'Account category not found' })
+      return res.status(200).json({ success: true, code: 200, message: 'Account category found', categories })
+    } else {
+      return res.status(404).json({ success: false, code: 404, message: 'Account category not found' })
     }
   } catch (error) {
     console.error(error)
@@ -834,11 +836,11 @@ router.post('/account/register', async (req, res) => {
     })
 
     if (!existingCategory) {
-      return res.status(404).json({ success: false, code : 404 , message: 'Category not found' })
+      return res.status(404).json({ success: false, code: 404, message: 'Category not found' })
     }
 
-    const existingCategoryAccount = await prisma.account_Categories.findMany({ where : {id_Categories : id_Categories} })
-    
+    const existingCategoryAccount = await prisma.account_Categories.findMany({ where: { id_Categories: id_Categories } })
+
     if (existingCategoryAccount.length > 0) {
       return res.status(400).json({ success: false, code: 400, message: 'The accounting category already exists', name: id_Categories })
     }
@@ -861,9 +863,17 @@ router.post('/account/register', async (req, res) => {
     }
 
     // Crear el registro
-    const newAccountCategory = await prisma.account_Categories.create({ data })
+    const { id_Categories: categoryId, ...restData } = data
+    const newAccountCategory = await prisma.account_Categories.create({
+      data: {
+        ...restData,
+        category: {
+          connect: { id: categoryId }
+        }
+      }
+    })
 
-    res.status(200).json({ success: true, code:200 , message: 'Account category registered succesfully', category: newAccountCategory })
+    res.status(200).json({ success: true, code: 200, message: 'Account category registered succesfully', category: newAccountCategory })
 
   } catch (error) {
     console.error(error)
@@ -927,11 +937,11 @@ router.put('/account/edit/:id', async (req, res) => {
       where: { id }
     })
 
-    res.status(200).json({ success: true, code:200, message: 'Account Category updated succesfully', category: newAccountCategory })
+    res.status(200).json({ success: true, code: 200, message: 'Account Category updated succesfully', category: newAccountCategory })
 
   } catch (error) {
     console.log(error)
-    res.status(500).json({ success: false, code:500, message: 'Error updating the category', error })
+    res.status(500).json({ success: false, code: 500, message: 'Error updating the category', error })
   }
 })
 
@@ -942,16 +952,16 @@ router.delete('/account/delete/:id', async (req, res) => {
 
     const search = await prisma.account_Categories.findUnique({ where: { id } })
 
-    if(search){
-      const deleteCategory = await prisma.account_Categories.delete({ where: {id} })
-      res.json({ success: true, code: 200, message: 'Account category successfully deleted', deleteCategory })    
-    }else{
-      res.status(404).json({ success: false, code: 404 , message: 'Account category not found' })
+    if (search) {
+      const deleteCategory = await prisma.account_Categories.delete({ where: { id } })
+      res.json({ success: true, code: 200, message: 'Account category successfully deleted', deleteCategory })
+    } else {
+      res.status(404).json({ success: false, code: 404, message: 'Account category not found' })
     }
 
   } catch (error) {
     console.log(error)
-    res.status(500).json({ success: false, message: 'Error deleting the account category'})
+    res.status(500).json({ success: false, message: 'Error deleting the account category' })
   }
 })
 

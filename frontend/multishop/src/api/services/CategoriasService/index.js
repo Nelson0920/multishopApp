@@ -23,12 +23,13 @@ class CategoriasService {
                         params.append('search', searchTerm);
                   }
                   const response = await instanceServices.get(`${this.baseURL}`, { params });
-                  if (response.data.categories) {
-                        return response.data.categories;
+                  if (response.data.data) {
+                        return response.data.data;
                   } else {
                         throw new CategoriasErrors('CATEGORIAS_GET_ALL_ERROR', 'No se encontraron categorías', 404);
                   }
             } catch (error) {
+                  console.log('error', error);
                   if (error instanceof CategoriasErrors) {
                         throw error;
                   }
@@ -70,7 +71,7 @@ class CategoriasService {
                         name: categoriaData.name,
                         discount_percentage: categoriaData.discount_percentage,
                         profit_percentage: categoriaData.profit_percentage,
-                        band_management: categoriaData.band_management
+                        accounts: categoriaData.accounts
                   });
                   return response.data;
             } catch (error) {

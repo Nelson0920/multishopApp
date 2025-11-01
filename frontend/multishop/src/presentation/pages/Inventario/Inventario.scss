@@ -1,0 +1,38 @@
+/* Estilos para el componente Inventario en el Home */
+.inventario-card {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+}
+
+.inventario-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+}
+
+.inventario-card .card_icon {
+      opacity: 0.9;
+}
+
+.inventario-card .card_title {
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.inventario-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+}
+
+.inventario-card:hover::before {
+      left: 100%;
+}

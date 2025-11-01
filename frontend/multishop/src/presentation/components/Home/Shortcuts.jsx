@@ -8,6 +8,7 @@ import CondicionesPago from "@pages/CondicionesPago/components/CondicionesPago";
 import AsignacionISRL from "@pages/AsignacionISRL/components/AsignacionISRL";
 import Usuarios from "@pages/Usuarios/components/Usuarios";
 import CPO from "@pages/CPO/components/CPO";
+import Inventario from "@pages/Inventario/components/Inventario";
 
 const Shortcuts = () => {
   const progress = 6;
@@ -29,6 +30,7 @@ const Shortcuts = () => {
             <CategoriasCPO />
             <AsignacionISRL />
             <CPO />
+            <Inventario />
           </div>
         </div>
 

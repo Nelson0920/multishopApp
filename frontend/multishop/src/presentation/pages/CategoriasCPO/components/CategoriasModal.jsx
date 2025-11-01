@@ -10,6 +10,8 @@ import {
       ModalHeader,
       ModalActions
 } from "@components/Common/Inputs";
+import LookupList from "@components/Common/LookupList";
+import AccountSelector from "@components/Common/AccountSelector";
 import "../Categorias.scss";
 import PLAN_CUENTAS from "@mocks/PlanCuentas.json";
 import AUXILIARES from "@mocks/Auxiliares.json";
@@ -227,6 +229,8 @@ const CategoriasModal = ({
                                                 onChange={handleInputChange}
                                                 placeholder="Ingrese el nombre de la categoría"
                                                 required
+                                                hasError={false}
+                                                errorMessage=""
                                           />
 
                                           <NumberInput
@@ -248,6 +252,8 @@ const CategoriasModal = ({
                                                 onChange={handleInputChange}
                                                 placeholder="Ejemplo: 30 días"
                                                 required
+                                                hasError={false}
+                                                errorMessage=""
                                           />
 
                                           <NumberInput
@@ -263,39 +269,24 @@ const CategoriasModal = ({
                                                 required
                                           />
 
-                                          {/* Grupo Cuenta Contable */}
-                                          <AccountGroup>
-                                                <SearchInput
-                                                      id="plan_cuentas_id"
-                                                      name="plan_cuentas_id"
-                                                      label="Plan de Cuentas"
-                                                      value={getSelectedText('plan_cuentas_id')}
-                                                      onClick={() => handleOpenList('plan_cuentas', 'plan_cuentas_id')}
-                                                      placeholder="Seleccionar plan de cuentas"
-                                                />
-
-                                                <AuxiliarInput
-                                                      id="auxiliary1_id"
-                                                      name="auxiliary1_id"
-                                                      label="Auxiliar 1"
-                                                      value={getSelectedText('auxiliary1_id')}
-                                                      onClick={() => handleOpenList('auxiliares', 'auxiliary1_id')}
-                                                      disabled={!isAuxiliarEnabled('plan_cuentas_id')}
-                                                      auxiliarNumber={1}
-                                                />
-                                                <AuxiliarRules rules={getAuxiliarRules('plan_cuentas_id')} />
-
-                                                <AuxiliarInput
-                                                      id="auxiliary2_id"
-                                                      name="auxiliary2_id"
-                                                      label="Auxiliar 2"
-                                                      value={getSelectedText('auxiliary2_id')}
-                                                      onClick={() => handleOpenList('auxiliares', 'auxiliary2_id')}
-                                                      disabled={!isAuxiliarEnabled('plan_cuentas_id')}
-                                                      auxiliarNumber={2}
-                                                />
-                                                <AuxiliarRules rules={getAuxiliarRules('plan_cuentas_id')} />
-                                          </AccountGroup>
+                                          {/* Grupo Cuenta Contable + Auxiliares */}
+                                          <AccountSelector
+                                                labelAccount="Plan de Cuentas"
+                                                labelAux1="Auxiliar 1"
+                                                labelAux2="Auxiliar 2"
+                                                numAuxiliaries={2}
+                                                value={{
+                                                      accountId: formData.plan_cuentas_id,
+                                                      auxiliary1: formData.auxiliary1_id,
+                                                      auxiliary2: formData.auxiliary2_id,
+                                                }}
+                                                onChange={({ accountId, auxiliary1, auxiliary2 }) => setFormData(prev => ({
+                                                      ...prev,
+                                                      plan_cuentas_id: accountId ?? prev.plan_cuentas_id,
+                                                      auxiliary1_id: auxiliary1 ?? prev.auxiliary1_id,
+                                                      auxiliary2_id: auxiliary2 ?? prev.auxiliary2_id,
+                                                }))}
+                                          />
 
                                           <NumberInput
                                                 id="deadline_day"
@@ -319,71 +310,15 @@ const CategoriasModal = ({
                                     />
                               </>
                         ) : (
-                              <>
-                                    <div className="modal-header">
-                                          <h2 className="modal-title">
-                                                {listType === 'plan_cuentas' ? 'Seleccionar Plan de Cuentas' :
-                                                      'Seleccionar Auxiliar'}
-                                          </h2>
-                                          <div className="modal-icon">
-                                                <MdSearch size={24} color="#36aad4" />
-                                          </div>
-                                    </div>
-
-                                    <div className="filter_container">
-                                          <label className="input_label">Buscar:</label>
-                                          <div className="filter_input_wrapper">
-                                                <input
-                                                      type="text"
-                                                      value={searchTerm}
-                                                      onChange={(e) => setSearchTerm(e.target.value)}
-                                                      className="modal_input"
-                                                      placeholder={
-                                                            listType === 'plan_cuentas' ? 'Buscar por código o nombre...' :
-                                                                  'Buscar por código o nombre...'
-                                                      }
-                                                />
-                                                <div className="filter_count">
-                                                      {getFilteredData().length} resultados
-                                                </div>
-                                          </div>
-                                    </div>
-
-                                    <div className="codes_list">
-                                          {getFilteredData().length === 0 ? (
-                                                <div className="no_results">
-                                                      No se encontraron resultados
-                                                </div>
-                                          ) : (
-                                                getFilteredData().map((item, index) => (
-                                                      <div
-                                                            key={index}
-                                                            className="code_item"
-                                                            onClick={() => handleSelectItem(item)}
-                                                      >
-                                                            {listType === 'plan_cuentas' ? (
-                                                                  <>
-                                                                        <div className="code_item_code">{item.codigo}</div>
-                                                                        <div className="code_item_name">{item.nombre}</div>
-                                                                  </>
-                                                            ) : (
-                                                                  <>
-                                                                        <div className="code_item_code">{item.auxiliar}</div>
-                                                                        <div className="code_item_name">{item.nombre}</div>
-                                                                  </>
-                                                            )}
-                                                      </div>
-                                                ))
-                                          )}
-                                    </div>
-
-                                    <ModalActions
-                                          onCancel={handleCloseList}
-                                          cancelText="Volver"
-                                          isFormValid={true}
-                                          isEditMode={false}
-                                    />
-                              </>
+                              <LookupList
+                                    listType={listType}
+                                    items={getFilteredData()}
+                                    isLoading={false}
+                                    searchTerm={searchTerm}
+                                    onSearchChange={setSearchTerm}
+                                    onSelect={handleSelectItem}
+                                    onBack={handleCloseList}
+                              />
                         )}
                   </div>
             </div>

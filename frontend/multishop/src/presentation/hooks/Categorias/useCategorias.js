@@ -50,6 +50,7 @@ export const useCreateCategoria = (options = {}) => {
             mutationFn: (categoriaData) => {
                   const sanitizedData = CategoriasValidator.sanitizeCategoriaData(categoriaData);
                   const adaptedData = CategoriasAdapter.adaptFormDataToService(sanitizedData);
+                  //console.log('adaptedData', adaptedData);
                   return categoriasService.create(adaptedData);
             },
             onSuccess: () => {
