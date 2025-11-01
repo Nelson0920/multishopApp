@@ -5,17 +5,18 @@ import { AxiosError } from 'axios'
 import AuxiliaresAdapter from '@business/adapters/AuxiliaresAdapter'
 
 export const QUERY_KEYS = {
-      lists: (letters) => ['auxiliares', 'letters', letters],
+      lists: (letters, searchTerm) => ['auxiliares', 'letters', letters, searchTerm],
 }
 
 const auxiliaresService = new AuxiliaresService()
 
-export const useAuxiliaresByLetters = (letters) => {
+export const useAuxiliaresByLetters = ({ enabled, letters, searchTerm = '' }) => {
       return useQuery({
-            queryKey: QUERY_KEYS.lists(letters),
+            enabled,
+            queryKey: QUERY_KEYS.lists(letters, searchTerm),
             queryFn: async () => {
-                  if (!letters) return [];
-                  const data = await auxiliaresService.getByLetters(letters);
+                  if (!letters || !enabled) return [];
+                  const data = await auxiliaresService.getByLetters(letters, searchTerm);
                   const adaptedData = data.map((data) => AuxiliaresAdapter.adaptServiceToFormData(data));
                   return adaptedData;
             },

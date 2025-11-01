@@ -4,6 +4,9 @@
  * Implementa el patrón Adapter para adaptar interfaces incompatibles
  */
 
+import AuxiliaresAdapter from "./AuxiliaresAdapter";
+import PlanCuentasAdapter from "./PlanCuentasAdapter";
+
 class CategoriasCPOAdapter {
       /**
        * Adapta los datos del formulario al formato del servicio
@@ -20,9 +23,9 @@ class CategoriasCPOAdapter {
                   credit_limit,
                   credit_terms,
                   discount_percentage,
-                  plan_cuentas_id,
-                  auxiliary1_id,
-                  auxiliary2_id,
+                  plan_cuentas,
+                  auxiliary1,
+                  auxiliary2,
                   deadline_day,
                   id
             } = formData;
@@ -37,9 +40,9 @@ class CategoriasCPOAdapter {
                   credit_limit: parseFloat(credit_limit) || 0,
                   credit_terms: parseFloat(credit_terms) || 0,
                   discount_percentage: parseFloat(discount_percentage) || 0,
-                  id_accounting_accounts: plan_cuentas_id || '',
-                  auxiliary1: auxiliary1_id || '',
-                  auxiliary2: auxiliary2_id || '',
+                  id_accounting_accounts: plan_cuentas?.id || '',
+                  auxiliary1: auxiliary1?.id || '',
+                  auxiliary2: auxiliary2?.id || '',
                   deadline_day: parseInt(deadline_day) || 365
             };
       }
@@ -59,7 +62,7 @@ class CategoriasCPOAdapter {
                   credit_limit,
                   credit_terms,
                   discount_percentage,
-                  id_accounting_accounts,
+                  accountingAccount,
                   auxiliary1,
                   auxiliary2,
                   deadline_day,
@@ -72,9 +75,9 @@ class CategoriasCPOAdapter {
                   credit_limit: credit_limit || 0,
                   credit_terms: credit_terms || 0,
                   discount_percentage: discount_percentage || 0,
-                  plan_cuentas_id: id_accounting_accounts || '',
-                  auxiliary1_id: auxiliary1 || '',
-                  auxiliary2_id: auxiliary2 || '',
+                  plan_cuentas: PlanCuentasAdapter.adaptServiceToFormData(accountingAccount) || '',
+                  auxiliary1: AuxiliaresAdapter.adaptServiceToFormData(auxiliary1) || '',
+                  auxiliary2: AuxiliaresAdapter.adaptServiceToFormData(auxiliary2) || '',
                   deadline_day: deadline_day || 365,
                   createdAt: serviceData.createdAt || ''
             };

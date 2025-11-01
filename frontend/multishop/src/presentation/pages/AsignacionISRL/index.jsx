@@ -7,12 +7,14 @@ import AsignacionISRLListItem from "./components/AsignacionISRLListItem";
 import AsignacionISRLCard from "./components/AsignacionISRLCard";
 import { useAsignacionISRLOperations } from "@hooks/AsignacionISRL/useAsignacionISRL";
 import "./AsignacionISRL.scss";
+import { useDebounce } from "@shared/hooks/useDebounce";
 
 const AsignacionISRL = () => {
       const [isModalOpen, setIsModalOpen] = useState(false);
       const [isEditMode, setIsEditMode] = useState(false);
       const [editingConcept, setEditingConcept] = useState(null);
       const [searchTerm, setSearchTerm] = useState("");
+      const { debouncedValue: debouncedSearch } = useDebounce(searchTerm, 1000);
 
       const {
             asignacionISRL,
@@ -22,7 +24,10 @@ const AsignacionISRL = () => {
             createAsignacionISRL,
             updateAsignacionISRL,
             refetch
-      } = useAsignacionISRLOperations();
+      } = useAsignacionISRLOperations({
+            options: {},
+            searchTerm: debouncedSearch,
+      });
 
       const handleCreateNew = () => {
             setIsEditMode(false);
@@ -54,16 +59,6 @@ const AsignacionISRL = () => {
             setIsEditMode(false);
             setEditingConcept(null);
       };
-
-      const filteredConcepts = asignacionISRL.filter(concept => {
-            const searchLower = searchTerm.toLowerCase();
-            return concept.code.toLowerCase().includes(searchLower) ||
-                  concept.name.toLowerCase().includes(searchLower) ||
-                  concept.percentage_pn.toString().includes(searchLower) ||
-                  concept.percentage_pj.toString().includes(searchLower);
-      });
-
-      const currentConcepts = filteredConcepts.slice(0, 10);
 
       return (
             <NavbarSidebar>
@@ -113,7 +108,7 @@ const AsignacionISRL = () => {
                                                             </tr>
                                                       </thead>
                                                       <tbody>
-                                                            {currentConcepts.map(concept => (
+                                                            {asignacionISRL.map(concept => (
                                                                   <AsignacionISRLListItem
                                                                         key={concept.id}
                                                                         asignacion={concept}
@@ -125,7 +120,7 @@ const AsignacionISRL = () => {
                                           </div>
 
                                           <div className="cards-wrapper">
-                                                {currentConcepts.map(concept => (
+                                                {asignacionISRL.map(concept => (
                                                       <AsignacionISRLCard
                                                             key={concept.id}
                                                             asignacion={concept}
@@ -134,7 +129,7 @@ const AsignacionISRL = () => {
                                                 ))}
                                           </div>
 
-                                          {currentConcepts.length === 0 && (
+                                          {asignacionISRL.length === 0 && (
                                                 <div className="no-results">
                                                       <MdAssignment size={48} color="#ccc" />
                                                       <p>No se encontraron conceptos de retención ISRL</p>

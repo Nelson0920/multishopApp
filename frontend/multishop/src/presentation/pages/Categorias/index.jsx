@@ -7,12 +7,14 @@ import CategoriasListItem from "./components/CategoriasListItem";
 import CategoriasCard from "./components/CategoriasCard";
 import { useCategoriasOperations } from "@hooks/Categorias/useCategorias";
 import "./Categorias.scss";
+import { useDebounce } from "@shared/hooks/useDebounce";
 
 const Categorias = () => {
       const [isModalOpen, setIsModalOpen] = useState(false);
       const [isEditMode, setIsEditMode] = useState(false);
       const [editingId, setEditingId] = useState(null);
       const [searchTerm, setSearchTerm] = useState("");
+      const { debouncedValue: debouncedSearch } = useDebounce(searchTerm, 1000);
 
       const {
             categorias,
@@ -24,7 +26,7 @@ const Categorias = () => {
             refetch
       } = useCategoriasOperations({
             options: {},
-            searchTerm
+            searchTerm: debouncedSearch,
       });
 
 
@@ -52,14 +54,6 @@ const Categorias = () => {
                   console.error('Error al guardar categoría:', error);
             }
       };
-
-      const filteredCategorias = categorias.filter(categoria =>
-            categoria.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            categoria.margenGanancia.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            categoria.porcentajeComision.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      const currentCategorias = filteredCategorias.slice(0, 20);
 
       const handleCloseModal = () => {
             setIsModalOpen(false);
@@ -92,7 +86,7 @@ const Categorias = () => {
                                                             <MdSearch size={20} className="search-icon" />
                                                             <input
                                                                   type="text"
-                                                                  placeholder="Buscar por nombre, margen o comisión..."
+                                                                  placeholder="Buscar por nombre"
                                                                   value={searchTerm}
                                                                   onChange={(e) => setSearchTerm(e.target.value)}
                                                                   className="search-input"
@@ -112,7 +106,7 @@ const Categorias = () => {
                                                             </tr>
                                                       </thead>
                                                       <tbody>
-                                                            {currentCategorias.map(categoria => (
+                                                            {categorias.map(categoria => (
                                                                   <CategoriasListItem
                                                                         key={categoria.id}
                                                                         categoria={categoria}
@@ -124,7 +118,7 @@ const Categorias = () => {
                                           </div>
 
                                           <div className="cards-wrapper">
-                                                {currentCategorias.map(categoria => (
+                                                {categorias.map(categoria => (
                                                       <CategoriasCard
                                                             key={categoria.id}
                                                             categoria={categoria}
@@ -133,7 +127,7 @@ const Categorias = () => {
                                                 ))}
                                           </div>
 
-                                          {currentCategorias.length === 0 && (
+                                          {categorias.length === 0 && (
                                                 <div className="no-results">
                                                       <MdCategory size={48} color="#ccc" />
                                                       <p>No se encontraron categorías</p>
@@ -161,7 +155,7 @@ const Categorias = () => {
                                           onClose={handleCloseModal}
                                           onSave={handleSave}
                                           isEditMode={isEditMode}
-                                          data={currentCategorias.find(c => c.id === editingId)}
+                                          data={categorias.find(c => c.id === editingId)}
                                     />
                               </div>
                         </section>

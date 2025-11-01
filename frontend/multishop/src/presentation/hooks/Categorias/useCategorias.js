@@ -30,7 +30,7 @@ export const useCategorias = (options = {}, searchTerm = '') => {
             onError: (error) => {
                   toast.error(error instanceof AxiosError ? error.response.data.message : error.message);
             },
-            staleTime: 2 * 60 * 1000, // 2 minutos
+            staleTime: 2000, // 2 minutos
             gcTime: 10 * 60 * 1000, // 10 minutos
             retry: 1,
             refetchOnWindowFocus: false,
@@ -95,7 +95,7 @@ export const useUpdateCategoria = (options = {}) => {
  * @returns {Object} Todos los hooks de categorías
  */
 export const useCategoriasOperations = (params = { options: {}, searchTerm: '' }) => {
-      const categoriasQuery = useCategorias(params.options?.queries?.list ?? {}, params.searchTerm ?? '')
+      const categoriasQuery = useCategorias(params.options ?? {}, params.searchTerm ?? '')
       const createMutation = useCreateCategoria(params.options?.mutations?.create ?? {})
       const updateMutation = useUpdateCategoria(params.options?.mutations?.update ?? {})
 

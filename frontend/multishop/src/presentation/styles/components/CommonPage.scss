@@ -103,10 +103,10 @@ $transition: all 0.3s ease;
                   .search-container {
                         display: flex;
                         justify-content: flex-end;
+                        gap: 2rem;
 
                         .search-input-wrapper {
                               position: relative;
-                              width: 300px;
 
                               .search-icon {
                                     position: absolute;
@@ -132,6 +132,26 @@ $transition: all 0.3s ease;
 
                                     &::placeholder {
                                           color: $text-muted;
+                                    }
+                              }
+
+                              .category-search-input {
+                                    width: 100%;
+                                    padding: 0.75rem 1.5rem 0.75rem 1.5rem;
+                                    border: 2px solid #e0e0e0;
+                                    border-radius: 8px;
+                                    font-size: 1rem;
+                                    background: white;
+                                    transition: border-color 0.3s ease;
+
+                                    &:focus {
+                                          outline: none;
+                                          border-color: #36aad4;
+                                          box-shadow: 0 0 0 3px rgba(54, 170, 212, 0.1);
+                                    }
+
+                                    &::placeholder {
+                                          color: #999;
                                     }
                               }
                         }

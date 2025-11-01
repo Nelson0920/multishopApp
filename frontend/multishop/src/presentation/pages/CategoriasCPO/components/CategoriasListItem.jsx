@@ -4,10 +4,11 @@ import { MdEdit } from "react-icons/md";
 const CategoriasListItem = ({ categoria, onEdit }) => {
       return (
             <tr>
-                  <td>{categoria.nombre}</td>
-                  <td>{categoria.descuento}</td>
-                  <td>{categoria.ganancia}</td>
-                  <td>{categoria.gestionBanda ? "Si" : "No"}</td>
+                  <td>{categoria.name}</td>
+                  <td>{categoria.credit_limit}</td>
+                  <td>{categoria.credit_terms}</td>
+                  <td>{categoria.discount_percentage}</td>
+                  <td>{categoria.deadline_day}</td>
                   <td className="actions">
                         <div className="action-buttons">
                               <button

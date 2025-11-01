@@ -8,6 +8,7 @@ import PlanCuentasCard from "./components/PlanCuentasCard";
 import { usePlanCuentasOperations } from "@hooks/PlanCuentas/usePlanCuentas";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { SelectInput } from "@components/Common/Inputs";
+import { formatAccountCode } from "@shared/utils/formatAccountCode";
 import "./PlanCuentas.scss";
 const PlanCuentas = () => {
       const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +23,7 @@ const PlanCuentas = () => {
       ];
       const { debouncedValue } = useDebounce(searchTerm, 1000, 5);
 
-      const { createCuenta, updateCuenta, cuentas, error, isLoading, refetch } = usePlanCuentasOperations({ searchTerm: debouncedValue, category: category });
+      const { createCuenta, updateCuenta, cuentas, error, isLoading, refetch } = usePlanCuentasOperations({ searchTerm: debouncedValue, category: category, options: { enabled: true } });
 
       const handleCreateNew = () => {
             setEditingCuenta(null);
@@ -50,8 +51,9 @@ const PlanCuentas = () => {
       };
 
       const handleSearchChange = useCallback((e) => {
-            setSearchTerm(e.target.value);
-      }, [setSearchTerm]);
+            const formattedValue = formatAccountCode(e.target.value);
+            setSearchTerm(formattedValue);
+      }, []);
 
       const handleCategoryChange = useCallback((e) => {
             setCategory(e.target.value);
@@ -88,17 +90,15 @@ const PlanCuentas = () => {
                                                                   className="search-input"
                                                             />
                                                       </div>
-                                                </div>
-                                                <div className="search-container">
                                                       <div className="search-input-wrapper">
                                                             <SelectInput
                                                                   id="category"
                                                                   name="category"
-                                                                  placeholder="Seleccionar categoría"
+                                                                  placeholder="Todos"
                                                                   options={categoriesOptions}
                                                                   value={category}
                                                                   onChange={handleCategoryChange}
-                                                                  className="search-input"
+                                                                  className="category-search-input"
                                                             />
                                                       </div>
                                                 </div>

@@ -34,6 +34,13 @@ class AuxiliaresAdapter {
        * @returns {Object} Datos adaptados { id: string, auxiliar: string, nombre: string }
        */
       static adaptServiceToFormData(serviceData) {
+            if (typeof serviceData === 'string') {
+                  return {
+                        id: serviceData,
+                        auxiliar: serviceData,
+                        nombre: serviceData
+                  };
+            }
             if (!serviceData || typeof serviceData !== 'object') {
                   return null;
             }

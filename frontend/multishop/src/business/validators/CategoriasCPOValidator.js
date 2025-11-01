@@ -82,6 +82,7 @@ class CategoriasCPOValidator {
                   const sanitized = this.sanitizeCategoriaData(categoriaData);
                   return sanitized.name && sanitized.name.length > 0;
             } catch (error) {
+                  console.log('error validateForCreate', error);
                   return false;
             }
       }
@@ -96,6 +97,7 @@ class CategoriasCPOValidator {
                   const sanitized = this.sanitizeCategoriaData(categoriaData);
                   return sanitized.id && sanitized.name && sanitized.name.length > 0;
             } catch (error) {
+                  console.log('error validateForUpdate', error);
                   return false;
             }
       }

@@ -10,7 +10,7 @@ const categoriasCPOService = new CategoriasCPOService()
 
 // Claves de query para cache
 export const QUERY_KEYS = {
-      lists: (searchTerm = '') => ['categoriasCPO', 'list', searchTerm],
+      lists: (searchTerm = '', orderByEndDate = false) => ['categoriasCPO', 'list', searchTerm, orderByEndDate],
 }
 
 /**
@@ -19,11 +19,11 @@ export const QUERY_KEYS = {
  * @param {string} searchTerm - Término de búsqueda
  * @returns {Object} Resultado de la query
  */
-export const useCategoriasCPO = (options = {}, searchTerm = '') => {
+export const useCategoriasCPO = (options = {}, searchTerm = '', orderByEndDate = false) => {
       return useQuery({
-            queryKey: QUERY_KEYS.lists(searchTerm),
+            queryKey: QUERY_KEYS.lists(searchTerm, orderByEndDate),
             queryFn: async () => {
-                  const data = await categoriasCPOService.getAll(searchTerm);
+                  const data = await categoriasCPOService.getAll(searchTerm, orderByEndDate);
                   const adaptedData = data.map((data) => CategoriasCPOAdapter.adaptServiceToFormData(data));
                   return adaptedData;
             },
@@ -53,7 +53,7 @@ export const useCreateCategoriaCPO = (options = {}) => {
                   return categoriasCPOService.create(adaptedData);
             },
             onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lists() })
+                  queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lists('', false) })
                   toast.success('Categoría CPO creada correctamente');
             },
             onError: (error) => {
@@ -78,7 +78,7 @@ export const useUpdateCategoriaCPO = (options = {}) => {
                   return categoriasCPOService.update(adaptedData);
             },
             onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lists() })
+                  queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lists('', false) })
                   toast.success('Categoría CPO actualizada correctamente');
             },
             onError: (error) => {
@@ -93,8 +93,8 @@ export const useUpdateCategoriaCPO = (options = {}) => {
  * @param {Object} params - Parámetros que incluyen options y searchTerm
  * @returns {Object} Todos los hooks de categorías CPO
  */
-export const useCategoriasCPOOperations = (params = { options: {}, searchTerm: '' }) => {
-      const categoriasCPOQuery = useCategoriasCPO(params.options?.queries?.list ?? {}, params.searchTerm ?? '')
+export const useCategoriasCPOOperations = (params = { options: {}, searchTerm: '', orderByEndDate: false }) => {
+      const categoriasCPOQuery = useCategoriasCPO(params.options ?? {}, params.searchTerm ?? '', params.orderByEndDate ?? false)
       const createMutation = useCreateCategoriaCPO(params.options?.mutations?.create ?? {})
       const updateMutation = useUpdateCategoriaCPO(params.options?.mutations?.update ?? {})
 

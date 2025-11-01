@@ -21,10 +21,11 @@ export const QUERY_KEYS = {
  * @param {string} category - Categoría de la cuenta
  * @returns {Object} Resultado de la query
  */
-export const usePlanCuentas = (options = {}, searchTerm = '', category = '') => {
+export const usePlanCuentas = (options = { enabled: true }, searchTerm = '', category = '') => {
       return useQuery({
             queryKey: QUERY_KEYS.lists(`${searchTerm}-${category}`),
             queryFn: async () => {
+                  if (!options.enabled) return [];
                   const data = await planCuentasService.getAll(searchTerm, category);
                   const adaptedData = data.map((data) => PlanCuentasAdapter.adaptServiceToFormData(data));
                   return adaptedData;
@@ -99,8 +100,8 @@ export const useUpdateCuenta = (options = {}) => {
  * @param {Object} params - Parámetros que incluyen options y searchTerm
  * @returns {Object} Todos los hooks de cuentas
  */
-export const usePlanCuentasOperations = (params = { options: {}, searchTerm: '', category: '' }) => {
-      const cuentasQuery = usePlanCuentas(params.options?.queries?.list ?? {}, params.searchTerm ?? '', params.category ?? '')
+export const usePlanCuentasOperations = (params = { options: { enabled: true }, searchTerm: '', category: '' }) => {
+      const cuentasQuery = usePlanCuentas(params.options, params.searchTerm ?? '', params.category ?? '')
       const createMutation = useCreateCuenta(params.options?.mutations?.create ?? {})
       const updateMutation = useUpdateCuenta(params.options?.mutations?.update ?? {})
 

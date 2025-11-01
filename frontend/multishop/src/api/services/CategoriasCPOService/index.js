@@ -14,13 +14,17 @@ class CategoriasCPOService {
       /**
        * Obtener todas las categorías CPO
        * @param {string} searchTerm - Término de búsqueda
+       * @param {boolean} orderByEndDate - Ordenar por fecha de fin
        * @returns {Promise<Array>} Lista de categorías CPO
        */
-      async getAll(searchTerm = '') {
+      async getAll(searchTerm = '', orderByEndDate = false) {
             try {
                   const params = new URLSearchParams();
                   if (searchTerm) {
-                        params.append('search', searchTerm);
+                        params.append('name', searchTerm);
+                  }
+                  if (orderByEndDate) {
+                        params.append('filterDays', orderByEndDate);
                   }
                   const response = await instanceUser.get(`${this.baseURL}`, { params });
                   if (response.data.categories) {
@@ -46,6 +50,7 @@ class CategoriasCPOService {
        */
       async create(categoriaData) {
             try {
+                  console.log('categoriaData', categoriaData);
                   const response = await instanceUser.post(`${this.baseURL}/register`, categoriaData);
                   return response.data;
             } catch (error) {

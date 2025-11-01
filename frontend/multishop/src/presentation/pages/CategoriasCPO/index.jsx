@@ -7,12 +7,16 @@ import CategoriasListItem from "./components/CategoriasListItem";
 import CategoriasCard from "./components/CategoriasCard";
 import { useCategoriasCPOOperations } from "@hooks/CategoriasCPO/useCategoriasCPO";
 import "./Categorias.scss";
+import { CheckboxInput } from "@components/Common/Inputs";
+import { useDebounce } from "@shared/hooks/useDebounce";
 
 const Categorias = () => {
       const [isModalOpen, setIsModalOpen] = useState(false);
       const [isEditMode, setIsEditMode] = useState(false);
       const [editingCategoria, setEditingCategoria] = useState(null);
       const [searchTerm, setSearchTerm] = useState("");
+      const { debouncedValue: debouncedSearch } = useDebounce(searchTerm, 1000);
+      const [orderByEndDate, setOrderByEndDate] = useState(false);
 
       const {
             categoriasCPO,
@@ -24,7 +28,8 @@ const Categorias = () => {
             refetch
       } = useCategoriasCPOOperations({
             options: {},
-            searchTerm
+            searchTerm: debouncedSearch,
+            orderByEndDate
       });
 
 
@@ -59,14 +64,6 @@ const Categorias = () => {
             setEditingCategoria(null);
       };
 
-      const filteredCategorias = categoriasCPO.filter(categoria =>
-            categoria.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            categoria.credit_limit.toString().includes(searchTerm.toLowerCase()) ||
-            categoria.discount_percentage.toString().includes(searchTerm.toLowerCase())
-      );
-
-      const currentCategorias = filteredCategorias.slice(0, 20);
-
 
       return (
             <NavbarSidebar>
@@ -99,6 +96,17 @@ const Categorias = () => {
                                                                   className="search-input"
                                                             />
                                                       </div>
+                                                      <div className="search-input-wrapper">
+                                                            <CheckboxInput
+                                                                  id="orderByEndDate"
+                                                                  name="orderByEndDate"
+                                                                  label="Ordenar por vigencia"
+                                                                  checked={orderByEndDate}
+                                                                  onChange={(e) => {
+                                                                        setOrderByEndDate(e.target.checked);
+                                                                  }}
+                                                            />
+                                                      </div>
                                                 </div>
                                           </div>
 
@@ -110,11 +118,12 @@ const Categorias = () => {
                                                                   <th>Límite Crédito</th>
                                                                   <th>Términos</th>
                                                                   <th>Descuento</th>
+                                                                  <th>Vigencia</th>
                                                                   <th>Acciones</th>
                                                             </tr>
                                                       </thead>
                                                       <tbody>
-                                                            {currentCategorias.map(categoria => (
+                                                            {categoriasCPO.map(categoria => (
                                                                   <CategoriasListItem
                                                                         key={categoria.id}
                                                                         categoria={categoria}
@@ -126,7 +135,7 @@ const Categorias = () => {
                                           </div>
 
                                           <div className="cards-wrapper">
-                                                {currentCategorias.map(categoria => (
+                                                {categoriasCPO.map(categoria => (
                                                       <CategoriasCard
                                                             key={categoria.id}
                                                             categoria={categoria}
@@ -135,7 +144,7 @@ const Categorias = () => {
                                                 ))}
                                           </div>
 
-                                          {currentCategorias.length === 0 && (
+                                          {categoriasCPO.length === 0 && (
                                                 <div className="no-results">
                                                       <MdCategory size={48} color="#ccc" />
                                                       <p>No se encontraron categorías</p>

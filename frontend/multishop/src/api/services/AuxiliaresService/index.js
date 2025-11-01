@@ -73,11 +73,16 @@ class AuxiliaresService {
       /**
        * Obtener auxiliares disponibles por letra
        * @param {string} letters - Letras del auxiliar
+       * @param {string} searchTerm - Término de búsqueda
        * @returns {Promise<Array>} Lista de auxiliares disponibles
        */
-      async getByLetters(letters) {
+      async getByLetters(letters, searchTerm = '') {
             try {
-                  const response = await instanceServices.get(`${this.baseURL}/available/?initials=${letters}`);
+                  const params = new URLSearchParams();
+                  params.append('name', searchTerm);
+                  params.append('initials', letters);
+
+                  const response = await instanceServices.get(`${this.baseURL}/available`, { params });
                   return response.data.auxiliaries;
             } catch (error) {
                   if (error instanceof AxiosError) {

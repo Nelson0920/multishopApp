@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import PlanCuentasValidator from '@business/validators/PlanCuentasValidator'
+import { formatAccountCode } from '@shared/utils/formatAccountCode'
 
 /**
  * Hook para manejo del modal de plan de cuentas
@@ -24,23 +25,7 @@ export const usePlanCuentasModal = (
       const [touched, setTouched] = useState({})
 
       const handleCodigoChange = (e) => {
-            const value = e.target.value;
-            const cleanValue = value.replace(/[^0-9]/g, '');
-
-            let formattedValue = '';
-            if (cleanValue.length > 0) {
-                  formattedValue = cleanValue[0];
-            }
-            if (cleanValue.length > 1) {
-                  formattedValue += '.' + cleanValue.slice(1, 3);
-            }
-            if (cleanValue.length > 3) {
-                  formattedValue += '.' + cleanValue.slice(3, 4);
-            }
-            if (cleanValue.length > 4) {
-                  formattedValue += '.' + cleanValue.slice(4, 6);
-            }
-
+            const formattedValue = formatAccountCode(e.target.value, true);
             setFormData(prev => ({
                   ...prev,
                   codigo: formattedValue

@@ -93,10 +93,12 @@
                   background: #f8f9fa;
                   display: flex;
                   align-items: center;
-                  gap: 1rem;
 
                   .search-container {
                         flex: 1;
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
 
                         .search-input-wrapper {
                               position: relative;
@@ -129,6 +131,145 @@
                                           color: #999;
                                     }
                               }
+
+                              // Estilos mejorados para el checkbox
+                              &:has(.checkbox-group) {
+                                    width: auto;
+                                    min-width: 220px;
+                                    flex-shrink: 0;
+                              }
+
+                              &:has(.search-input) {
+                                    flex: 1;
+                                    min-width: 250px;
+                              }
+
+                              .checkbox-group {
+                                    width: 100%;
+
+                                    .checkbox-label {
+                                          display: flex;
+                                          align-items: center;
+                                          gap: 0.75rem;
+                                          cursor: pointer;
+                                          padding: 0.75rem 1rem;
+                                          border: 2px solid rgba(54, 170, 212, 0.2);
+                                          border-radius: 8px;
+                                          background: white;
+                                          transition: all 0.3s ease;
+                                          font-size: 0.95rem;
+                                          font-weight: 500;
+                                          color: #333;
+                                          user-select: none;
+                                          white-space: nowrap;
+
+                                          &:hover {
+                                                border-color: rgba(54, 170, 212, 0.4);
+                                                background: rgba(54, 170, 212, 0.03);
+                                                transform: translateY(-1px);
+                                                box-shadow: 0 2px 8px rgba(54, 170, 212, 0.15);
+                                          }
+
+                                          &:active {
+                                                transform: translateY(0);
+                                                box-shadow: 0 1px 4px rgba(54, 170, 212, 0.2);
+                                          }
+
+                                          input[type="checkbox"] {
+                                                appearance: none;
+                                                width: 1.25rem;
+                                                height: 1.25rem;
+                                                border: 2px solid rgba(54, 170, 212, 0.3);
+                                                border-radius: 4px;
+                                                background: white;
+                                                cursor: pointer;
+                                                position: relative;
+                                                transition: all 0.3s ease;
+                                                flex-shrink: 0;
+                                                margin: 0;
+
+                                                &:hover {
+                                                      border-color: #36aad4;
+                                                      background: rgba(54, 170, 212, 0.05);
+                                                }
+
+                                                &:checked {
+                                                      background: #36aad4;
+                                                      border-color: #36aad4;
+                                                      box-shadow: 0 0 0 2px rgba(54, 170, 212, 0.2);
+
+                                                      &::after {
+                                                            content: '';
+                                                            position: absolute;
+                                                            left: 0.25rem;
+                                                            top: 0.125rem;
+                                                            width: 0.375rem;
+                                                            height: 0.625rem;
+                                                            border: solid white;
+                                                            border-width: 0 2px 2px 0;
+                                                            transform: rotate(45deg);
+                                                            animation: checkmark 0.2s ease-in-out;
+                                                      }
+                                                }
+
+                                                &:focus {
+                                                      outline: none;
+                                                      box-shadow: 0 0 0 3px rgba(54, 170, 212, 0.2);
+                                                }
+
+                                                &:disabled {
+                                                      cursor: not-allowed;
+                                                      background: #f5f5f5;
+                                                      border-color: #e0e0e0;
+                                                      opacity: 0.6;
+
+                                                      &:hover {
+                                                            border-color: #e0e0e0;
+                                                            background: #f5f5f5;
+                                                            transform: none;
+                                                            box-shadow: none;
+                                                      }
+                                                }
+                                          }
+
+                                          &:has(input[type="checkbox"]:checked) {
+                                                border-color: #36aad4;
+                                                background: rgba(54, 170, 212, 0.08);
+                                                color: #36aad4;
+                                                font-weight: 600;
+
+                                                &:hover {
+                                                      background: rgba(54, 170, 212, 0.12);
+                                                }
+                                          }
+
+                                          &:has(input[type="checkbox"]:disabled) {
+                                                opacity: 0.6;
+                                                cursor: not-allowed;
+                                                color: #999;
+
+                                                &:hover {
+                                                      border-color: rgba(54, 170, 212, 0.2);
+                                                      background: white;
+                                                      transform: none;
+                                                      box-shadow: none;
+                                                }
+                                          }
+                                    }
+                              }
+
+                              @keyframes checkmark {
+                                    0% {
+                                          transform: rotate(45deg) scale(0);
+                                    }
+                                    50% {
+                                          transform: rotate(45deg) scale(1.2);
+                                    }
+                                    100% {
+                                          transform: rotate(45deg) scale(1);
+                                    }
+                              }
+
                         }
                   }
             }

@@ -1,7 +1,7 @@
 import React from "react";
 import { MdEdit } from "react-icons/md";
 
-const CategoriasCard = ({ categoria, onEdit, planCuentas, auxiliares }) => {
+const CategoriasCard = ({ categoria, onEdit }) => {
       return (
             <div className="categoria-card">
                   <div className="card-header">
@@ -26,18 +26,6 @@ const CategoriasCard = ({ categoria, onEdit, planCuentas, auxiliares }) => {
                         <div className="card-row">
                               <span className="label">Descuento:</span>
                               <span className="value">{categoria.discount_percentage}%</span>
-                        </div>
-                        <div className="card-row">
-                              <span className="label">Plan de Cuentas:</span>
-                              <span className="value">
-                                    {planCuentas.find(pc => pc.id === categoria.plan_cuentas_id)?.codigo || 'N/A'}
-                              </span>
-                        </div>
-                        <div className="card-row">
-                              <span className="label">Auxiliar 1:</span>
-                              <span className="value">
-                                    {auxiliares.find(aux => aux.auxiliar === categoria.auxiliary1_id)?.nombre || 'N/A'}
-                              </span>
                         </div>
                         <div className="card-row">
                               <span className="label">Vigencia:</span>

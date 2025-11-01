@@ -22,10 +22,10 @@ const AccountSelector = ({
       const [listType, setListType] = useState(null); // 'plan_cuentas' | 'auxiliares'
       const [searchTerm, setSearchTerm] = useState("");
       const [selectedAuxIndex, setSelectedAuxIndex] = useState(null); // 1 | 2 | null
-      const { debouncedValue: debouncedSearch } = useDebounce(searchTerm, 400);
+      const { debouncedValue: debouncedSearch } = useDebounce(searchTerm, 1000);
 
       // Query de cuentas
-      const { data: cuentas = [], isLoading: loadingCuentas } = usePlanCuentas({}, debouncedSearch);
+      const { data: cuentas = [], isLoading: loadingCuentas } = usePlanCuentas({ enabled: listType === 'plan_cuentas' }, debouncedSearch);
 
       // Derivar letras para auxiliares según cuenta seleccionada
       //const selectedCuenta = useMemo(() => cuentas.find(c => c.id === value.accountId), [cuentas, value.accountId]);
@@ -39,7 +39,7 @@ const AccountSelector = ({
       }, [value.account, listType, selectedAuxIndex]);
 
       // Query de auxiliares por letras
-      const { data: auxiliares = [], isLoading: loadingAuxiliares } = useAuxiliaresByLetters(letters || "");
+      const { data: auxiliares = [], isLoading: loadingAuxiliares } = useAuxiliaresByLetters({ enabled: listType === 'auxiliares', letters: letters || "", searchTerm: debouncedSearch });
 
       const openList = (type, auxIndex = null) => {
             setListType(type);

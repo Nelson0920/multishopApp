@@ -20,7 +20,7 @@ class CategoriasService {
             try {
                   const params = new URLSearchParams();
                   if (searchTerm) {
-                        params.append('search', searchTerm);
+                        params.append('name', searchTerm);
                   }
                   const response = await instanceServices.get(`${this.baseURL}`, { params });
                   if (response.data.data) {
@@ -29,7 +29,6 @@ class CategoriasService {
                         throw new CategoriasErrors('CATEGORIAS_GET_ALL_ERROR', 'No se encontraron categorías', 404);
                   }
             } catch (error) {
-                  console.log('error', error);
                   if (error instanceof CategoriasErrors) {
                         throw error;
                   }
